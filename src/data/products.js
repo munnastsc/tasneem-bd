@@ -8,14 +8,14 @@ export const products = [
     nameEn: "Satkhira Pure Danadaar Gawa Ghee",
     category: "ghee",
     categoryName: "সাতক্ষীরার খাঁটি ঘি",
-    price: 1350,
-    originalPrice: 1600,
-    weight: "৯০০ গ্রাম (কাঁচের জার)",
+    price: 1900,
+    originalPrice: 2250,
+    weight: "১ কেজি (কাঁচের জার)",
     variants: [
-      { label: "২৫০ গ্রাম", labelEn: "250g", price: 420, originalPrice: 500 },
-      { label: "৪৫০ গ্রাম", labelEn: "450g", price: 720, originalPrice: 850 },
-      { label: "৯০০ গ্রাম (জার)", labelEn: "900g (Jar)", price: 1350, originalPrice: 1600 },
-      { label: "২ কেজি (ফ্যামিলি প্যাক)", labelEn: "2kg", price: 2850, originalPrice: 3400 }
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 490, originalPrice: 580 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 970, originalPrice: 1150 },
+      { label: "১ কেজি (জার)", labelEn: "1kg (Jar)", price: 1900, originalPrice: 2250 },
+      { label: "২ কেজি (ফ্যামিলি প্যাক)", labelEn: "2kg", price: 3750, originalPrice: 4400 }
     ],
     rating: 4.9,
     reviewsCount: 418,
@@ -58,13 +58,13 @@ export const products = [
     nameEn: "Raw Sundarban Khalisha Honey (Satkhira Range)",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
-    price: 1150,
-    originalPrice: 1400,
+    price: 1999,
+    originalPrice: 2350,
     weight: "১ কেজি (জার)",
     variants: [
-      { label: "২৫০ গ্রাম", labelEn: "250g", price: 340, originalPrice: 420 },
-      { label: "৫০০ গ্রাম", labelEn: "500g", price: 620, originalPrice: 750 },
-      { label: "১ কেজি (জার)", labelEn: "1kg (Jar)", price: 1150, originalPrice: 1400 }
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 540, originalPrice: 640 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 1050, originalPrice: 1250 },
+      { label: "১ কেজি (জার)", labelEn: "1kg (Jar)", price: 1999, originalPrice: 2350 }
     ],
     rating: 5.0,
     reviewsCount: 562,
@@ -102,13 +102,13 @@ export const products = [
     nameEn: "Pure Natural Jujube / Kul Boroi Flower Honey",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
-    price: 950,
-    originalPrice: 1150,
+    price: 849,
+    originalPrice: 1050,
     weight: "১ কেজি (জার)",
     variants: [
-      { label: "২৫০ গ্রাম", labelEn: "250g", price: 290, originalPrice: 360 },
-      { label: "৫০০ গ্রাম", labelEn: "500g", price: 520, originalPrice: 650 },
-      { label: "১ কেজি", labelEn: "1kg", price: 950, originalPrice: 1150 }
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 240, originalPrice: 300 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 450, originalPrice: 550 },
+      { label: "১ কেজি", labelEn: "1kg", price: 849, originalPrice: 1050 }
     ],
     rating: 4.9,
     reviewsCount: 310,
@@ -146,13 +146,13 @@ export const products = [
     nameEn: "Pure Dinajpur Lychee Blossom Honey",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
-    price: 880,
+    price: 850,
     originalPrice: 1050,
     weight: "১ কেজি (জার)",
     variants: [
-      { label: "২৫০ গ্রাম", labelEn: "250g", price: 260, originalPrice: 320 },
-      { label: "৫০০ গ্রাম", labelEn: "500g", price: 480, originalPrice: 580 },
-      { label: "১ কেজি", labelEn: "1kg", price: 880, originalPrice: 1050 }
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 240, originalPrice: 300 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 450, originalPrice: 550 },
+      { label: "১ কেজি", labelEn: "1kg", price: 850, originalPrice: 1050 }
     ],
     rating: 4.9,
     reviewsCount: 245,
@@ -190,13 +190,13 @@ export const products = [
     nameEn: "Pure Mustard Blossom Raw Honey (Natural Cream)",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
-    price: 750,
-    originalPrice: 900,
+    price: 699,
+    originalPrice: 850,
     weight: "১ কেজি (জার)",
     variants: [
-      { label: "২৫০ গ্রাম", labelEn: "250g", price: 230, originalPrice: 280 },
-      { label: "৫০০ গ্রাম", labelEn: "500g", price: 420, originalPrice: 500 },
-      { label: "১ কেজি", labelEn: "1kg", price: 750, originalPrice: 900 }
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 210, originalPrice: 260 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 380, originalPrice: 460 },
+      { label: "১ কেজি", labelEn: "1kg", price: 699, originalPrice: 850 }
     ],
     rating: 4.8,
     reviewsCount: 380,
@@ -234,13 +234,13 @@ export const products = [
     nameEn: "Pure Black Seed (Kalonji) Flower Honey",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
-    price: 950,
-    originalPrice: 1150,
+    price: 1150,
+    originalPrice: 1380,
     weight: "১ কেজি (জার)",
     variants: [
-      { label: "২৫০ গ্রাম", labelEn: "250g", price: 290, originalPrice: 360 },
-      { label: "৫০০ গ্রাম", labelEn: "500g", price: 520, originalPrice: 650 },
-      { label: "১ কেজি", labelEn: "1kg", price: 950, originalPrice: 1150 }
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 320, originalPrice: 390 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 600, originalPrice: 720 },
+      { label: "১ কেজি", labelEn: "1kg", price: 1150, originalPrice: 1380 }
     ],
     rating: 4.9,
     reviewsCount: 320,
@@ -1000,8 +1000,8 @@ export const products = [
 ];
 
 export const bundleItems = [
-  { id: 'b1', name: 'সাতক্ষীরার খাঁটি গাওয়া ঘি (৪৫০ গ্রাম)', price: 720, weight: '৪৫০ গ্রাম' },
-  { id: 'b2', name: 'সুন্দরবন সাতক্ষীরা খলিশা মধু (৫০০ গ্রাম)', price: 620, weight: '৫০০ গ্রাম' },
+  { id: 'b1', name: 'সাতক্ষীরার খাঁটি গাওয়া ঘি (৫০০ গ্রাম)', price: 970, weight: '৫০০ গ্রাম' },
+  { id: 'b2', name: 'সুন্দরবন সাতক্ষীরা খলিশা মধু (৫০০ গ্রাম)', price: 1050, weight: '৫০০ গ্রাম' },
   { id: 'b3', name: 'আজওয়া ভিআইপি খেজুর (৪০০ গ্রাম)', price: 780, weight: '৪০০ গ্রাম' },
   { id: 'b4', name: 'রয়েল উদ আতর (৬ মিলি)', price: 550, weight: '৬ মিলি' },
   { id: 'b5', name: 'শ্রীমঙ্গলের কুঁড়ি চা পাতা (৪০০ গ্রাম)', price: 380, weight: '৪০০ গ্রাম' },
