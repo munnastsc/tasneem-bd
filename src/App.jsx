@@ -30,7 +30,9 @@ import {
   Home,
   Grid,
   Droplets,
-  Menu
+  Menu,
+  Mail,
+  Loader2
 } from 'lucide-react';
 import { products, bundleItems, reviews, faqs, sourcingStories } from './data/products';
 import AdminPanel from './components/AdminPanel';
@@ -54,6 +56,9 @@ export default function App() {
     const handleHash = () => {
       if (window.location.hash === '#admin') {
         setIsAdminOpen(true);
+        setIsCheckoutOpen(false);
+      } else {
+        setIsAdminOpen(false);
       }
     };
     window.addEventListener('hashchange', handleHash);
@@ -88,12 +93,14 @@ export default function App() {
   // Checkout Form State
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
   const [deliveryArea, setDeliveryArea] = useState('dhaka'); // 'dhaka' (60) or 'outside' (120)
   const [paymentMethod, setPaymentMethod] = useState('cod'); // 'cod', 'bkash', 'nagad'
   const [trxId, setTrxId] = useState('');
   const [senderNumber, setSenderNumber] = useState('');
   const [orderConfirmed, setOrderConfirmed] = useState(false);
+  const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
   const [confirmedOrderId, setConfirmedOrderId] = useState('');
   const [recentOrderNotice, setRecentOrderNotice] = useState(null);
   const [copiedPhone, setCopiedPhone] = useState(false);
@@ -223,6 +230,7 @@ export default function App() {
       `---------------------------------%0A` +
       `*ক্রেতার নাম:* ${customerName}%0A` +
       `*মোবাইল:* ${customerPhone}%0A` +
+      (customerEmail ? `*ইমেইল:* ${customerEmail}%0A` : '') +
       `*ঠিকানা:* ${customerAddress}%0A` +
       `*ডেলিভারি এলাকা:* ${deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳ ৬০)' : 'ঢাকার বাইরে (৳ ১২০)'}%0A` +
       `*পেমেন্ট মাধ্যম:* ${paymentMethod.toUpperCase()}${paymentDetails}%0A%0A` +
@@ -235,7 +243,7 @@ export default function App() {
   };
 
   // Order Submission with Auto WhatsApp Trigger
-  const handleConfirmOrder = (e) => {
+  const handleConfirmOrder = async (e) => {
     e.preventDefault();
     if (!customerName || !customerPhone || !customerAddress) {
       alert('দয়া করে আপনার নাম, মোবাইল নম্বর এবং ঠিকানা পূরণ করুন!');
@@ -250,10 +258,11 @@ export default function App() {
       return;
     }
 
+    setIsSubmittingOrder(true);
     const orderId = 'FN-' + Math.floor(100000 + Math.random() * 900000);
     setConfirmedOrderId(orderId);
 
-    // Save order in browser storage
+    // Save order in browser storage & Admin Panel database
     try {
       const existingOrders = JSON.parse(localStorage.getItem('tasneem_orders') || '[]');
       existingOrders.unshift({
@@ -261,29 +270,22 @@ export default function App() {
         date: new Date().toISOString(),
         customerName,
         customerPhone,
+        customerEmail: customerEmail || 'N/A',
         customerAddress,
         deliveryArea,
         paymentMethod,
         items: cart,
-        grandTotal
+        grandTotal,
+        status: 'pending'
       });
       localStorage.setItem('tasneem_orders', JSON.stringify(existingOrders));
     } catch (err) {
       console.error('Error saving order', err);
     }
 
-    // Confetti celebration
-    confetti({
-      particleCount: 140,
-      spread: 80,
-      origin: { y: 0.6 }
-    });
-
-    setOrderConfirmed(true);
-
-    // 📧 Background Email Dispatch to munnastsc@gmail.com (Works for PC & Mobile users without WhatsApp)
+    // 📧 Primary Order Notification via Email to munnastsc@gmail.com
     try {
-      fetch("https://formsubmit.co/ajax/munnastsc@gmail.com", {
+      await fetch("https://formsubmit.co/ajax/munnastsc@gmail.com", {
         method: "POST",
         headers: { 
           'Content-Type': 'application/json',
@@ -297,22 +299,30 @@ export default function App() {
           "তারিখ ও সময়": new Date().toLocaleString('bn-BD'),
           "ক্রেতার নাম": customerName,
           "মোবাইল নম্বর": customerPhone,
-          "ঠিকানা": customerAddress,
+          "ইমেইল": customerEmail || 'প্রদান করা হয়নি',
+          "পূর্ণ ঠিকানা": customerAddress,
           "ডেলিভারি এলাকা": deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳৬০)' : 'ঢাকার বাইরে (৳১২০)',
           "পেমেন্ট মাধ্যম": paymentMethod.toUpperCase(),
           "অর্ডারকৃত পণ্যসমূহ": cart.map(i => `${i.product.name} [${i.product.weight}] (x${i.qty}) - ৳${i.product.price * i.qty}`).join(' | '),
           "পণ্য উপমোট": `৳${subtotal}`,
           "ডেলিভারি চার্জ": `৳${deliveryCharge}`,
-          "সর্বমোট বিল": `৳${grandTotal}`
+          "সর্বমোট প্রদেয়": `৳${grandTotal}`
         })
-      }).catch(err => console.log('Email dispatch notification:', err));
-    } catch (e) {
-      console.log('Email error:', e);
+      });
+    } catch (err) {
+      console.log('Email dispatch notification log:', err);
     }
 
-    // 🚀 Auto-redirect to WhatsApp with order slip
-    const msg = generateWhatsAppMessage(orderId);
-    window.open(`https://wa.me/8801714740430?text=${msg}`, '_blank');
+    // Confetti celebration
+    confetti({
+      particleCount: 140,
+      spread: 80,
+      origin: { y: 0.6 }
+    });
+
+    setIsSubmittingOrder(false);
+    setOrderConfirmed(true);
+    // Note: No forced WhatsApp popup! Customer sees the confirmation directly, with WhatsApp as 2nd optional action.
   };
 
   const sendWhatsAppOrder = () => {
@@ -1633,41 +1643,69 @@ export default function App() {
 
             {orderConfirmed ? (
               <div style={{ padding: '24px 18px', textAlign: 'center' }}>
-                <div style={{ width: '60px', height: '60px', background: '#dcfce7', color: '#16a34a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-                  <CheckCircle size={32} />
+                <div style={{ width: '64px', height: '64px', background: '#dcfce7', color: '#16a34a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                  <CheckCircle size={34} />
                 </div>
                 <h3 style={{ fontSize: '1.3rem', color: '#064e3b', marginBottom: '6px' }}>আলহামদুলিল্লাহ! আপনার অর্ডার সফল হয়েছে</h3>
-                <p style={{ color: '#57534e', fontSize: '0.86rem', marginBottom: '14px' }}>
-                  অর্ডার নং: <strong style={{ color: '#064e3b', fontSize: '1.05rem' }}>{confirmedOrderId}</strong><br />
-                  আমাদের হোয়াটসঅ্যাপে আপনার অর্ডার স্লিপটি স্বয়ংক্রিয়ভাবে পাঠানো হচ্ছে।
+                <p style={{ color: '#475569', fontSize: '0.86rem', marginBottom: '14px' }}>
+                  অর্ডার আইডি: <strong style={{ color: '#064e3b', fontSize: '1.1rem' }}>{confirmedOrderId}</strong>
                 </p>
 
-                <div style={{ background: '#f0fdf4', border: '1.5px solid #86efac', borderRadius: '10px', padding: '12px', marginBottom: '14px', textAlign: 'left', fontSize: '0.82rem' }}>
-                  <div style={{ fontWeight: '700', color: '#166534', marginBottom: '5px' }}>📦 অর্ডারের সারসংক্ষেপ:</div>
-                  <div style={{ color: '#334155', marginBottom: '2px' }}>• <strong>ক্রেতা:</strong> {customerName} ({customerPhone})</div>
-                  <div style={{ color: '#334155', marginBottom: '2px' }}>• <strong>ঠিকানা:</strong> {customerAddress}</div>
-                  <div style={{ color: '#334155', marginBottom: '2px' }}>• <strong>ডেলিভারি:</strong> {deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳৬০)' : 'ঢাকার বাইরে (৳১২০)'}</div>
-                  <div style={{ color: '#064e3b', fontWeight: '700', marginTop: '4px', fontSize: '0.88rem' }}>• <strong>সর্বমোট বিল:</strong> ৳{grandTotal} (ক্যাশ অন ডেলিভারি)</div>
+                {/* 1st Primary Channel: Email & Admin Database Notice */}
+                <div style={{ background: '#f0fdf4', border: '1.5px solid #86efac', borderRadius: '10px', padding: '12px 14px', marginBottom: '14px', textAlign: 'left', fontSize: '0.83rem' }}>
+                  <div style={{ fontWeight: '700', color: '#166534', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Mail size={16} />
+                    <span>১ম মাধ্যম: ইমেইল ও ডাটাবেজে অর্ডার কনফার্মড</span>
+                  </div>
+                  <p style={{ color: '#334155', margin: '0 0 8px 0', lineHeight: '1.45' }}>
+                    আপনার অর্ডারটি সফলভাবে সেন্ট্রাল ডাটাবেজ এবং <strong>munnastsc@gmail.com</strong> ইমেইলে সংরক্ষিত হয়েছে। আমাদের প্রতিনিধি দ্রুত আপনার ঠিকানায় পার্সেল বুকিংয়ের জন্য ফোনে যোগাযোগ করবেন।
+                  </p>
+                  <div style={{ borderTop: '1px dashed #bbf7d0', paddingTop: '8px', color: '#1f2937', fontSize: '0.8rem' }}>
+                    <div>• <strong>ক্রেতার নাম:</strong> {customerName} ({customerPhone})</div>
+                    {customerEmail && <div>• <strong>ইমেইল:</strong> {customerEmail}</div>}
+                    <div>• <strong>ঠিকানা:</strong> {customerAddress}</div>
+                    <div>• <strong>ডেলিভারি:</strong> {deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳৬০)' : 'ঢাকার বাইরে (৳১২০)'}</div>
+                    <div style={{ marginTop: '4px' }}>• <strong>সর্বমোট বিল:</strong> <span style={{ color: '#064e3b', fontWeight: '800' }}>৳{grandTotal}</span> ({paymentMethod === 'cod' ? 'ক্যাশ অন ডেলিভারি' : paymentMethod.toUpperCase()})</div>
+                  </div>
                 </div>
 
-                <button 
-                  className="checkout-submit-btn" 
-                  style={{ width: '100%', background: '#25d366', color: '#fff', marginBottom: '10px', boxShadow: '0 4px 14px rgba(37, 211, 102, 0.4)' }}
-                  onClick={sendWhatsAppOrder}
-                >
-                  <MessageCircle size={18} />
-                  <span>হোয়াটসঅ্যাপে পাঠান / পুনরায় ওপেন করুন</span>
-                </button>
+                {/* 2nd Optional Channel: WhatsApp (ঐচ্ছিক) */}
+                <div style={{ background: '#f8fafc', border: '1.5px dashed #cbd5e1', borderRadius: '10px', padding: '12px 14px', marginBottom: '14px', textAlign: 'left' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '5px' }}>
+                    <div style={{ fontWeight: '700', color: '#1e293b', fontSize: '0.86rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <MessageCircle size={16} color="#16a34a" />
+                      <span>২য় মাধ্যম: হোয়াটসঅ্যাপে স্লিপ পাঠানো</span>
+                    </div>
+                    <span style={{ background: '#e2e8f0', color: '#475569', fontSize: '0.7rem', fontWeight: '700', padding: '2px 6px', borderRadius: '4px' }}>
+                      ঐচ্ছিক / Optional
+                    </span>
+                  </div>
+                  <p style={{ color: '#64748b', fontSize: '0.78rem', marginBottom: '10px', lineHeight: '1.35' }}>
+                    আপনার পিসিতে বা ফোনে হোয়াটসঅ্যাপ থাকলে চাইলে এক ক্লিকে অর্ডার স্লিপটি আমাদের অফিশিয়াল হোয়াটসঅ্যাপেও পাঠিয়ে রাখতে পারেন:
+                  </p>
+                  <button 
+                    type="button"
+                    className="checkout-submit-btn" 
+                    style={{ width: '100%', background: '#25d366', color: '#fff', padding: '10px 14px', fontSize: '0.88rem', boxShadow: '0 4px 12px rgba(37, 211, 102, 0.3)' }}
+                    onClick={sendWhatsAppOrder}
+                  >
+                    <MessageCircle size={17} />
+                    <span>হোয়াটসঅ্যাপে স্লিপ পাঠান (ঐচ্ছিক)</span>
+                  </button>
+                </div>
 
+                {/* Close & Continue Shopping */}
                 <button 
+                  type="button"
                   onClick={() => {
                     setOrderConfirmed(false);
                     setCart([]);
                     setIsCheckoutOpen(false);
                   }}
-                  style={{ background: 'transparent', border: '1px solid #cbd5e1', padding: '10px', width: '100%', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', color: '#475569' }}
+                  style={{ background: '#064e3b', color: '#fff', border: 'none', padding: '12px', width: '100%', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '0.9rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                 >
-                  নতুন কেনাকাটা করুন
+                  <ShoppingBag size={17} />
+                  <span>কেনাকাটা সম্পন্ন করুন / হোম পেজে ফিরুন</span>
                 </button>
               </div>
             ) : (
@@ -1733,6 +1771,11 @@ export default function App() {
 
                 {/* Form Fields */}
                 <form onSubmit={handleConfirmOrder} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ background: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: '8px', padding: '10px 12px', fontSize: '0.82rem', color: '#065f46', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Mail size={16} style={{ flexShrink: 0, color: '#059669' }} />
+                    <span><strong>সরাসরি ইমেইল ও ওয়েব অর্ডার:</strong> পিসিতে হোয়াটসঅ্যাপ না থাকলেও কোনো চিন্তা নেই, সরাসরি এক ক্লিকে অর্ডার সম্পন্ন হবে!</span>
+                  </div>
+
                   <div className="form-group-luxury">
                     <label>আপনার পূর্ণ নাম *</label>
                     <input 
@@ -1754,6 +1797,17 @@ export default function App() {
                       value={customerPhone}
                       onChange={e => setCustomerPhone(e.target.value)}
                       required
+                    />
+                  </div>
+
+                  <div className="form-group-luxury">
+                    <label>ইমেইল ঠিকানা (ঐচ্ছিক - ইনভয়েস ও মেমো পেতে)</label>
+                    <input 
+                      type="email" 
+                      placeholder="যেমন: yourname@gmail.com" 
+                      className="form-input-luxury"
+                      value={customerEmail}
+                      onChange={e => setCustomerEmail(e.target.value)}
                     />
                   </div>
 
@@ -1896,11 +1950,24 @@ export default function App() {
                   <button 
                     type="submit" 
                     className="checkout-submit-btn"
-                    disabled={cart.length === 0}
+                    disabled={cart.length === 0 || isSubmittingOrder}
+                    style={{ opacity: isSubmittingOrder ? 0.75 : 1, cursor: isSubmittingOrder ? 'wait' : 'pointer' }}
                   >
-                    <CheckCircle size={18} />
-                    <span>৳{grandTotal} - অর্ডার কনফার্ম করুন</span>
+                    {isSubmittingOrder ? (
+                      <>
+                        <Loader2 size={18} className="spin-animation" />
+                        <span>অর্ডারটি সিস্টেমে ও ইমেইলে জমা হচ্ছে...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle size={18} />
+                        <span>৳{grandTotal} - সরাসরি অর্ডার সম্পন্ন করুন</span>
+                      </>
+                    )}
                   </button>
+                  <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#64748b', margin: '2px 0 0 0' }}>
+                    🔒 ক্যাশ অন ডেলিভারি | পিসিতে হোয়াটসঅ্যাপ ছাড়াও সরাসরি অর্ডার কনফার্ম হয়
+                  </p>
                 </form>
               </div>
             )}

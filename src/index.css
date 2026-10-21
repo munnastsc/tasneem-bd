@@ -3204,5 +3204,14 @@ button, a, input, select {
   }
 }
 
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-animation {
+  animation: spinSlow 1s linear infinite;
+}
+
 
 
