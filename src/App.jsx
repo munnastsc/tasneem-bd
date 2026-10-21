@@ -226,7 +226,7 @@ export default function App() {
       : '';
     
     return `*নতুন অর্ডার স্লিপ - ${orderId}*%0A` +
-      `*TASNEEM BD (tasneembd.com)*%0A` +
+      `*TUHFA SHOP (tuhfashop.com)*%0A` +
       `---------------------------------%0A` +
       `*ক্রেতার নাম:* ${customerName}%0A` +
       `*মোবাইল:* ${customerPhone}%0A` +
@@ -264,7 +264,7 @@ export default function App() {
 
     // Save order in browser storage & Admin Panel database
     try {
-      const existingOrders = JSON.parse(localStorage.getItem('tasneem_orders') || '[]');
+      const existingOrders = JSON.parse(localStorage.getItem('tuhfashop_orders') || localStorage.getItem('tasneem_orders') || '[]');
       existingOrders.unshift({
         orderId,
         date: new Date().toISOString(),
@@ -278,6 +278,7 @@ export default function App() {
         grandTotal,
         status: 'pending'
       });
+      localStorage.setItem('tuhfashop_orders', JSON.stringify(existingOrders));
       localStorage.setItem('tasneem_orders', JSON.stringify(existingOrders));
     } catch (err) {
       console.error('Error saving order', err);
@@ -292,7 +293,7 @@ export default function App() {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          _subject: `নতুন অর্ডার স্লিপ - ${orderId} (TASNEEM BD)`,
+          _subject: `নতুন অর্ডার #${orderId} - TUHFA SHOP (৳${grandTotal})`,
           _template: "table",
           _captcha: "false",
           "অর্ডার আইডি": orderId,
@@ -389,11 +390,11 @@ export default function App() {
 
             <div className="brand-emblem" onClick={() => { setSelectedCategory('all'); setShowWishlistOnly(false); }}>
               <div className="brand-logo-icon">
-                <Award size={26} />
+                <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" />
               </div>
               <div className="brand-text">
-                <h1>TASNEEM <span>BD</span></h1>
-                <p>tasneembd.com | PURE & SUNNAH</p>
+                <h1>TUHFA <span>SHOP</span></h1>
+                <p>tuhfashop.com | PURE & SUNNAH</p>
               </div>
             </div>
           </div>
@@ -571,11 +572,11 @@ export default function App() {
             <div className="drawer-header">
               <div className="brand-emblem" onClick={() => { setSelectedCategory('all'); setIsMobileMenuOpen(false); }}>
                 <div className="brand-logo-icon">
-                  <Award size={22} />
+                  <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" />
                 </div>
                 <div className="brand-text">
-                  <h2 style={{ fontSize: '1.15rem', color: '#064e3b', fontWeight: '800' }}>TASNEEM <span style={{ color: '#d97706' }}>BD</span></h2>
-                  <p style={{ fontSize: '0.65rem', color: '#64748b' }}>tasneembd.com | মেনু ও ক্যাটাগরি</p>
+                  <h2 style={{ fontSize: '1.15rem', color: '#064e3b', fontWeight: '800' }}>TUHFA <span style={{ color: '#d97706' }}>SHOP</span></h2>
+                  <p style={{ fontSize: '0.65rem', color: '#64748b' }}>tuhfashop.com | মেনু ও ক্যাটাগরি</p>
                 </div>
               </div>
               <button className="drawer-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
@@ -2060,8 +2061,13 @@ export default function App() {
       <footer className="luxury-footer">
         <div className="footer-container">
           <div className="footer-col">
-            <h3 style={{ color: '#fbbf24', fontSize: '1.5rem', marginBottom: '4px', letterSpacing: '1px' }}>TASNEEM BD</h3>
-            <p style={{ color: '#34d399', fontSize: '0.9rem', fontWeight: 700, marginBottom: '10px' }}>tasneembd.com</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+              <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" style={{ width: '46px', height: '46px', borderRadius: '10px', objectFit: 'cover', border: '1.5px solid #fbbf24' }} />
+              <div>
+                <h3 style={{ color: '#fbbf24', fontSize: '1.4rem', margin: 0, letterSpacing: '1px', lineHeight: 1.1 }}>TUHFA SHOP</h3>
+                <span style={{ color: '#34d399', fontSize: '0.82rem', fontWeight: 700 }}>tuhfashop.com</span>
+              </div>
+            </div>
             <p style={{ marginBottom: '12px' }}>
               সাতক্ষীরার খাঁটি গাওয়া ঘি ও বিখ্যাত হিমসাগর আম, সুন্দরবনের র' মধু, সৌদি আরবের আজওয়া খেজুর, সিলেটের চা এবং মদিনা ও দুবাইয়ের অ্যালকোহলমুক্ত রাজকীয় আতরের এক বিশ্বস্ত প্ল্যাটফর্ম।
             </p>
@@ -2096,14 +2102,14 @@ export default function App() {
             <h4>যোগাযোগ ও ঠিকানা</h4>
             <p>হটলাইন: +880 1714-740430</p>
             <p>হোয়াটসঅ্যাপ: +880 1714-740430</p>
-            <p>ইমেইল: support@tasneembd.com</p>
-            <p>ওয়েবসাইট: www.tasneembd.com</p>
+            <p>ইমেইল: support@tuhfashop.com</p>
+            <p>ওয়েবসাইট: www.tuhfashop.com</p>
             <p>ঠিকানা: বাড়ি ১২, রোড ৫, বনানী, ঢাকা - ১২১৩</p>
           </div>
         </div>
 
         <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '18px', textAlign: 'center', fontSize: '0.8rem', color: '#6ee7b7' }}>
-          © {new Date().getFullYear()} TASNEEM BD (tasneembd.com). All rights reserved. খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল।
+          © {new Date().getFullYear()} TUHFA SHOP (tuhfashop.com). All rights reserved. খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল।
         </div>
       </footer>
 
