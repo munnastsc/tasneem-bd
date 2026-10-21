@@ -33,6 +33,7 @@ import {
   Menu
 } from 'lucide-react';
 import { products, bundleItems, reviews, faqs, sourcingStories } from './data/products';
+import AdminPanel from './components/AdminPanel';
 
 export default function App() {
   const [lang, setLang] = useState('bn');
@@ -43,6 +44,21 @@ export default function App() {
   const [labModalProduct, setLabModalProduct] = useState(null);
   const [detailModalProduct, setDetailModalProduct] = useState(null);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+  
+  // Admin Panel state & URL hash listener
+  const [isAdminOpen, setIsAdminOpen] = useState(() => {
+    return window.location.hash === '#admin';
+  });
+
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === '#admin') {
+        setIsAdminOpen(true);
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
   
   // Main Menu & Mobile Drawer states
   const [isMainMenuOpen, setIsMainMenuOpen] = useState(false);
@@ -264,6 +280,35 @@ export default function App() {
     });
 
     setOrderConfirmed(true);
+
+    // 📧 Background Email Dispatch to munnastsc@gmail.com (Works for PC & Mobile users without WhatsApp)
+    try {
+      fetch("https://formsubmit.co/ajax/munnastsc@gmail.com", {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: `নতুন অর্ডার স্লিপ - ${orderId} (TASNEEM BD)`,
+          _template: "table",
+          _captcha: "false",
+          "অর্ডার আইডি": orderId,
+          "তারিখ ও সময়": new Date().toLocaleString('bn-BD'),
+          "ক্রেতার নাম": customerName,
+          "মোবাইল নম্বর": customerPhone,
+          "ঠিকানা": customerAddress,
+          "ডেলিভারি এলাকা": deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳৬০)' : 'ঢাকার বাইরে (৳১২০)',
+          "পেমেন্ট মাধ্যম": paymentMethod.toUpperCase(),
+          "অর্ডারকৃত পণ্যসমূহ": cart.map(i => `${i.product.name} [${i.product.weight}] (x${i.qty}) - ৳${i.product.price * i.qty}`).join(' | '),
+          "পণ্য উপমোট": `৳${subtotal}`,
+          "ডেলিভারি চার্জ": `৳${deliveryCharge}`,
+          "সর্বমোট বিল": `৳${grandTotal}`
+        })
+      }).catch(err => console.log('Email dispatch notification:', err));
+    } catch (e) {
+      console.log('Email error:', e);
+    }
 
     // 🚀 Auto-redirect to WhatsApp with order slip
     const msg = generateWhatsAppMessage(orderId);
@@ -1972,6 +2017,12 @@ export default function App() {
             <a href="#!">ল্যাব টেস্ট ভেরিফিকেশন</a>
             <a href="#!">ডেলিভারি চার্জ ও সময়সীমা</a>
             <a href="#!">প্রাইভেসি ও শর্তাবলী</a>
+            <button 
+              onClick={() => { setIsAdminOpen(true); window.location.hash = 'admin'; }}
+              style={{ background: 'none', border: 'none', color: '#fbbf24', fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer', textAlign: 'left', padding: '6px 0', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}
+            >
+              🔑 অ্যাডমিন পোর্টাল (লগইন)
+            </button>
           </div>
 
           <div className="footer-col">
@@ -1988,6 +2039,18 @@ export default function App() {
           © {new Date().getFullYear()} TASNEEM BD (tasneembd.com). All rights reserved. খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল।
         </div>
       </footer>
+
+      {/* 19. Admin Order Management Panel */}
+      {isAdminOpen && (
+        <AdminPanel 
+          onClose={() => {
+            setIsAdminOpen(false);
+            if (window.location.hash === '#admin') {
+              window.history.pushState("", document.title, window.location.pathname + window.location.search);
+            }
+          }} 
+        />
+      )}
     </div>
   );
 }
