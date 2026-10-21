@@ -195,7 +195,30 @@ export default function App() {
   const grandTotal = subtotal > 0 ? subtotal + deliveryCharge : 0;
   const totalCartCount = cart.reduce((acc, curr) => acc + curr.qty, 0);
 
-  // Order Submission
+  // Generate WhatsApp Order Message
+  const generateWhatsAppMessage = (orderId) => {
+    const orderItemsText = cart.map(item => `• ${item.product.name} [${item.product.weight}] (পরিমাণ: ${item.qty} টি, মূল্য: ৳${item.product.price * item.qty})`).join('%0A');
+    const paymentDetails = (paymentMethod === 'bkash' || paymentMethod === 'nagad')
+      ? `%0A*পেমেন্ট নম্বর:* ${senderNumber}%0A*TrxID:* ${trxId}`
+      : '';
+    
+    return `*নতুন অর্ডার স্লিপ - ${orderId}*%0A` +
+      `*TASNEEM BD (tasneembd.com)*%0A` +
+      `---------------------------------%0A` +
+      `*ক্রেতার নাম:* ${customerName}%0A` +
+      `*মোবাইল:* ${customerPhone}%0A` +
+      `*ঠিকানা:* ${customerAddress}%0A` +
+      `*ডেলিভারি এলাকা:* ${deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳ ৬০)' : 'ঢাকার বাইরে (৳ ১২০)'}%0A` +
+      `*পেমেন্ট মাধ্যম:* ${paymentMethod.toUpperCase()}${paymentDetails}%0A%0A` +
+      `*অর্ডারকৃত পণ্যসমূহ:*%0A${orderItemsText}%0A%0A` +
+      `*পণ্য উপমোট:* ৳${subtotal}%0A` +
+      `*ডেলিভারি চার্জ:* ৳${deliveryCharge}%0A` +
+      `*সর্বমোট প্রদেয়:* ৳${grandTotal}%0A` +
+      `---------------------------------%0A` +
+      `দয়া করে অর্ডারটি নিশ্চিত করে পার্সেল বুকিং দিন। ধন্যবাদ!`;
+  };
+
+  // Order Submission with Auto WhatsApp Trigger
   const handleConfirmOrder = (e) => {
     e.preventDefault();
     if (!customerName || !customerPhone || !customerAddress) {
@@ -214,6 +237,25 @@ export default function App() {
     const orderId = 'FN-' + Math.floor(100000 + Math.random() * 900000);
     setConfirmedOrderId(orderId);
 
+    // Save order in browser storage
+    try {
+      const existingOrders = JSON.parse(localStorage.getItem('tasneem_orders') || '[]');
+      existingOrders.unshift({
+        orderId,
+        date: new Date().toISOString(),
+        customerName,
+        customerPhone,
+        customerAddress,
+        deliveryArea,
+        paymentMethod,
+        items: cart,
+        grandTotal
+      });
+      localStorage.setItem('tasneem_orders', JSON.stringify(existingOrders));
+    } catch (err) {
+      console.error('Error saving order', err);
+    }
+
     // Confetti celebration
     confetti({
       particleCount: 140,
@@ -222,25 +264,14 @@ export default function App() {
     });
 
     setOrderConfirmed(true);
+
+    // 🚀 Auto-redirect to WhatsApp with order slip
+    const msg = generateWhatsAppMessage(orderId);
+    window.open(`https://wa.me/8801714740430?text=${msg}`, '_blank');
   };
 
   const sendWhatsAppOrder = () => {
-    const orderItemsText = cart.map(item => `• ${item.product.name} [${item.product.weight}] (পরিমাণ: ${item.qty} টি, মূল্য: ৳${item.product.price * item.qty})`).join('%0A');
-    const paymentDetails = (paymentMethod === 'bkash' || paymentMethod === 'nagad')
-      ? `%0A*পেমেন্ট নম্বর:* ${senderNumber}%0A*TrxID:* ${trxId}`
-      : '';
-    
-    const msg = `*নতুন অর্ডার স্লিপ - ${confirmedOrderId}*%0A%0A` +
-      `*ক্রেতার নাম:* ${customerName}%0A` +
-      `*মোবাইল:* ${customerPhone}%0A` +
-      `*ঠিকানা:* ${customerAddress}%0A` +
-      `*ডেলিভারি এলাকা:* ${deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳ ৬০)' : 'ঢাকার বাইরে (৳ ১২০)'}%0A` +
-      `*পেমেন্ট মাধ্যম:* ${paymentMethod.toUpperCase()}${paymentDetails}%0A%0A` +
-      `*অর্ডারকৃত পণ্যসমূহ:*%0A${orderItemsText}%0A%0A` +
-      `*ডেলিভারি চার্জ:* ৳${deliveryCharge}%0A` +
-      `*সর্বমোট মূল্য:* ৳${grandTotal}%0A%0A` +
-      `দয়া করে দ্রুত পার্সেল প্রসেস করুন। ধন্যবাদ!`;
-
+    const msg = generateWhatsAppMessage(confirmedOrderId);
     window.open(`https://wa.me/8801714740430?text=${msg}`, '_blank');
   };
 
@@ -1556,23 +1587,31 @@ export default function App() {
             </div>
 
             {orderConfirmed ? (
-              <div style={{ padding: '32px 20px', textAlign: 'center' }}>
-                <div style={{ width: '64px', height: '64px', background: '#dcfce7', color: '#16a34a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                  <CheckCircle size={36} />
+              <div style={{ padding: '24px 18px', textAlign: 'center' }}>
+                <div style={{ width: '60px', height: '60px', background: '#dcfce7', color: '#16a34a', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                  <CheckCircle size={32} />
                 </div>
-                <h3 style={{ fontSize: '1.4rem', color: '#064e3b', marginBottom: '8px' }}>আলহামদুলিল্লাহ! আপনার অর্ডার সফল হয়েছে</h3>
-                <p style={{ color: '#57534e', fontSize: '0.88rem', marginBottom: '20px' }}>
-                  অর্ডার নং: <strong>{confirmedOrderId}</strong><br />
-                  আমাদের প্রতিনিধি অতি শীঘ্রই ফোন করে পার্সেল পাঠানোর আপডেট প্রদান করবেন।
+                <h3 style={{ fontSize: '1.3rem', color: '#064e3b', marginBottom: '6px' }}>আলহামদুলিল্লাহ! আপনার অর্ডার সফল হয়েছে</h3>
+                <p style={{ color: '#57534e', fontSize: '0.86rem', marginBottom: '14px' }}>
+                  অর্ডার নং: <strong style={{ color: '#064e3b', fontSize: '1.05rem' }}>{confirmedOrderId}</strong><br />
+                  আমাদের হোয়াটসঅ্যাপে আপনার অর্ডার স্লিপটি স্বয়ংক্রিয়ভাবে পাঠানো হচ্ছে।
                 </p>
+
+                <div style={{ background: '#f0fdf4', border: '1.5px solid #86efac', borderRadius: '10px', padding: '12px', marginBottom: '14px', textAlign: 'left', fontSize: '0.82rem' }}>
+                  <div style={{ fontWeight: '700', color: '#166534', marginBottom: '5px' }}>📦 অর্ডারের সারসংক্ষেপ:</div>
+                  <div style={{ color: '#334155', marginBottom: '2px' }}>• <strong>ক্রেতা:</strong> {customerName} ({customerPhone})</div>
+                  <div style={{ color: '#334155', marginBottom: '2px' }}>• <strong>ঠিকানা:</strong> {customerAddress}</div>
+                  <div style={{ color: '#334155', marginBottom: '2px' }}>• <strong>ডেলিভারি:</strong> {deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳৬০)' : 'ঢাকার বাইরে (৳১২০)'}</div>
+                  <div style={{ color: '#064e3b', fontWeight: '700', marginTop: '4px', fontSize: '0.88rem' }}>• <strong>সর্বমোট বিল:</strong> ৳{grandTotal} (ক্যাশ অন ডেলিভারি)</div>
+                </div>
 
                 <button 
                   className="checkout-submit-btn" 
-                  style={{ width: '100%', background: '#25d366', color: '#fff', marginBottom: '12px' }}
+                  style={{ width: '100%', background: '#25d366', color: '#fff', marginBottom: '10px', boxShadow: '0 4px 14px rgba(37, 211, 102, 0.4)' }}
                   onClick={sendWhatsAppOrder}
                 >
                   <MessageCircle size={18} />
-                  <span>হোয়াটসঅ্যাপে স্লিপ পাঠিয়ে কনফার্ম করুন</span>
+                  <span>হোয়াটসঅ্যাপে পাঠান / পুনরায় ওপেন করুন</span>
                 </button>
 
                 <button 
@@ -1581,7 +1620,7 @@ export default function App() {
                     setCart([]);
                     setIsCheckoutOpen(false);
                   }}
-                  style={{ background: 'transparent', border: '1px solid #cbd5e1', padding: '11px', width: '100%', borderRadius: '8px', cursor: 'pointer', fontWeight: '600' }}
+                  style={{ background: 'transparent', border: '1px solid #cbd5e1', padding: '10px', width: '100%', borderRadius: '8px', cursor: 'pointer', fontWeight: '600', color: '#475569' }}
                 >
                   নতুন কেনাকাটা করুন
                 </button>
