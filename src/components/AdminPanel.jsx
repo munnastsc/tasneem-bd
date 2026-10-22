@@ -8,7 +8,7 @@ import {
 export default function AdminPanel({ onClose }) {
   // Authentication State
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('tuhfa_admin_auth') === 'true' || localStorage.getItem('tasneem_admin_auth') === 'true';
+    return localStorage.getItem('khatisaoda_admin_auth') === 'true' || localStorage.getItem('tuhfa_admin_auth') === 'true' || localStorage.getItem('tasneem_admin_auth') === 'true';
   });
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +24,7 @@ export default function AdminPanel({ onClose }) {
   // Load orders from localStorage
   const loadOrders = () => {
     try {
-      const stored = localStorage.getItem('tuhfashop_orders') || localStorage.getItem('tasneem_orders');
+      const stored = localStorage.getItem('khatisaoda_orders') || localStorage.getItem('tuhfashop_orders') || localStorage.getItem('tasneem_orders');
       if (stored) {
         setOrders(JSON.parse(stored));
       } else {
@@ -79,6 +79,7 @@ export default function AdminPanel({ onClose }) {
             grandTotal: 1920
           }
         ];
+        localStorage.setItem('khatisaoda_orders', JSON.stringify(sampleOrders));
         localStorage.setItem('tuhfashop_orders', JSON.stringify(sampleOrders));
         localStorage.setItem('tasneem_orders', JSON.stringify(sampleOrders));
         setOrders(sampleOrders);
@@ -100,12 +101,13 @@ export default function AdminPanel({ onClose }) {
   // Handle Login
   const handleLogin = (e) => {
     e.preventDefault();
-    if (username.trim() === 'admin' && (password === 'tuhfa2026' || password === 'tasneem2026')) {
+    if (username.trim() === 'admin' && (password === 'khati2026' || password === 'tuhfa2026' || password === 'tasneem2026')) {
       setIsAuthenticated(true);
+      localStorage.setItem('khatisaoda_admin_auth', 'true');
       localStorage.setItem('tuhfa_admin_auth', 'true');
       localStorage.setItem('tasneem_admin_auth', 'true');
       setLoginError('');
-      showToast('স্বাগতম! TUHFA SHOP অ্যাডমিন প্যানেলে সফলভাবে লগইন হয়েছে।');
+      showToast('স্বাগতম! খাঁটি সওদা (khatisaoda.com) অ্যাডমিন প্যানেলে সফলভাবে লগইন হয়েছে।');
     } else {
       setLoginError('ভুল ইউজারনেম বা পাসওয়ার্ড! আবার চেষ্টা করুন।');
     }
@@ -114,6 +116,7 @@ export default function AdminPanel({ onClose }) {
   // Handle Logout
   const handleLogout = () => {
     setIsAuthenticated(false);
+    localStorage.removeItem('khatisaoda_admin_auth');
     localStorage.removeItem('tuhfa_admin_auth');
     localStorage.removeItem('tasneem_admin_auth');
     showToast('অ্যাডমিন প্যানেল থেকে লগআউট সম্পন্ন হয়েছে।');
@@ -123,6 +126,7 @@ export default function AdminPanel({ onClose }) {
   const handleUpdateStatus = (orderId, newStatus) => {
     const updated = orders.map(o => o.orderId === orderId ? { ...o, status: newStatus } : o);
     setOrders(updated);
+    localStorage.setItem('khatisaoda_orders', JSON.stringify(updated));
     localStorage.setItem('tuhfashop_orders', JSON.stringify(updated));
     localStorage.setItem('tasneem_orders', JSON.stringify(updated));
     showToast(`অর্ডার ${orderId} এর স্ট্যাটাস '${newStatus}' করা হয়েছে।`);
@@ -133,6 +137,7 @@ export default function AdminPanel({ onClose }) {
     if (window.confirm(`আপনি কি নিশ্চিতভাবে অর্ডার ${orderId} মুছে ফেলতে চান?`)) {
       const updated = orders.filter(o => o.orderId !== orderId);
       setOrders(updated);
+      localStorage.setItem('khatisaoda_orders', JSON.stringify(updated));
       localStorage.setItem('tuhfashop_orders', JSON.stringify(updated));
       localStorage.setItem('tasneem_orders', JSON.stringify(updated));
       showToast(`অর্ডার ${orderId} ডিলিট করা হয়েছে।`);
@@ -158,7 +163,7 @@ export default function AdminPanel({ onClose }) {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `tuhfashop_orders_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `khatisaoda_orders_${new Date().toISOString().slice(0, 10)}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -191,10 +196,10 @@ export default function AdminPanel({ onClose }) {
         <div className="admin-login-card">
           <div className="admin-login-header">
             <div className="admin-logo-badge" style={{ padding: 0, overflow: 'hidden' }}>
-              <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <h2>TUHFA SHOP অ্যাডমিন পোর্টাল</h2>
-            <p>tuhfashop.com অর্ডার ম্যানেজমেন্ট ও কাস্টমার ডাটাবেজ এক্সেস</p>
+            <h2>খাঁটি সওদা অ্যাডমিন পোর্টাল</h2>
+            <p>khatisaoda.com অর্ডার ম্যানেজমেন্ট ও কাস্টমার ডাটাবেজ এক্সেস</p>
           </div>
 
           <form onSubmit={handleLogin} className="admin-login-form">
@@ -232,7 +237,7 @@ export default function AdminPanel({ onClose }) {
             <div className="admin-hint-box">
               <span>ডিফল্ট লগইন তথ্য:</span>
               <code>Username: <strong>admin</strong></code>
-              <code>Password: <strong>tuhfa2026</strong> (বা tasneem2026)</code>
+              <code>Password: <strong>khati2026</strong> (বা tuhfa2026)</code>
             </div>
 
             <div className="admin-actions-row">
@@ -265,8 +270,8 @@ export default function AdminPanel({ onClose }) {
       <header className="admin-navbar">
         <div className="admin-nav-left">
           <div className="admin-nav-brand">
-            <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" style={{ width: '34px', height: '34px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #fbbf24' }} />
-            <h2>TUHFA SHOP</h2>
+            <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '34px', height: '34px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #fbbf24' }} />
+            <h2>খাঁটি সওদা</h2>
             <span className="admin-pill">ম্যানেজমেন্ট প্যানেল</span>
           </div>
         </div>
@@ -484,7 +489,7 @@ export default function AdminPanel({ onClose }) {
                           <div className="action-buttons-group">
                             {/* WhatsApp Direct Chat */}
                             <a 
-                              href={`https://wa.me/88${order.customerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`আসসালামু আলাইকুম ${order.customerName} সাহেব, TUHFA SHOP (tuhfashop.com) থেকে আপনার অর্ডার ${order.orderId} এর বিষয়ে যোগাযোগ করা হচ্ছে।`)}`}
+                              href={`https://wa.me/88${order.customerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`আসসালামু আলাইকুম ${order.customerName} সাহেব, খাঁটি সওদা (khatisaoda.com) থেকে আপনার অর্ডার ${order.orderId} এর বিষয়ে যোগাযোগ করা হচ্ছে।`)}`}
                               target="_blank" 
                               rel="noreferrer"
                               className="action-icon-btn whatsapp"
@@ -547,10 +552,10 @@ export default function AdminPanel({ onClose }) {
 
             <div className="invoice-header">
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" style={{ width: '50px', height: '50px', borderRadius: '10px', objectFit: 'cover', border: '1.5px solid #064e3b' }} />
+                <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '50px', height: '50px', borderRadius: '10px', objectFit: 'cover', border: '1.5px solid #064e3b' }} />
                 <div>
-                  <h2 style={{ margin: 0, fontSize: '1.4rem', color: '#064e3b' }}>TUHFA SHOP</h2>
-                  <p style={{ margin: '2px 0', fontSize: '0.85rem', color: '#475569' }}>tuhfashop.com | খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল</p>
+                  <h2 style={{ margin: 0, fontSize: '1.4rem', color: '#064e3b' }}>খাঁটি সওদা</h2>
+                  <p style={{ margin: '2px 0', fontSize: '0.85rem', color: '#475569' }}>khatisaoda.com | খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল</p>
                   <small style={{ color: '#64748b' }}>হটলাইন: 01714-740430 | বনানী, ঢাকা</small>
                 </div>
               </div>

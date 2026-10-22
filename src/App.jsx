@@ -226,7 +226,7 @@ export default function App() {
       : '';
     
     return `*নতুন অর্ডার স্লিপ - ${orderId}*%0A` +
-      `*TUHFA SHOP (tuhfashop.com)*%0A` +
+      `*খাঁটি সওদা (khatisaoda.com)*%0A` +
       `---------------------------------%0A` +
       `*ক্রেতার নাম:* ${customerName}%0A` +
       `*মোবাইল:* ${customerPhone}%0A` +
@@ -264,7 +264,7 @@ export default function App() {
 
     // Save order in browser storage & Admin Panel database
     try {
-      const existingOrders = JSON.parse(localStorage.getItem('tuhfashop_orders') || localStorage.getItem('tasneem_orders') || '[]');
+      const existingOrders = JSON.parse(localStorage.getItem('khatisaoda_orders') || localStorage.getItem('tuhfashop_orders') || localStorage.getItem('tasneem_orders') || '[]');
       existingOrders.unshift({
         orderId,
         date: new Date().toISOString(),
@@ -278,6 +278,7 @@ export default function App() {
         grandTotal,
         status: 'pending'
       });
+      localStorage.setItem('khatisaoda_orders', JSON.stringify(existingOrders));
       localStorage.setItem('tuhfashop_orders', JSON.stringify(existingOrders));
       localStorage.setItem('tasneem_orders', JSON.stringify(existingOrders));
     } catch (err) {
@@ -293,7 +294,7 @@ export default function App() {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          _subject: `নতুন অর্ডার #${orderId} - TUHFA SHOP (৳${grandTotal})`,
+          _subject: `নতুন অর্ডার #${orderId} - খাঁটি সওদা (৳${grandTotal})`,
           _template: "table",
           _captcha: "false",
           "অর্ডার আইডি": orderId,
@@ -390,11 +391,11 @@ export default function App() {
 
             <div className="brand-emblem" onClick={() => { setSelectedCategory('all'); setShowWishlistOnly(false); }}>
               <div className="brand-logo-icon">
-                <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" />
+                <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" />
               </div>
               <div className="brand-text">
-                <h1>TUHFA <span>SHOP</span></h1>
-                <p>tuhfashop.com | PURE & SUNNAH</p>
+                <h1>খাঁটি <span>সওদা</span></h1>
+                <p>khatisaoda.com | PURE & AUTHENTIC</p>
               </div>
             </div>
           </div>
@@ -572,11 +573,11 @@ export default function App() {
             <div className="drawer-header">
               <div className="brand-emblem" onClick={() => { setSelectedCategory('all'); setIsMobileMenuOpen(false); }}>
                 <div className="brand-logo-icon">
-                  <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" />
+                  <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" />
                 </div>
                 <div className="brand-text">
-                  <h2 style={{ fontSize: '1.15rem', color: '#064e3b', fontWeight: '800' }}>TUHFA <span style={{ color: '#d97706' }}>SHOP</span></h2>
-                  <p style={{ fontSize: '0.65rem', color: '#64748b' }}>tuhfashop.com | মেনু ও ক্যাটাগরি</p>
+                  <h2 style={{ fontSize: '1.15rem', color: '#064e3b', fontWeight: '800' }}>খাঁটি <span style={{ color: '#d97706' }}>সওদা</span></h2>
+                  <p style={{ fontSize: '0.65rem', color: '#64748b' }}>khatisaoda.com | মেনু ও ক্যাটাগরি</p>
                 </div>
               </div>
               <button className="drawer-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
@@ -2062,10 +2063,10 @@ export default function App() {
         <div className="footer-container">
           <div className="footer-col">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-              <img src="/images/tuhfashop_logo.png" alt="TUHFA SHOP" style={{ width: '46px', height: '46px', borderRadius: '10px', objectFit: 'cover', border: '1.5px solid #fbbf24' }} />
+              <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '48px', height: '48px', borderRadius: '10px', objectFit: 'cover', border: '1.5px solid #fbbf24' }} />
               <div>
-                <h3 style={{ color: '#fbbf24', fontSize: '1.4rem', margin: 0, letterSpacing: '1px', lineHeight: 1.1 }}>TUHFA SHOP</h3>
-                <span style={{ color: '#34d399', fontSize: '0.82rem', fontWeight: 700 }}>tuhfashop.com</span>
+                <h3 style={{ color: '#fbbf24', fontSize: '1.4rem', margin: 0, letterSpacing: '0.5px', lineHeight: 1.1 }}>খাঁটি সওদা</h3>
+                <span style={{ color: '#34d399', fontSize: '0.82rem', fontWeight: 700 }}>khatisaoda.com</span>
               </div>
             </div>
             <p style={{ marginBottom: '12px' }}>
@@ -2102,14 +2103,14 @@ export default function App() {
             <h4>যোগাযোগ ও ঠিকানা</h4>
             <p>হটলাইন: +880 1714-740430</p>
             <p>হোয়াটসঅ্যাপ: +880 1714-740430</p>
-            <p>ইমেইল: support@tuhfashop.com</p>
-            <p>ওয়েবসাইট: www.tuhfashop.com</p>
+            <p>ইমেইল: support@khatisaoda.com</p>
+            <p>ওয়েবসাইট: www.khatisaoda.com</p>
             <p>ঠিকানা: বাড়ি ১২, রোড ৫, বনানী, ঢাকা - ১২১৩</p>
           </div>
         </div>
 
         <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '18px', textAlign: 'center', fontSize: '0.8rem', color: '#6ee7b7' }}>
-          © {new Date().getFullYear()} TUHFA SHOP (tuhfashop.com). All rights reserved. খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল।
+          © {new Date().getFullYear()} খাঁটি সওদা (khatisaoda.com). All rights reserved. খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল।
         </div>
       </footer>
 
