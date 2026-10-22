@@ -107,7 +107,7 @@ export default function AdminPanel({ onClose }) {
       localStorage.setItem('tuhfa_admin_auth', 'true');
       localStorage.setItem('tasneem_admin_auth', 'true');
       setLoginError('');
-      showToast('স্বাগতম! খাঁটি সওদা (khatisaoda.com) অ্যাডমিন প্যানেলে সফলভাবে লগইন হয়েছে।');
+      showToast('স্বাগতম! খাঁটি সওদা (www.khatisaoda.com) অ্যাডমিন প্যানেলে সফলভাবে লগইন হয়েছে।');
     } else {
       setLoginError('ভুল ইউজারনেম বা পাসওয়ার্ড! আবার চেষ্টা করুন।');
     }
@@ -195,11 +195,11 @@ export default function AdminPanel({ onClose }) {
       <div className="admin-overlay">
         <div className="admin-login-card">
           <div className="admin-login-header">
-            <div className="admin-logo-badge" style={{ padding: 0, overflow: 'hidden' }}>
-              <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div className="admin-logo-badge" style={{ padding: 0, overflow: 'hidden', borderRadius: '50%', border: '2px solid #059669', background: '#fff' }}>
+              <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             <h2>খাঁটি সওদা অ্যাডমিন পোর্টাল</h2>
-            <p>khatisaoda.com অর্ডার ম্যানেজমেন্ট ও কাস্টমার ডাটাবেজ এক্সেস</p>
+            <p>www.khatisaoda.com অর্ডার ম্যানেজমেন্ট ও কাস্টমার ডাটাবেজ এক্সেস</p>
           </div>
 
           <form onSubmit={handleLogin} className="admin-login-form">
@@ -270,7 +270,7 @@ export default function AdminPanel({ onClose }) {
       <header className="admin-navbar">
         <div className="admin-nav-left">
           <div className="admin-nav-brand">
-            <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '34px', height: '34px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #fbbf24' }} />
+            <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'contain', border: '1.5px solid #fbbf24', background: '#fff' }} />
             <h2>খাঁটি সওদা</h2>
             <span className="admin-pill">ম্যানেজমেন্ট প্যানেল</span>
           </div>
@@ -489,7 +489,7 @@ export default function AdminPanel({ onClose }) {
                           <div className="action-buttons-group">
                             {/* WhatsApp Direct Chat */}
                             <a 
-                              href={`https://wa.me/88${order.customerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`আসসালামু আলাইকুম ${order.customerName} সাহেব, খাঁটি সওদা (khatisaoda.com) থেকে আপনার অর্ডার ${order.orderId} এর বিষয়ে যোগাযোগ করা হচ্ছে।`)}`}
+                              href={`https://wa.me/88${order.customerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`আসসালামু আলাইকুম ${order.customerName} সাহেব, খাঁটি সওদা (www.khatisaoda.com) থেকে আপনার অর্ডার ${order.orderId} এর বিষয়ে যোগাযোগ করা হচ্ছে।`)}`}
                               target="_blank" 
                               rel="noreferrer"
                               className="action-icon-btn whatsapp"
@@ -552,10 +552,10 @@ export default function AdminPanel({ onClose }) {
 
             <div className="invoice-header">
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '50px', height: '50px', borderRadius: '10px', objectFit: 'cover', border: '1.5px solid #064e3b' }} />
+                <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'contain', border: '1.5px solid #064e3b', background: '#fff' }} />
                 <div>
                   <h2 style={{ margin: 0, fontSize: '1.4rem', color: '#064e3b' }}>খাঁটি সওদা</h2>
-                  <p style={{ margin: '2px 0', fontSize: '0.85rem', color: '#475569' }}>khatisaoda.com | খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল</p>
+                  <p style={{ margin: '2px 0', fontSize: '0.85rem', color: '#475569' }}>www.khatisaoda.com | খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল</p>
                   <small style={{ color: '#64748b' }}>হটলাইন: 01714-740430 | বনানী, ঢাকা</small>
                 </div>
               </div>

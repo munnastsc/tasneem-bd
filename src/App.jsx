@@ -226,7 +226,7 @@ export default function App() {
       : '';
     
     return `*নতুন অর্ডার স্লিপ - ${orderId}*%0A` +
-      `*খাঁটি সওদা (khatisaoda.com)*%0A` +
+      `*খাঁটি সওদা (www.khatisaoda.com)*%0A` +
       `---------------------------------%0A` +
       `*ক্রেতার নাম:* ${customerName}%0A` +
       `*মোবাইল:* ${customerPhone}%0A` +
@@ -395,7 +395,7 @@ export default function App() {
               </div>
               <div className="brand-text">
                 <h1>খাঁটি <span>সওদা</span></h1>
-                <p>khatisaoda.com | PURE & AUTHENTIC</p>
+                <p>www.khatisaoda.com | PURE & AUTHENTIC</p>
               </div>
             </div>
           </div>
@@ -577,7 +577,7 @@ export default function App() {
                 </div>
                 <div className="brand-text">
                   <h2 style={{ fontSize: '1.15rem', color: '#064e3b', fontWeight: '800' }}>খাঁটি <span style={{ color: '#d97706' }}>সওদা</span></h2>
-                  <p style={{ fontSize: '0.65rem', color: '#64748b' }}>khatisaoda.com | মেনু ও ক্যাটাগরি</p>
+                  <p style={{ fontSize: '0.65rem', color: '#64748b' }}>www.khatisaoda.com | মেনু ও ক্যাটাগরি</p>
                 </div>
               </div>
               <button className="drawer-close-btn" onClick={() => setIsMobileMenuOpen(false)}>
@@ -2063,10 +2063,10 @@ export default function App() {
         <div className="footer-container">
           <div className="footer-col">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-              <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '48px', height: '48px', borderRadius: '10px', objectFit: 'cover', border: '1.5px solid #fbbf24' }} />
+              <img src="/images/khatisaoda_logo.png" alt="খাঁটি সওদা" style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'contain', border: '1.5px solid #fbbf24', background: '#fff' }} />
               <div>
                 <h3 style={{ color: '#fbbf24', fontSize: '1.4rem', margin: 0, letterSpacing: '0.5px', lineHeight: 1.1 }}>খাঁটি সওদা</h3>
-                <span style={{ color: '#34d399', fontSize: '0.82rem', fontWeight: 700 }}>khatisaoda.com</span>
+                <span style={{ color: '#34d399', fontSize: '0.82rem', fontWeight: 700 }}>www.khatisaoda.com</span>
               </div>
             </div>
             <p style={{ marginBottom: '12px' }}>
@@ -2110,7 +2110,7 @@ export default function App() {
         </div>
 
         <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '18px', textAlign: 'center', fontSize: '0.8rem', color: '#6ee7b7' }}>
-          © {new Date().getFullYear()} খাঁটি সওদা (khatisaoda.com). All rights reserved. খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল।
+          © {new Date().getFullYear()} খাঁটি সওদা (www.khatisaoda.com). All rights reserved. খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল।
         </div>
       </footer>
 

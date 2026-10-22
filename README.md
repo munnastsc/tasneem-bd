@@ -1,11 +1,11 @@
-# খাঁটি সওদা (khatisaoda.com)
+# খাঁটি সওদা (www.khatisaoda.com)
 
 > **খাঁটি প্রাকৃতিক খাদ্য, ঐতিহ্য ও সুন্নাহ লাইফস্টাইল ই-কমার্স প্ল্যাটফর্ম**
 
 ![খাঁটি সওদা লোগো](public/images/khatisaoda_logo.png)
 
 ## 🌿 প্রজেক্ট পরিচিতি (About Project)
-**খাঁটি সওদা** (`khatisaoda.com`) বাংলাদেশের একটি প্রিমিয়াম প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল ই-কমার্স প্ল্যাটফর্ম। 
+**খাঁটি সওদা** (`www.khatisaoda.com`) বাংলাদেশের একটি প্রিমিয়াম প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল ই-কমার্স প্ল্যাটফর্ম। 
 
 ### 📍 আমাদের মূল পণ্য ও নিজস্ব আঞ্চলিক উৎস (Authentic Sourcing):
 * 🧈 **সাতক্ষীরার খাঁটি গাওয়া ঘি:** সাতক্ষীরা সদর ও শ্যামনগরের দেশি গাভীর দুধ থেকে কাঠের আগুনে জ্বাল দিয়ে প্রস্তুতকৃত দানাদার গাওয়া ঘি।
@@ -24,7 +24,7 @@
 * **Icons:** Lucide React
 * **Effects:** Canvas Confetti
 * **Design:** Custom Modern Glassmorphic CSS with Hind Siliguri & Plus Jakarta Sans typography
-* **Deployment Ready:** Vercel, Netlify, GitHub Pages
+* **Deployment Ready:** Vercel, Netlify, GitHub Pages, cPanel
 
 ---
 
@@ -43,8 +43,18 @@ npm run build
 
 ---
 
+## 🌐 ডোমেইন ও ডিএনএস কনফিগারেশন (Domain & DNS Setup)
+* **মূল ডোমেইন:** `www.khatisaoda.com` / `khatisaoda.com`
+* **Vercel / Netlify দিয়ে লাইভ করার নিয়ম:**
+  - `www` CNAME রেকর্ড: `cname.vercel-dns.com` (অথবা আপনার হোস্টিং CNAME)
+  - রুট `@` A রেকর্ড: `76.76.21.21` (Vercel)
+
+---
+
 ## 📞 হটলাইন ও যোগাযোগ
 * **হটলাইন / হোয়াটসঅ্যাপ:** `01714-740430`
-* **ডোমেইন:** `khatisaoda.com`
+* **অফিসিয়াল ডোমেইন:** `www.khatisaoda.com`
 * **ইমেইল:** `support@khatisaoda.com`
+* **অর্ডার নোটিফিকেশন রিসিভার:** `munnastsc@gmail.com`
 * **ঠিকানা:** বাড়ি ১২, রোড ৫, বনানী, ঢাকা - ১২১৩
+

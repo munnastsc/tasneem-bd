@@ -123,25 +123,27 @@ h1, h2, h3, h4, .font-arabic {
 }
 
 .brand-logo-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fbbf24;
-  box-shadow: 0 4px 14px rgba(6, 78, 59, 0.25);
-  border: 1.5px solid rgba(251, 191, 36, 0.6);
+  box-shadow: 0 4px 14px rgba(6, 78, 59, 0.2);
+  border: 1.5px solid #10b981;
   flex-shrink: 0;
   overflow: hidden;
+  padding: 1px;
 }
 
 .brand-logo-icon img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  border-radius: 50%;
 }
 
 .brand-text h1 {
@@ -2299,9 +2301,9 @@ h1, h2, h3, h4, .font-arabic {
   }
 
   .brand-logo-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
   }
 
   .brand-text h1 {
