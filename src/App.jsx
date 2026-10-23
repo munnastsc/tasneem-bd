@@ -36,6 +36,15 @@ import {
 } from 'lucide-react';
 import { products, bundleItems, reviews, faqs, sourcingStories } from './data/products';
 import AdminPanel from './components/AdminPanel';
+import { logVisitorAction, sendHeartbeat } from './utils/visitorTracker';
+import { 
+  pixelPageView, 
+  pixelViewContent, 
+  pixelAddToCart, 
+  pixelInitiateCheckout, 
+  pixelPurchase, 
+  pixelContact 
+} from './utils/facebookPixel';
 
 export default function App() {
   const [lang, setLang] = useState('bn');
@@ -64,6 +73,41 @@ export default function App() {
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
+
+  // Initialize Visitor Tracking & Facebook Pixel PageView + Heartbeat
+  useEffect(() => {
+    logVisitorAction('হোমপেজ ভিজিট', 'ওয়েবসাইটে প্রবেশ করেছে');
+    pixelPageView('Home');
+
+    const heartbeatTimer = setInterval(() => {
+      sendHeartbeat(isCheckoutOpen ? 'চেকআউট পেজে আছে' : 'হোমপেজ ব্রাউজ করছে');
+    }, 20000);
+
+    return () => clearInterval(heartbeatTimer);
+  }, []);
+
+  // Track Checkout Modal Entry & Pixel InitiateCheckout
+  useEffect(() => {
+    if (isCheckoutOpen) {
+      logVisitorAction('চেকআউট পেজে প্রবেশ করেছে', `মোট বিল: ৳${grandTotal}`);
+      pixelInitiateCheckout(cart, grandTotal);
+    }
+  }, [isCheckoutOpen]);
+
+  // Track Product Details View & Pixel ViewContent
+  useEffect(() => {
+    if (detailModalProduct) {
+      logVisitorAction('পণ্য বিস্তারিত দেখছে', detailModalProduct.name);
+      pixelViewContent(detailModalProduct);
+    }
+  }, [detailModalProduct]);
+
+  // Track Lab Report Modal
+  useEffect(() => {
+    if (labModalProduct) {
+      logVisitorAction('ল্যাব রিপোর্ট যাচাই করছে', labModalProduct.name);
+    }
+  }, [labModalProduct]);
   
   // Main Menu & Mobile Drawer states
   const [isMainMenuOpen, setIsMainMenuOpen] = useState(false);
@@ -145,6 +189,10 @@ export default function App() {
     const chosenWeight = variant ? variant.label : product.weight;
     const cartItemId = `${product.id}-${chosenWeight}`;
 
+    // Track Visitor Action & Facebook Pixel AddToCart
+    logVisitorAction('কার্টে পণ্য যোগ করেছে', `${product.name} [${chosenWeight}] (৳${chosenPrice})`);
+    pixelAddToCart(product, 1, chosenPrice);
+
     setCart(prev => {
       const existing = prev.find(item => item.id === cartItemId && !item.isBundle);
       if (existing) {
@@ -167,6 +215,8 @@ export default function App() {
   const directOrder = (product, variant = null) => {
     addToCart(product, variant);
     setIsCheckoutOpen(true);
+    logVisitorAction('সরাসরি অর্ডার শুরু করেছে', product.name);
+    pixelInitiateCheckout([{ product, qty: 1 }], variant ? variant.price : product.price);
   };
 
   const updateQty = (id, delta, isBundle = false) => {
@@ -330,12 +380,18 @@ export default function App() {
       origin: { y: 0.6 }
     });
 
+    // Track Visitor Action & Facebook Pixel Purchase
+    logVisitorAction('অর্ডার সম্পন্ন করেছে', `অর্ডার নং #${orderId} - মোট ৳${grandTotal}`);
+    pixelPurchase(orderId, grandTotal, cart);
+
     setIsSubmittingOrder(false);
     setOrderConfirmed(true);
     // Note: No forced WhatsApp popup! Customer sees the confirmation directly, with WhatsApp as 2nd optional action.
   };
 
   const sendWhatsAppOrder = () => {
+    logVisitorAction('হোয়াটসঅ্যাপে যোগাযোগ করছে', `অর্ডার #${confirmedOrderId}`);
+    pixelContact('WhatsApp Order');
     const msg = generateWhatsAppMessage(confirmedOrderId);
     window.open(`https://wa.me/8801714740430?text=${msg}`, '_blank');
   };
@@ -365,6 +421,20 @@ export default function App() {
     const el = document.getElementById('products-section');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // Exclusive Fullscreen Admin Portal View
+  if (isAdminOpen) {
+    return (
+      <AdminPanel 
+        onClose={() => {
+          setIsAdminOpen(false);
+          if (window.location.hash === '#admin') {
+            window.history.pushState("", document.title, window.location.pathname + window.location.search);
+          }
+        }} 
+      />
+    );
+  }
 
   return (
     <div className="store-wrapper">
@@ -2111,6 +2181,16 @@ export default function App() {
             <h4>যোগাযোগ ও ঠিকানা</h4>
             <p>হটলাইন: +880 1714-740430</p>
             <p>হোয়াটসঅ্যাপ: +880 1714-740430</p>
+            <p>
+              <a 
+                href="https://www.facebook.com/khatisaoda" 
+                target="_blank" 
+                rel="noreferrer" 
+                style={{ color: '#60a5fa', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+              >
+                🌐 ফেসবুক: facebook.com/khatisaoda
+              </a>
+            </p>
             <p>ইমেইল: support@khatisaoda.com</p>
             <p>ওয়েবসাইট: www.khatisaoda.com</p>
             <p>ঠিকানা: বাড়ি ১২, রোড ৫, বনানী, ঢাকা - ১২১৩</p>
@@ -2121,18 +2201,6 @@ export default function App() {
           © {new Date().getFullYear()} খাঁটি সওদা (www.khatisaoda.com). All rights reserved. খাঁটি প্রাকৃতিক খাদ্য ও সুন্নাহ লাইফস্টাইল।
         </div>
       </footer>
-
-      {/* 19. Admin Order Management Panel */}
-      {isAdminOpen && (
-        <AdminPanel 
-          onClose={() => {
-            setIsAdminOpen(false);
-            if (window.location.hash === '#admin') {
-              window.history.pushState("", document.title, window.location.pathname + window.location.search);
-            }
-          }} 
-        />
-      )}
     </div>
   );
 }
