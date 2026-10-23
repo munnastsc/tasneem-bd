@@ -287,29 +287,37 @@ export default function App() {
 
     // 📧 Primary Order Notification via Email to munnastsc@gmail.com
     try {
+      const emailPayload = {
+        _subject: `🛒 নতুন অর্ডার #${orderId} - খাঁটি সওদা (৳${grandTotal})`,
+        _template: "table",
+        _captcha: "false",
+        "অর্ডার আইডি": orderId,
+        "তারিখ ও সময়": new Date().toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka' }),
+        "ক্রেতার নাম": customerName,
+        "মোবাইল নম্বর": customerPhone,
+        "ইমেইল": customerEmail || 'প্রদান করা হয়নি',
+        "পূর্ণ ঠিকানা": customerAddress,
+        "ডেলিভারি এলাকা": deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳৬০)' : 'ঢাকার বাইরে (৳১২০)',
+        "পেমেন্ট মাধ্যম": paymentMethod.toUpperCase(),
+        "বিকাশ/নগদ নম্বর": (paymentMethod === 'bkash' || paymentMethod === 'nagad') ? (senderNumber || 'N/A') : 'ক্যাশ অন ডেলিভারি',
+        "ট্রানজেকশন আইডি (TrxID)": (paymentMethod === 'bkash' || paymentMethod === 'nagad') ? (trxId || 'N/A') : 'প্রযোজ্য নয়',
+        "অর্ডারকৃত পণ্যসমূহ": cart.map(i => `${i.product.name} [${i.product.weight}] (x${i.qty}) - ৳${i.product.price * i.qty}`).join(' | '),
+        "পণ্য উপমোট": `৳${subtotal}`,
+        "ডেলিভারি চার্জ": `৳${deliveryCharge}`,
+        "সর্বমোট প্রদেয় বিল": `৳${grandTotal}`
+      };
+
+      if (customerEmail && customerEmail.includes('@')) {
+        emailPayload._replyto = customerEmail;
+      }
+
       await fetch("https://formsubmit.co/ajax/munnastsc@gmail.com", {
         method: "POST",
         headers: { 
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({
-          _subject: `নতুন অর্ডার #${orderId} - খাঁটি সওদা (৳${grandTotal})`,
-          _template: "table",
-          _captcha: "false",
-          "অর্ডার আইডি": orderId,
-          "তারিখ ও সময়": new Date().toLocaleString('bn-BD'),
-          "ক্রেতার নাম": customerName,
-          "মোবাইল নম্বর": customerPhone,
-          "ইমেইল": customerEmail || 'প্রদান করা হয়নি',
-          "পূর্ণ ঠিকানা": customerAddress,
-          "ডেলিভারি এলাকা": deliveryArea === 'dhaka' ? 'ঢাকা সিটি (৳৬০)' : 'ঢাকার বাইরে (৳১২০)',
-          "পেমেন্ট মাধ্যম": paymentMethod.toUpperCase(),
-          "অর্ডারকৃত পণ্যসমূহ": cart.map(i => `${i.product.name} [${i.product.weight}] (x${i.qty}) - ৳${i.product.price * i.qty}`).join(' | '),
-          "পণ্য উপমোট": `৳${subtotal}`,
-          "ডেলিভারি চার্জ": `৳${deliveryCharge}`,
-          "সর্বমোট প্রদেয়": `৳${grandTotal}`
-        })
+        body: JSON.stringify(emailPayload)
       });
     } catch (err) {
       console.log('Email dispatch notification log:', err);
