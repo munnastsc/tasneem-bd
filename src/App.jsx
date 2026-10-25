@@ -34,7 +34,7 @@ import {
   Mail,
   Loader2
 } from 'lucide-react';
-import { products, bundleItems, reviews, faqs, sourcingStories } from './data/products';
+import { products as defaultProducts, bundleItems, reviews, faqs, sourcingStories } from './data/products';
 import AdminPanel from './components/AdminPanel';
 import { logVisitorAction, sendHeartbeat } from './utils/visitorTracker';
 import { 
@@ -55,6 +55,50 @@ export default function App() {
   const [labModalProduct, setLabModalProduct] = useState(null);
   const [detailModalProduct, setDetailModalProduct] = useState(null);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+
+  // Dynamic Product Catalog State (synced with localStorage & Admin Panel)
+  const [productList, setProductList] = useState(() => {
+    try {
+      const saved = localStorage.getItem('khatisaoda_products');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.error('Error loading products from localStorage:', e);
+    }
+    return defaultProducts;
+  });
+
+  // Listen for product catalog updates from Admin Panel or across browser tabs
+  useEffect(() => {
+    const handleProductsUpdate = (e) => {
+      if (e?.detail?.products && Array.isArray(e.detail.products)) {
+        setProductList(e.detail.products);
+      } else {
+        try {
+          const saved = localStorage.getItem('khatisaoda_products');
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setProductList(parsed);
+              return;
+            }
+          }
+          setProductList(defaultProducts);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+
+    window.addEventListener('khatisaoda_products_updated', handleProductsUpdate);
+    window.addEventListener('storage', handleProductsUpdate);
+    return () => {
+      window.removeEventListener('khatisaoda_products_updated', handleProductsUpdate);
+      window.removeEventListener('storage', handleProductsUpdate);
+    };
+  }, []);
   
   // Admin Panel state & URL hash listener
   const [isAdminOpen, setIsAdminOpen] = useState(() => {
@@ -168,10 +212,12 @@ export default function App() {
   }, []);
 
   // Filter products
-  const filteredProducts = products.filter(p => {
+  const filteredProducts = productList.filter(p => {
     const matchesCat = selectedCategory === 'all' || p.category === selectedCategory;
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.nameEn.toLowerCase().includes(searchQuery.toLowerCase());
+    const nameBn = (p.name || '').toLowerCase();
+    const nameEn = (p.nameEn || '').toLowerCase();
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = nameBn.includes(q) || nameEn.includes(q);
     const matchesWishlist = !showWishlistOnly || wishlist.includes(p.id);
     return matchesCat && matchesSearch && matchesWishlist;
   });
@@ -684,7 +730,7 @@ export default function App() {
               >
                 <span className="drawer-cat-left">
                   <span className="cat-emoji">✨</span>
-                  <span>সকল পণ্য ({products.length}টি)</span>
+                  <span>সকল পণ্য ({productList.length}টি)</span>
                 </span>
                 <ChevronRight size={16} />
               </button>
@@ -1017,71 +1063,80 @@ export default function App() {
             className={`category-pill-btn ${selectedCategory === 'all' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('all'); setShowWishlistOnly(false); }}
           >
-            ✨ সকল পণ্য ({products.length})
+            ✨ সকল পণ্য ({productList.length})
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'ghee' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('ghee'); setShowWishlistOnly(false); }}
           >
-            🧈 সাতক্ষীরার খাঁটি ঘি ({products.filter(p => p.category === 'ghee').length})
+            🧈 সাতক্ষীরার খাঁটি ঘি ({productList.filter(p => p.category === 'ghee').length})
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'mango' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('mango'); setShowWishlistOnly(false); }}
           >
-            🥭 সাতক্ষীরার হিমসাগর আম ({products.filter(p => p.category === 'mango').length})
+            🥭 সাতক্ষীরার হিমসাগর আম ({productList.filter(p => p.category === 'mango').length})
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'honey' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('honey'); setShowWishlistOnly(false); }}
           >
-            🍯 সুন্দরবন ও খাঁটি মধু ({products.filter(p => p.category === 'honey').length})
+            🍯 সুন্দরবন ও খাঁটি মধু ({productList.filter(p => p.category === 'honey').length})
           </button>
 
           <button 
             className={`category-pill-btn special-attar ${selectedCategory === 'attar' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('attar'); setShowWishlistOnly(false); }}
           >
-            👑 রয়্যাল আতর (মদিনা ও দুবাই) ({products.filter(p => p.category === 'attar').length})
+            👑 রয়্যাল আতর (মদিনা ও দুবাই) ({productList.filter(p => p.category === 'attar').length})
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'dates' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('dates'); setShowWishlistOnly(false); }}
           >
-            🌴 সৌদি খেজুর (আজওয়া ও সুক্কারি) ({products.filter(p => p.category === 'dates').length})
+            🌴 সৌদি খেজুর (আজওয়া ও সুক্কারি) ({productList.filter(p => p.category === 'dates').length})
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'sylhet_tea' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('sylhet_tea'); setShowWishlistOnly(false); }}
           >
-            🍃 সিলেটের চা ও তেজপাতা ({products.filter(p => p.category === 'sylhet_tea').length})
+            🍃 সিলেটের চা ও তেজপাতা ({productList.filter(p => p.category === 'sylhet_tea').length})
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'spices' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('spices'); setShowWishlistOnly(false); }}
           >
-            🌶️ খাঁটি দেশি মশলা ({products.filter(p => p.category === 'spices').length})
+            🌶️ খাঁটি দেশি মশলা ({productList.filter(p => p.category === 'spices').length})
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'sunnah_oil' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('sunnah_oil'); setShowWishlistOnly(false); }}
           >
-            🌿 সুন্নতি খাদ্য ও তেল ({products.filter(p => p.category === 'sunnah_oil').length})
+            🌿 সুন্নতি খাদ্য ও তেল ({productList.filter(p => p.category === 'sunnah_oil').length})
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'lifestyle' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('lifestyle'); setShowWishlistOnly(false); }}
           >
-            🕌 ইসলামিক লাইফস্টাইল ({products.filter(p => p.category === 'lifestyle').length})
+            🕌 ইসলামিক লাইফস্টাইল ({productList.filter(p => p.category === 'lifestyle').length})
           </button>
+
+          {productList.some(p => p.category === 'other' || !['ghee','mango','honey','attar','dates','sylhet_tea','spices','sunnah_oil','lifestyle'].includes(p.category)) && (
+            <button 
+              className={`category-pill-btn ${selectedCategory === 'other' && !showWishlistOnly ? 'active' : ''}`}
+              onClick={() => { setSelectedCategory('other'); setShowWishlistOnly(false); }}
+            >
+              📦 অন্যান্য পণ্য ({productList.filter(p => p.category === 'other' || !['ghee','mango','honey','attar','dates','sylhet_tea','spices','sunnah_oil','lifestyle'].includes(p.category)).length})
+            </button>
+          )}
         </div>
 
         {/* Dynamic Category Highlight Banner */}

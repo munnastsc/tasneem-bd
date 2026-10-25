@@ -3,8 +3,10 @@ import {
   ShieldCheck, Lock, LogOut, Package, Clock, CheckCircle2, 
   Truck, DollarSign, Search, Filter, Phone, MessageSquare, 
   Printer, Trash2, Download, ExternalLink, RefreshCw, AlertCircle, X, ChevronRight,
-  Users, Activity, Eye, Globe, Smartphone, Monitor, Bell, BellOff, ArrowUpRight, Share2, Tag, Sparkles, Check, Play
+  Users, Activity, Eye, Globe, Smartphone, Monitor, Bell, BellOff, ArrowUpRight, Share2, Tag, Sparkles, Check, Play,
+  ShoppingBag, Plus, Edit2, Upload, Image as ImageIcon, Layers, RotateCcw, AlertTriangle
 } from 'lucide-react';
+import { products as defaultProducts } from '../data/products';
 import { 
   getLiveVisitorMetrics, 
   clearVisitorHistory, 
@@ -18,6 +20,19 @@ import {
   trackPixelEvent, 
   DEFAULT_PIXEL_ID 
 } from '../utils/facebookPixel';
+
+const STORE_CATEGORIES = [
+  { id: 'ghee', name: 'সাতক্ষীরার খাঁটি ঘি', icon: '🧈' },
+  { id: 'honey', name: 'সুন্দরবন ও খাঁটি মধু', icon: '🍯' },
+  { id: 'mango', name: 'সাতক্ষীরার হিমসাগর আম', icon: '🥭' },
+  { id: 'attar', name: 'রয়্যাল আতর (মদিনা ও দুবাই)', icon: '👑' },
+  { id: 'dates', name: 'সৌদি খেজুর (আজওয়া ও সুক্কারি)', icon: '🌴' },
+  { id: 'sylhet_tea', name: 'সিলেটের চা ও তেজপাতা', icon: '🍃' },
+  { id: 'spices', name: 'খাঁটি দেশি মশলা', icon: '🌶️' },
+  { id: 'sunnah_oil', name: 'সুন্নতি খাদ্য ও তেল', icon: '🌿' },
+  { id: 'lifestyle', name: 'ইসলামিক লাইফস্টাইল', icon: '🕌' },
+  { id: 'other', name: 'অন্যান্য প্রাকৃতিক পণ্য', icon: '📦' }
+];
 
 export default function AdminPanel({ onClose }) {
   // Authentication State
@@ -51,6 +66,46 @@ export default function AdminPanel({ onClose }) {
   const [currentPixelId, setCurrentPixelId] = useState(() => getPixelId());
   const [pixelInput, setPixelInput] = useState(() => getPixelId());
   const [pixelEvents, setPixelEvents] = useState(() => getPixelEventLogs());
+
+  // Products Catalog Management State
+  const [productsList, setProductsList] = useState(() => {
+    try {
+      const stored = localStorage.getItem('khatisaoda_products');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {
+      console.error('Error loading products from localStorage:', e);
+    }
+    return defaultProducts;
+  });
+  const [productSearch, setProductSearch] = useState('');
+  const [productCategoryFilter, setProductCategoryFilter] = useState('all');
+  const [productStockFilter, setProductStockFilter] = useState('all'); // 'all', 'instock', 'outofstock'
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+
+  const initialProductForm = {
+    name: '',
+    nameEn: '',
+    category: 'ghee',
+    categoryName: 'সাতক্ষীরার খাঁটি ঘি',
+    price: '',
+    originalPrice: '',
+    weight: '১ প্যাক',
+    origin: 'সাতক্ষীরা',
+    stock: 25,
+    badge: 'সেরা অফার',
+    badgeColor: 'gold',
+    image: '',
+    description: '',
+    benefits: '',
+    isSunnah: false,
+    isBestseller: true
+  };
+  const [productFormData, setProductFormData] = useState(initialProductForm);
+  const [imageUploadLoading, setImageUploadLoading] = useState(false);
 
   // Show Toast Helper
   const showToast = (msg) => {
@@ -311,6 +366,281 @@ export default function AdminPanel({ onClose }) {
     showToast(`মেটা পিক্সেল [${evtName}] টেস্ট ইভেন্ট সফলভাবে ফায়ার হয়েছে!`);
   };
 
+  // Save Products helper
+  const handleSaveProductList = (newList) => {
+    setProductsList(newList);
+    try {
+      localStorage.setItem('khatisaoda_products', JSON.stringify(newList));
+      window.dispatchEvent(new CustomEvent('khatisaoda_products_updated', { detail: { products: newList } }));
+    } catch (e) {
+      console.error(e);
+      showToast('⚠️ স্টোরেজে সংরক্ষণ করতে সমস্যা হয়েছে, ছবির সাইজ ছোট করুন!');
+    }
+  };
+
+  // Open Add Product Modal
+  const handleOpenNewProductModal = () => {
+    setEditingProduct(null);
+    setProductFormData(initialProductForm);
+    setIsProductModalOpen(true);
+  };
+
+  // Open Edit Product Modal
+  const handleOpenEditProductModal = (product) => {
+    setEditingProduct(product);
+    setProductFormData({
+      name: product.name || '',
+      nameEn: product.nameEn || '',
+      category: product.category || 'ghee',
+      categoryName: product.categoryName || '',
+      price: product.price || '',
+      originalPrice: product.originalPrice || '',
+      weight: product.weight || '১ প্যাক',
+      origin: product.origin || 'সাতক্ষীরা',
+      stock: typeof product.stock === 'number' ? product.stock : 20,
+      badge: product.badge || '',
+      badgeColor: product.badgeColor || 'gold',
+      image: product.image || '',
+      description: product.description || '',
+      benefits: Array.isArray(product.benefits) ? product.benefits.join('\n') : (product.benefits || ''),
+      isSunnah: !!product.isSunnah,
+      isBestseller: !!product.isBestseller
+    });
+    setIsProductModalOpen(true);
+  };
+
+  // Toggle Stock
+  const handleToggleStock = (productId) => {
+    const updated = productsList.map(p => {
+      if (p.id === productId) {
+        const currentStock = Number(p.stock) || 0;
+        const newStock = currentStock > 0 ? 0 : 25;
+        return { ...p, stock: newStock };
+      }
+      return p;
+    });
+    handleSaveProductList(updated);
+    showToast('পণ্যের স্টক স্ট্যাটাস সফলভাবে আপডেট হয়েছে!');
+  };
+
+  // Delete Product
+  const handleDeleteProduct = (productId) => {
+    const target = productsList.find(p => p.id === productId);
+    if (window.confirm(`আপনি কি নিশ্চিতভাবে "${target?.name || 'এই পণ্যটি'}" মুছে ফেলতে চান?`)) {
+      const updated = productsList.filter(p => p.id !== productId);
+      handleSaveProductList(updated);
+      showToast('পণ্যটি সফলভাবে ডিলিট করা হয়েছে!');
+    }
+  };
+
+  // Reset Default Catalog
+  const handleResetDefaultProducts = () => {
+    if (window.confirm('আপনি কি ডিফল্ট প্রোডাক্ট ক্যাটালগ রিস্টোর করতে চান? আপনার কাস্টম পণ্যগুলো রিসেট হয়ে মূল পণ্যগুলো ফিরে আসবে।')) {
+      handleSaveProductList(defaultProducts);
+      showToast('ডিফল্ট পণ্য ক্যাটালগ সফলভাবে রিস্টোর হয়েছে!');
+    }
+  };
+
+  // Image Upload with Canvas Compression
+  const handleImageFileChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showToast('অনুগ্রহ করে শুধুমাত্র ছবি (JPG, PNG, WebP) ফাইল সিলেক্ট করুন!');
+      return;
+    }
+
+    setImageUploadLoading(true);
+    const reader = new FileReader();
+    reader.onload = (loadEvent) => {
+      const img = new Image();
+      img.src = loadEvent.target.result;
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          const maxDim = 800;
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          const compressed = canvas.toDataURL('image/jpeg', 0.82);
+          setProductFormData(prev => ({ ...prev, image: compressed }));
+          setImageUploadLoading(false);
+          showToast('ছবি সফলভাবে আপলোড ও অপ্টিমাইজ হয়েছে!');
+        } catch (err) {
+          console.error(err);
+          setProductFormData(prev => ({ ...prev, image: loadEvent.target.result }));
+          setImageUploadLoading(false);
+        }
+      };
+      img.onerror = () => {
+        setImageUploadLoading(false);
+        showToast('ছবি লোড করতে সমস্যা হয়েছে!');
+      };
+    };
+    reader.onerror = () => {
+      setImageUploadLoading(false);
+      showToast('ফাইল রিড করা সম্ভব হয়নি!');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Submit Product (Add or Edit)
+  const handleSubmitProduct = (e) => {
+    e.preventDefault();
+    if (!productFormData.name.trim()) {
+      showToast('অনুগ্রহ করে পণ্যের বাংলা নাম লিখুন!');
+      return;
+    }
+    const priceNum = Number(productFormData.price);
+    if (!priceNum || priceNum <= 0) {
+      showToast('অনুগ্রহ করে সঠিক বিক্রয় মূল্য দিন!');
+      return;
+    }
+
+    const catObj = STORE_CATEGORIES.find(c => c.id === productFormData.category) || STORE_CATEGORIES[0];
+    const benefitsList = (productFormData.benefits || '')
+      .split('\n')
+      .map(b => b.trim())
+      .filter(Boolean);
+
+    const origPriceNum = productFormData.originalPrice 
+      ? Number(productFormData.originalPrice) 
+      : Math.round(priceNum * 1.15);
+
+    const finalImage = productFormData.image.trim() || '/images/satkhira_ghee.jpg';
+
+    if (editingProduct) {
+      const updated = productsList.map(p => {
+        if (p.id === editingProduct.id) {
+          return {
+            ...p,
+            name: productFormData.name.trim(),
+            nameEn: productFormData.nameEn.trim() || productFormData.name.trim(),
+            category: productFormData.category,
+            categoryName: catObj.name,
+            price: priceNum,
+            originalPrice: origPriceNum,
+            weight: productFormData.weight.trim() || '১ প্যাক',
+            origin: productFormData.origin.trim() || 'সাতক্ষীরা',
+            stock: Number(productFormData.stock) || 0,
+            badge: productFormData.badge.trim(),
+            badgeColor: productFormData.badgeColor,
+            image: finalImage,
+            description: productFormData.description.trim() || p.description,
+            benefits: benefitsList.length > 0 ? benefitsList : (p.benefits || []),
+            isSunnah: !!productFormData.isSunnah,
+            isBestseller: !!productFormData.isBestseller
+          };
+        }
+        return p;
+      });
+      handleSaveProductList(updated);
+      showToast(`"${productFormData.name}" সফলভাবে আপডেট হয়েছে!`);
+    } else {
+      const newProduct = {
+        id: Date.now(),
+        name: productFormData.name.trim(),
+        nameEn: productFormData.nameEn.trim() || productFormData.name.trim(),
+        category: productFormData.category,
+        categoryName: catObj.name,
+        price: priceNum,
+        originalPrice: origPriceNum,
+        weight: productFormData.weight.trim() || '১ প্যাক',
+        origin: productFormData.origin.trim() || 'সাতক্ষীরা',
+        stock: Number(productFormData.stock) || 20,
+        badge: productFormData.badge.trim() || 'নতুন কালেকশন',
+        badgeColor: productFormData.badgeColor || 'gold',
+        image: finalImage,
+        description: productFormData.description.trim() || 'খাঁটি সওদার শতভাগ বিশুদ্ধ প্রাকৃতিক পণ্য। স্বাস্থ্যসম্মত ও কেমিক্যালমুক্ত।',
+        descriptionEn: productFormData.nameEn.trim() || '',
+        rating: 5.0,
+        reviewsCount: 1,
+        benefits: benefitsList.length > 0 ? benefitsList : [
+          '১০০% খাঁটি ও প্রাকৃতিক উপাদানে তৈরি',
+          'স্বাস্থ্যসম্মত ও ক্ষতিকারক কেমিক্যালমুক্ত'
+        ],
+        isSunnah: !!productFormData.isSunnah,
+        isBestseller: !!productFormData.isBestseller,
+        variants: [
+          {
+            label: productFormData.weight.trim() || '১ প্যাক',
+            labelEn: 'Standard Pack',
+            price: priceNum,
+            originalPrice: origPriceNum
+          }
+        ]
+      };
+      const updated = [newProduct, ...productsList];
+      handleSaveProductList(updated);
+      showToast(`নতুন পণ্য "${newProduct.name}" সফলভাবে ক্যাটালগে আপলোড হয়েছে!`);
+    }
+
+    setIsProductModalOpen(false);
+    setEditingProduct(null);
+  };
+
+  // Export Products CSV
+  const handleExportProductsCSV = () => {
+    const headers = ['ID', 'Name (Bengali)', 'Name (English)', 'Category', 'Sale Price (BDT)', 'Regular Price (BDT)', 'Weight/Unit', 'Stock', 'Origin', 'Badge'];
+    const rows = productsList.map(p => [
+      p.id,
+      `"${(p.name || '').replace(/"/g, '""')}"`,
+      `"${(p.nameEn || '').replace(/"/g, '""')}"`,
+      p.category,
+      p.price,
+      p.originalPrice || '',
+      `"${p.weight || ''}"`,
+      p.stock || 0,
+      `"${p.origin || ''}"`,
+      `"${p.badge || ''}"`
+    ]);
+
+    const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `khatisaoda_products_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('পণ্য ক্যাটালগ CSV ফাইলে ডাউনলোড হয়েছে!');
+  };
+
+  // Filtered Products
+  const filteredProductsList = useMemo(() => {
+    return productsList.filter(p => {
+      const q = productSearch.toLowerCase();
+      const matchesSearch = 
+        (p.name && p.name.toLowerCase().includes(q)) ||
+        (p.nameEn && p.nameEn.toLowerCase().includes(q)) ||
+        (p.origin && p.origin.toLowerCase().includes(q));
+
+      if (!matchesSearch) return false;
+
+      if (productCategoryFilter !== 'all' && p.category !== productCategoryFilter) {
+        return false;
+      }
+
+      if (productStockFilter === 'instock' && (!p.stock || p.stock <= 0)) return false;
+      if (productStockFilter === 'outofstock' && (p.stock && p.stock > 0)) return false;
+
+      return true;
+    });
+  }, [productsList, productSearch, productCategoryFilter, productStockFilter]);
+
   // Filtered orders
   const filteredOrders = useMemo(() => {
     return orders.filter(o => {
@@ -460,6 +790,15 @@ export default function AdminPanel({ onClose }) {
           </button>
 
           <button 
+            className={`admin-nav-tab-btn ${activeTab === 'products' ? 'active' : ''}`}
+            onClick={() => setActiveTab('products')}
+          >
+            <ShoppingBag size={16} />
+            <span>পণ্য আপলোড</span>
+            <span className="tab-badge" style={{ background: '#059669' }}>{productsList.length}</span>
+          </button>
+
+          <button 
             className={`admin-nav-tab-btn ${activeTab === 'visitors' ? 'active' : ''}`}
             onClick={() => setActiveTab('visitors')}
           >
@@ -481,7 +820,7 @@ export default function AdminPanel({ onClose }) {
         {/* Right Action Icons */}
         <div className="admin-nav-right">
           <button 
-            onClick={activeTab === 'orders' ? loadOrders : activeTab === 'visitors' ? refreshVisitorMetrics : refreshPixelLogs} 
+            onClick={activeTab === 'orders' ? loadOrders : activeTab === 'products' ? () => showToast('পণ্য তালিকা রিফ্রেশ হয়েছে!') : activeTab === 'visitors' ? refreshVisitorMetrics : refreshPixelLogs} 
             className="admin-icon-btn" 
             title="রিফ্রেশ করুন"
           >
@@ -490,7 +829,7 @@ export default function AdminPanel({ onClose }) {
           </button>
 
           <button 
-            onClick={activeTab === 'visitors' ? handleExportVisitorsCSV : handleExportCSV} 
+            onClick={activeTab === 'visitors' ? handleExportVisitorsCSV : activeTab === 'products' ? handleExportProductsCSV : handleExportCSV} 
             className="admin-icon-btn success" 
             title="এক্সেল/CSV ডাউনলোড"
           >
@@ -737,6 +1076,300 @@ export default function AdminPanel({ onClose }) {
                                   onClick={() => handleDeleteOrder(order.orderId)}
                                   className="action-icon-btn delete"
                                   title="অর্ডার মুছুন"
+                                >
+                                  <Trash2 size={15} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </>
+        )}
+
+        {/* ============================================================ */}
+        {/* TAB 2: PRODUCT UPLOAD & CATALOG MANAGEMENT                   */}
+        {/* ============================================================ */}
+        {activeTab === 'products' && (
+          <>
+            {/* Products Action Strip */}
+            <div className="admin-email-alert-strip" style={{ background: '#f0fdf4', borderColor: '#10b981' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#059669', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <ShoppingBag size={20} />
+                  </div>
+                  <div>
+                    <strong>পণ্য আপলোড ও ক্যাটালগ কন্ট্রোল সেন্টার:</strong>
+                    <p style={{ margin: 0, fontSize: '0.85rem', color: '#334155' }}>
+                      নতুন পণ্য যুক্ত করুন, মূল্য ও অফার পরিবর্তন করুন অথবা সরাসরি স্টক ইন/আউট করুন। এটি ওয়েবসাইটে তৎক্ষণাৎ লাইভ হবে।
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <button 
+                    onClick={handleOpenNewProductModal}
+                    className="admin-btn-primary"
+                    style={{ background: '#059669', borderColor: '#047857', padding: '9px 18px', fontSize: '0.9rem' }}
+                  >
+                    <Plus size={18} />
+                    <span>নতুন পণ্য আপলোড করুন</span>
+                  </button>
+
+                  <button 
+                    onClick={handleResetDefaultProducts}
+                    className="admin-icon-btn"
+                    title="ডিফল্ট ক্যাটালগ রিস্টোর করুন"
+                    style={{ background: '#ffffff' }}
+                  >
+                    <RotateCcw size={15} />
+                    <span className="hide-mobile">ডিফল্ট রিস্টোর</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Metrics Statistics Cards for Products */}
+            <section className="admin-metrics-grid">
+              <div className="admin-metric-card">
+                <div className="metric-icon bg-emerald">
+                  <ShoppingBag size={22} color="#059669" />
+                </div>
+                <div className="metric-info">
+                  <span className="metric-label">মোট সক্রিয় পণ্য</span>
+                  <strong className="metric-value">{productsList.length} টি</strong>
+                  <span className="metric-subtext">অনলাইন শপে লাইভ প্রদর্শিত</span>
+                </div>
+              </div>
+
+              <div className="admin-metric-card">
+                <div className="metric-icon bg-amber">
+                  <Layers size={22} color="#d97706" />
+                </div>
+                <div className="metric-info">
+                  <span className="metric-label">ক্যাটাগরি সংখ্যা</span>
+                  <strong className="metric-value">{new Set(productsList.map(p => p.category)).size} টি</strong>
+                  <span className="metric-subtext">বিভিন্ন ক্যাটাগরির প্রাকৃতিক খাদ্য</span>
+                </div>
+              </div>
+
+              <div className="admin-metric-card">
+                <div className="metric-icon bg-blue">
+                  <CheckCircle2 size={22} color="#2563eb" />
+                </div>
+                <div className="metric-info">
+                  <span className="metric-label">ইন-স্টক পণ্য</span>
+                  <strong className="metric-value">{productsList.filter(p => (Number(p.stock) || 0) > 0).length} টি</strong>
+                  <span className="metric-subtext">গ্রাহকরা সরাসরি অর্ডার করতে পারবেন</span>
+                </div>
+              </div>
+
+              <div className="admin-metric-card">
+                <div className="metric-icon bg-rose">
+                  <AlertCircle size={22} color="#e11d48" />
+                </div>
+                <div className="metric-info">
+                  <span className="metric-label">স্টক আউট পণ্য</span>
+                  <strong className="metric-value">{productsList.filter(p => !(Number(p.stock) || 0) || Number(p.stock) <= 0).length} টি</strong>
+                  <span className="metric-subtext">রি-স্টক প্রয়োজন</span>
+                </div>
+              </div>
+            </section>
+
+            {/* Search & Filter Controls */}
+            <section className="admin-filters-bar">
+              <div className="admin-search-box">
+                <Search size={18} />
+                <input 
+                  type="text" 
+                  placeholder="পণ্যের নাম (বাংলা বা ইংরেজি) অথবা অঞ্চল দিয়ে খুঁজুন..." 
+                  value={productSearch}
+                  onChange={e => setProductSearch(e.target.value)}
+                />
+                {productSearch && (
+                  <button onClick={() => setProductSearch('')} className="clear-search-btn">
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+
+              <div className="admin-filter-group">
+                <Filter size={16} />
+                <select 
+                  value={productCategoryFilter} 
+                  onChange={e => setProductCategoryFilter(e.target.value)}
+                  className="admin-select"
+                >
+                  <option value="all">সকল ক্যাটাগরি ({productsList.length})</option>
+                  {STORE_CATEGORIES.map(c => {
+                    const count = productsList.filter(p => p.category === c.id).length;
+                    return (
+                      <option key={c.id} value={c.id}>
+                        {c.icon} {c.name} ({count})
+                      </option>
+                    );
+                  })}
+                </select>
+
+                <select 
+                  value={productStockFilter} 
+                  onChange={e => setProductStockFilter(e.target.value)}
+                  className="admin-select"
+                >
+                  <option value="all">সকল স্টক স্ট্যাটাস</option>
+                  <option value="instock">শুধুমাত্র ইন-স্টক</option>
+                  <option value="outofstock">শুধুমাত্র স্টক আউট</option>
+                </select>
+              </div>
+            </section>
+
+            {/* Products Table */}
+            <section className="admin-table-container">
+              <div className="admin-products-table-wrap">
+                <table className="admin-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '70px' }}>ছবি</th>
+                      <th>পণ্যের নাম ও বিবরণ</th>
+                      <th>ক্যাটাগরি</th>
+                      <th>বিক্রয় মূল্য</th>
+                      <th>স্টক স্ট্যাটাস</th>
+                      <th style={{ textAlign: 'center', width: '130px' }}>অ্যাকশন</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredProductsList.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b' }}>
+                          <ShoppingBag size={42} color="#cbd5e1" style={{ margin: '0 auto 12px' }} />
+                          <p style={{ margin: 0, fontWeight: 700, fontSize: '1rem', color: '#334155' }}>কোনো পণ্য পাওয়া যায়নি</p>
+                          <p style={{ margin: '4px 0 16px', fontSize: '0.85rem' }}>আপনার সার্চ বা ক্যাটাগরি ফিল্টারে মিল পাওয়া যায়নি অথবা এখনো কোনো পণ্য আপলোড করা হয়নি।</p>
+                          <button onClick={handleOpenNewProductModal} className="admin-btn-primary">
+                            <Plus size={16} />
+                            <span>প্রথম পণ্যটি আপলোড করুন</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ) : (
+                      filteredProductsList.map(product => {
+                        const inStock = (Number(product.stock) || 0) > 0;
+                        const catObj = STORE_CATEGORIES.find(c => c.id === product.category) || { name: product.category, icon: '📦' };
+                        const hasDiscount = product.originalPrice && product.originalPrice > product.price;
+                        const discountPercent = hasDiscount 
+                          ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+                          : 0;
+
+                        return (
+                          <tr key={product.id} className="product-row">
+                            <td>
+                              <div style={{ position: 'relative', width: '52px', height: '52px' }}>
+                                <img 
+                                  src={product.image || '/images/satkhira_ghee.jpg'} 
+                                  alt={product.name} 
+                                  className="admin-product-thumb"
+                                  onError={(e) => { e.target.src = '/images/satkhira_ghee.jpg'; }}
+                                />
+                                {product.badge && (
+                                  <span style={{
+                                    position: 'absolute',
+                                    bottom: '-4px',
+                                    left: '50%',
+                                    transform: 'translateX(-50%)',
+                                    background: product.badgeColor === 'red' ? '#dc2626' : product.badgeColor === 'green' ? '#059669' : '#d97706',
+                                    color: '#ffffff',
+                                    fontSize: '0.58rem',
+                                    padding: '1px 4px',
+                                    borderRadius: '4px',
+                                    whiteSpace: 'nowrap',
+                                    fontWeight: 700,
+                                    boxShadow: '0 1px 3px rgba(0,0,0,0.3)'
+                                  }}>
+                                    {product.badge}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+
+                            <td>
+                              <div className="admin-product-name-cell">
+                                <span className="admin-product-name-bn">{product.name}</span>
+                                <div className="admin-product-meta">
+                                  {product.nameEn && <span>{product.nameEn}</span>}
+                                  {product.weight && <span>• {product.weight}</span>}
+                                  {product.origin && <span>• 📍 {product.origin}</span>}
+                                </div>
+                                <div style={{ display: 'flex', gap: '6px', marginTop: '3px' }}>
+                                  {product.isSunnah && (
+                                    <span style={{ background: '#ecfdf5', color: '#047857', fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', fontWeight: 600 }}>
+                                      🌿 সুন্নতি
+                                    </span>
+                                  )}
+                                  {product.isBestseller && (
+                                    <span style={{ background: '#fef3c7', color: '#b45309', fontSize: '0.68rem', padding: '1px 6px', borderRadius: '4px', fontWeight: 600 }}>
+                                      ⭐ বেস্টসেলার
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+
+                            <td>
+                              <span className="admin-product-cat-pill">
+                                <span>{catObj.icon}</span>
+                                <span>{catObj.name}</span>
+                              </span>
+                            </td>
+
+                            <td>
+                              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <strong style={{ fontSize: '1.05rem', color: '#064e3b' }}>
+                                  ৳{product.price}
+                                </strong>
+                                {hasDiscount && (
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem' }}>
+                                    <span style={{ textDecoration: 'line-through', color: '#94a3b8' }}>৳{product.originalPrice}</span>
+                                    <span style={{ color: '#dc2626', fontWeight: 700 }}>(-{discountPercent}%)</span>
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+
+                            <td>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start' }}>
+                                <button 
+                                  type="button"
+                                  onClick={() => handleToggleStock(product.id)}
+                                  className={`admin-stock-toggle-btn ${inStock ? 'in-stock' : 'out-of-stock'}`}
+                                  title="ক্লিক করে স্টক অন/অফ করুন"
+                                >
+                                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: inStock ? '#16a34a' : '#dc2626' }}></span>
+                                  <span>{inStock ? `ইন-স্টক (${product.stock} টি)` : 'স্টক আউট'}</span>
+                                </button>
+                                <span style={{ fontSize: '0.68rem', color: '#94a3b8' }}>ক্লিক করে টগল করুন</span>
+                              </div>
+                            </td>
+
+                            <td>
+                              <div className="action-buttons-cell" style={{ justifyContent: 'center' }}>
+                                <button 
+                                  onClick={() => handleOpenEditProductModal(product)} 
+                                  className="action-btn view-btn" 
+                                  title="এডিট করুন"
+                                  style={{ background: '#ecfdf5', color: '#047857' }}
+                                >
+                                  <Edit2 size={15} />
+                                </button>
+
+                                <button 
+                                  onClick={() => handleDeleteProduct(product.id)} 
+                                  className="action-btn delete-btn" 
+                                  title="ডিলিট করুন"
                                 >
                                   <Trash2 size={15} />
                                 </button>
@@ -1324,6 +1957,288 @@ export default function AdminPanel({ onClose }) {
               <p>✓ ধন্যবাদ আপনার অর্ডারের জন্য! খাঁটি জিনিস পৌঁছানোই আমাদের অঙ্গীকার।</p>
               <p>পার্সেল রিসিভ করার সময় চেক করে মূল্য পরিশোধ করুন।</p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* PRODUCT UPLOAD & EDIT MODAL                                  */}
+      {/* ============================================================ */}
+      {isProductModalOpen && (
+        <div className="admin-product-modal-overlay" onClick={() => setIsProductModalOpen(false)}>
+          <div className="admin-product-modal-card" onClick={e => e.stopPropagation()}>
+            <div className="admin-product-modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="admin-modal-icon-badge">
+                  <ShoppingBag size={20} color="#059669" />
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.25rem', color: '#064e3b', fontWeight: 800 }}>
+                    {editingProduct ? '✏️ পণ্য এডিট ও আপডেট' : '➕ নতুন পণ্য আপলোড করুন'}
+                  </h3>
+                  <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                    {editingProduct ? `আইডি #${editingProduct.id} এর তথ্য পরিবর্তন করুন` : 'খাঁটি সওদা অনলাইন শপের পণ্য ক্যাটালগে সরাসরি যুক্ত করুন'}
+                  </p>
+                </div>
+              </div>
+              <button 
+                type="button" 
+                onClick={() => setIsProductModalOpen(false)} 
+                className="admin-modal-close-btn"
+                title="বন্ধ করুন"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitProduct} className="admin-product-form">
+              {/* Row 1: Bangla & English Name */}
+              <div className="admin-form-grid-2">
+                <div className="form-group-admin">
+                  <label>পণ্যের নাম (বাংলা) <span className="req">*</span></label>
+                  <input 
+                    type="text" 
+                    placeholder="যেমন: সুন্দরবনের খাঁটি র' খলিশা ফুলের মধু" 
+                    value={productFormData.name} 
+                    onChange={e => setProductFormData({ ...productFormData, name: e.target.value })}
+                    required 
+                  />
+                </div>
+                <div className="form-group-admin">
+                  <label>পণ্যের নাম (English)</label>
+                  <input 
+                    type="text" 
+                    placeholder="যেমন: Raw Sundarban Khalisha Honey" 
+                    value={productFormData.nameEn} 
+                    onChange={e => setProductFormData({ ...productFormData, nameEn: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              {/* Row 2: Category, Weight, Origin */}
+              <div className="admin-form-grid-3">
+                <div className="form-group-admin">
+                  <label>ক্যাটাগরি নির্বাচন <span className="req">*</span></label>
+                  <select 
+                    value={productFormData.category}
+                    onChange={e => setProductFormData({ ...productFormData, category: e.target.value })}
+                  >
+                    {STORE_CATEGORIES.map(c => (
+                      <option key={c.id} value={c.id}>
+                        {c.icon} {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="form-group-admin">
+                  <label>ওজন / পরিমাপ <span className="req">*</span></label>
+                  <input 
+                    type="text" 
+                    placeholder="যেমন: ১ কেজি / ৫০০ গ্রাম / ৬ মিলি" 
+                    value={productFormData.weight} 
+                    onChange={e => setProductFormData({ ...productFormData, weight: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="form-group-admin">
+                  <label>উৎপত্তিস্থল (Sourcing Origin)</label>
+                  <input 
+                    type="text" 
+                    placeholder="যেমন: সাতক্ষীরা সদর / বুড়িগোয়ালিনী" 
+                    value={productFormData.origin} 
+                    onChange={e => setProductFormData({ ...productFormData, origin: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              {/* Row 3: Pricing & Stock */}
+              <div className="admin-form-grid-3">
+                <div className="form-group-admin">
+                  <label>বিক্রয় মূল্য (৳) <span className="req">*</span></label>
+                  <input 
+                    type="number" 
+                    placeholder="যেমন: ১০৫০" 
+                    value={productFormData.price} 
+                    onChange={e => setProductFormData({ ...productFormData, price: e.target.value })}
+                    required
+                    min="1"
+                  />
+                </div>
+
+                <div className="form-group-admin">
+                  <label>পূর্বের নিয়মিত মূল্য (৳)</label>
+                  <input 
+                    type="number" 
+                    placeholder="যেমন: ১২৫০ (ছাড় দেখাতে)" 
+                    value={productFormData.originalPrice} 
+                    onChange={e => setProductFormData({ ...productFormData, originalPrice: e.target.value })}
+                    min="1"
+                  />
+                </div>
+
+                <div className="form-group-admin">
+                  <label>মজুত পরিমাণ (স্টক)</label>
+                  <input 
+                    type="number" 
+                    placeholder="যেমন: ২৫" 
+                    value={productFormData.stock} 
+                    onChange={e => setProductFormData({ ...productFormData, stock: e.target.value })}
+                    min="0"
+                  />
+                </div>
+              </div>
+
+              {/* Row 4: Badge & Badge Color */}
+              <div className="admin-form-grid-2">
+                <div className="form-group-admin">
+                  <label>বিশেষ ব্যাজ / অফার ট্যাগ</label>
+                  <input 
+                    type="text" 
+                    placeholder="যেমন: 🔥 হট ডিল / সাতক্ষীরার ঐতিহ্য / বেস্টসেলার" 
+                    value={productFormData.badge} 
+                    onChange={e => setProductFormData({ ...productFormData, badge: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group-admin">
+                  <label>ব্যাজের রং (Color)</label>
+                  <select 
+                    value={productFormData.badgeColor}
+                    onChange={e => setProductFormData({ ...productFormData, badgeColor: e.target.value })}
+                  >
+                    <option value="gold">🥇 গোল্ডেন (Gold)</option>
+                    <option value="green">🌿 এমারেল্ড সবুজ (Emerald)</option>
+                    <option value="red">🔥 লাল (Hot Red)</option>
+                    <option value="blue">💎 রয়েল ব্লু (Royal Blue)</option>
+                    <option value="purple">👑 বেগুনি (Purple)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 5: Product Image (File Upload & URL) */}
+              <div className="admin-image-upload-section">
+                <label className="section-label">
+                  <ImageIcon size={15} />
+                  <span>পণ্যের ছবি আপলোড ও প্রিভিউ</span>
+                </label>
+
+                <div className="admin-image-upload-grid">
+                  {/* File Upload Zone */}
+                  <label className={`admin-photo-dropzone ${imageUploadLoading ? 'loading' : ''}`}>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleImageFileChange} 
+                      style={{ display: 'none' }} 
+                    />
+                    <Upload size={28} className="upload-icon" />
+                    <span className="dropzone-title">
+                      {imageUploadLoading ? 'ছবি প্রসেস হচ্ছে...' : 'ছবি সিলেক্ট করতে ক্লিক করুন'}
+                    </span>
+                    <span className="dropzone-sub">মোবাইল বা পিসি থেকে ছবি নির্বাচন করুন (JPG, PNG, WebP)</span>
+                  </label>
+
+                  {/* Live Preview Card */}
+                  <div className="admin-image-preview-box">
+                    {productFormData.image ? (
+                      <div className="preview-inner">
+                        <img src={productFormData.image} alt="প্রিভিউ" />
+                        <button 
+                          type="button" 
+                          onClick={() => setProductFormData({ ...productFormData, image: '' })}
+                          className="preview-remove-btn"
+                          title="ছবি মুছুন"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="preview-placeholder">
+                        <ImageIcon size={32} color="#94a3b8" />
+                        <span>ছবির প্রিভিউ এখানে দেখাবে</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Alternative URL Input */}
+                <div className="form-group-admin" style={{ marginTop: '10px' }}>
+                  <label style={{ fontSize: '0.75rem', color: '#64748b' }}>অথবা সরাসরি ছবির লিঙ্ক (Image URL) দিন:</label>
+                  <input 
+                    type="text" 
+                    placeholder="যেমন: /images/satkhira_ghee.jpg অথবা https://.../photo.jpg" 
+                    value={productFormData.image} 
+                    onChange={e => setProductFormData({ ...productFormData, image: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              {/* Row 6: Description & Benefits */}
+              <div className="admin-form-grid-2">
+                <div className="form-group-admin">
+                  <label>সংক্ষিপ্ত বিবরণ (Description)</label>
+                  <textarea 
+                    rows={3} 
+                    placeholder="পণ্য তৈরির পদ্ধতি, খাঁটি হওয়ার প্রমাণ ও বিশেষত্ব..." 
+                    value={productFormData.description} 
+                    onChange={e => setProductFormData({ ...productFormData, description: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group-admin">
+                  <label>মূল উপকারিতা (Key Benefits - প্রতি লাইনে একটি)</label>
+                  <textarea 
+                    rows={3} 
+                    placeholder="যেমন:&#10;রোগ প্রতিরোধ ক্ষমতা বৃদ্ধি করে&#10;হজমশক্তি ও মেটাবলিজম বাড়ায়" 
+                    value={productFormData.benefits} 
+                    onChange={e => setProductFormData({ ...productFormData, benefits: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              {/* Row 7: Flags (Sunnah & Bestseller) */}
+              <div className="admin-checkboxes-row">
+                <label className="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    checked={productFormData.isSunnah} 
+                    onChange={e => setProductFormData({ ...productFormData, isSunnah: e.target.checked })}
+                  />
+                  <span>🌿 সুন্নতি পণ্য (Prophetic Sunnah Diet)</span>
+                </label>
+
+                <label className="checkbox-label">
+                  <input 
+                    type="checkbox" 
+                    checked={productFormData.isBestseller} 
+                    onChange={e => setProductFormData({ ...productFormData, isBestseller: e.target.checked })}
+                  />
+                  <span>⭐ বেস্টসেলার ব্যাজ (Homepage Highlight)</span>
+                </label>
+              </div>
+
+              {/* Modal Actions */}
+              <div className="admin-modal-actions">
+                <button 
+                  type="button" 
+                  onClick={() => setIsProductModalOpen(false)} 
+                  className="admin-btn-secondary"
+                >
+                  বাতিল করুন
+                </button>
+
+                <button 
+                  type="submit" 
+                  className="admin-btn-primary"
+                  style={{ background: '#059669', borderColor: '#047857' }}
+                >
+                  <Check size={18} />
+                  <span>{editingProduct ? 'পরিবর্তন সংরক্ষণ করুন' : 'পণ্য ক্যাটালগে যুক্ত করুন'}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
