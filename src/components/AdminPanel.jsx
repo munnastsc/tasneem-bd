@@ -26,9 +26,9 @@ const STORE_CATEGORIES = [
   { id: 'honey', name: 'সুন্দরবন ও খাঁটি মধু', icon: '🍯' },
   { id: 'mango', name: 'সাতক্ষীরার হিমসাগর আম', icon: '🥭' },
   { id: 'attar', name: 'রয়্যাল আতর (মদিনা ও দুবাই)', icon: '👑' },
-  { id: 'dates', name: 'সৌদি খেজুর (আজওয়া ও সুক্কারি)', icon: '🌴' },
+  { id: 'dates', name: 'সৌদি খেজুর ও বাদাম', icon: '🌴' },
   { id: 'sylhet_tea', name: 'সিলেটের চা ও তেজপাতা', icon: '🍃' },
-  { id: 'spices', name: 'খাঁটি দেশি মশলা', icon: '🌶️' },
+  { id: 'spices', name: 'খাঁটি দেশি মশলা (হলুদ, ঝাল ও জিরা)', icon: '🌶️' },
   { id: 'sunnah_oil', name: 'সুন্নতি খাদ্য ও তেল', icon: '🌿' },
   { id: 'lifestyle', name: 'ইসলামিক লাইফস্টাইল', icon: '🕌' },
   { id: 'other', name: 'অন্যান্য প্রাকৃতিক পণ্য', icon: '📦' }
@@ -68,12 +68,20 @@ export default function AdminPanel({ onClose }) {
   const [pixelEvents, setPixelEvents] = useState(() => getPixelEventLogs());
 
   // Products Catalog Management State
+  const CATALOG_VERSION = '2026-11-v2';
   const [productsList, setProductsList] = useState(() => {
     try {
-      const stored = localStorage.getItem('khatisaoda_products');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      const storedVer = localStorage.getItem('khatisaoda_catalog_version');
+      if (storedVer === CATALOG_VERSION) {
+        const stored = localStorage.getItem('khatisaoda_products');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } else {
+        localStorage.setItem('khatisaoda_products', JSON.stringify(defaultProducts));
+        localStorage.setItem('khatisaoda_catalog_version', CATALOG_VERSION);
+        return defaultProducts;
       }
     } catch (e) {
       console.error('Error loading products from localStorage:', e);
@@ -371,6 +379,7 @@ export default function AdminPanel({ onClose }) {
     setProductsList(newList);
     try {
       localStorage.setItem('khatisaoda_products', JSON.stringify(newList));
+      localStorage.setItem('khatisaoda_catalog_version', '2026-11-v2');
       window.dispatchEvent(new CustomEvent('khatisaoda_products_updated', { detail: { products: newList } }));
     } catch (e) {
       console.error(e);

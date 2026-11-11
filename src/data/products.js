@@ -275,34 +275,34 @@ export const products = [
 
   // ==========================================
   // ৩. খাঁটি মশলা সম্ভার (PURE SPICES COLLECTION)
-  // খাঁটি দেশি গুঁড়া হলুদ, শুকনো মরিচ, এলাচ, দারুচিনি ইত্যাদি
+  // খাঁটি দেশি গুঁড়া হলুদ, শুকনো ঝালের গুঁড়া, জিরা গুঁড়া, এলাচ, দারুচিনি ইত্যাদি
   // ==========================================
   {
     id: 30,
-    name: "খাঁটি দেশি গুঁড়া হলুদ",
-    nameEn: "Pure Deshi Organic Turmeric Powder",
+    name: "খাঁটি দেশি হলুদ গুঁড়া (কাঁচা হলুদ থেকে ভাঙানো)",
+    nameEn: "Pure Deshi Organic Turmeric Powder (Holud Gura)",
     category: "spices",
     categoryName: "খাঁটি মশলা সম্ভার",
-    price: 320,
-    originalPrice: 400,
+    price: 250,
+    originalPrice: 320,
     weight: "৫০০ গ্রাম (ফুড-গ্রেড সিল্ড প্যাক)",
     variants: [
-      { label: "২৫০ গ্রাম", labelEn: "250g", price: 170, originalPrice: 210 },
-      { label: "৫০০ গ্রাম", labelEn: "500g", price: 320, originalPrice: 400 },
-      { label: "১ কেজি", labelEn: "1kg", price: 600, originalPrice: 750 }
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 135, originalPrice: 170 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 250, originalPrice: 320 },
+      { label: "১ কেজি", labelEn: "1kg", price: 490, originalPrice: 620 }
     ],
     rating: 5.0,
-    reviewsCount: 198,
+    reviewsCount: 218,
     image: "/images/turmeric_powder.jpg",
-    badge: "১০০% সিসা ও রং মুক্ত",
+    badge: "১০০% সিসা ও রঞ্জকমুক্ত",
     badgeColor: "gold",
     origin: "দেশি মাঠপর্যায়ের কাঁচা হলুদ",
     isSunnah: false,
     isBestseller: true,
-    stock: 35,
+    stock: 45,
     hadith: "খাঁটি আহার সুস্বাস্থ্যের চাবিকাঠি।",
-    description: "মাঠপর্যায়ে সরাসরি সংগৃহীত আঁশযুক্ত দেশি কাঁচা হলুদ ধুয়ে, রোদে শুকিয়ে পরিচ্ছন্নভাবে ভাঙানো। কোনো টেক্সটাইল রং, সিসা বা ধানের গুঁড়ার ভেজাল নেই। তরকারিতে দেয় প্রাকৃতিক উজ্জ্বল সোনালী রং ও খাঁটি সুঘ্রাণ।",
-    descriptionEn: "Stone-ground pure deshi turmeric sourced directly from farmers. Tested 100% free of lead chromate and artificial yellow dyes.",
+    description: "মাঠপর্যায়ে সরাসরি সংগৃহীত আঁশযুক্ত দেশি কাঁচা হলুদ ধুয়ে, রোদে শুকিয়ে পরিচ্ছন্নভাবে ভাঙানো। কোনো টেক্সটাইল রং, সিসা বা ধানের গুঁড়ার ভেজাল নেই। তরকারিতে দেয় প্রাকৃতিক উজ্জ্বল সোনালী রং ও খাঁটি সুঘ্রাণ। ঘরের বাজারের চেয়েও সাশ্রয়ী মূল্যে খাঁটি নিশ্চয়তা।",
+    descriptionEn: "Stone-ground pure deshi turmeric sourced directly from farmers. Tested 100% free of lead chromate and artificial yellow dyes. Superior quality at the most honest price.",
     labReport: {
       labName: "সায়েন্স ল্যাব (BCSIR) কেমিক্যাল শাখা",
       testId: "BCSIR-TUR-2026",
@@ -323,30 +323,30 @@ export const products = [
   },
   {
     id: 31,
-    name: "খাঁটি দেশি লাল মরিচ গুঁড়া (ভেজালমুক্ত)",
-    nameEn: "Pure Sun-Dried Red Chili Powder",
+    name: "খাঁটি দেশি ঝালের গুঁড়া (বগুড়ার শুকনো লাল মরিচ)",
+    nameEn: "Pure Hot Red Chili Powder (Jhaler Gura)",
     category: "spices",
     categoryName: "খাঁটি মশলা সম্ভার",
-    price: 350,
-    originalPrice: 440,
+    price: 310,
+    originalPrice: 390,
     weight: "৫০০ গ্রাম (ফুড-প্যাক)",
     variants: [
-      { label: "২৫০ গ্রাম", labelEn: "250g", price: 190, originalPrice: 240 },
-      { label: "৫০০ গ্রাম", labelEn: "500g", price: 350, originalPrice: 440 },
-      { label: "১ কেজি", labelEn: "1kg", price: 680, originalPrice: 850 }
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 160, originalPrice: 200 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 310, originalPrice: 390 },
+      { label: "১ কেজি", labelEn: "1kg", price: 590, originalPrice: 740 }
     ],
     rating: 4.9,
-    reviewsCount: 172,
+    reviewsCount: 195,
     image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=800&q=80",
-    badge: "গাঢ় লাল ও তীব্র ঝাঁঝ",
+    badge: "তীব্র খাঁটি ঝাঁঝ ও লালচে আভা",
     badgeColor: "emerald",
     origin: "বগুড়ার ঝাল মরিচ খেত",
     isSunnah: false,
     isBestseller: true,
-    stock: 28,
+    stock: 40,
     hadith: "খাবারে ভেজাল দেওয়া থেকে কঠোরভাবে বিরত থাকো।",
-    description: "বগুড়ার ঝাল মরিচ বোঁটা বেছে, রোদে শুকিয়ে নিজস্ব তত্ত্বাবধানে ভাঙানো। কোনো কৃত্রিম লাল রং বা ইটের গুঁড়া মেশানো হয় না। রান্নায় দেয় আসল দেশি ঝাঁঝ ও স্বাদ।",
-    descriptionEn: "Authentic sun-dried hot chili powder ground from handpicked chilis with zero synthetic red coloring.",
+    description: "বগুড়ার সেরা শুকনো ঝাল মরিচ বোঁটা বেছে, কড়া রোদে শুকিয়ে সম্পূর্ণ নিজস্ব তত্ত্বাবধানে ভাঙানো। কোনো কৃত্রিম লাল রং, কেমিক্যাল বা ইটের গুঁড়া মেশানো হয় না। রান্নায় দেয় আসল দেশি ঝাঁঝ ও চমৎকার স্বাদ।",
+    descriptionEn: "Authentic sun-dried hot chili powder ground from handpicked chilis with zero synthetic red coloring. Genuine punch and natural aroma.",
     labReport: {
       labName: "খাদ্য মান নিয়ন্ত্রণ ল্যাব",
       testId: "FQC-CHILI-2026",
@@ -363,6 +363,50 @@ export const products = [
       "Boosts metabolism through natural capsaicin",
       "Zero brick dust or textile dye adulteration",
       "Rich deep flavor and punch"
+    ]
+  },
+  {
+    id: 34,
+    name: "খাঁটি প্রিমিয়াম জিরা গুঁড়া (ভেজালমুক্ত সুবাসিত)",
+    nameEn: "Pure Aromatic Roasted Cumin Powder (Jira Gura)",
+    category: "spices",
+    categoryName: "খাঁটি মশলা সম্ভার",
+    price: 610,
+    originalPrice: 750,
+    weight: "৫০০ গ্রাম (ফুড-গ্রেড সিল্ড প্যাক)",
+    variants: [
+      { label: "২০০ গ্রাম", labelEn: "200g", price: 250, originalPrice: 310 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 610, originalPrice: 750 },
+      { label: "১ কেজি", labelEn: "1kg", price: 1190, originalPrice: 1450 }
+    ],
+    rating: 5.0,
+    reviewsCount: 162,
+    image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80",
+    badge: "১০০% খাঁটি কিউমিন সুবাস",
+    badgeColor: "gold",
+    origin: "নির্বাচিত প্রিমিয়াম কিউমিন বীজ",
+    isSunnah: false,
+    isBestseller: true,
+    stock: 38,
+    hadith: "সুস্বাদু ও সুবাসিত মসলা খাবারের তৃপ্তি বাড়ায়।",
+    description: "বাছাইকৃত সেরা কিউমিন (জিরা) ধুলোবালি ও ময়লামুক্ত করে হালকা তাওয়ায় টেলে নিজস্ব মিলে ভাঙানো। কোনো কাঠের ভুসি, ডাল বা ধানের গুঁড়ার ভেজাল নেই। তরকারি, মাছ ও মাংসের ভুনা রান্নায় এক চামচেই ছড়িয়ে পড়ে রাজকীয় সুবাস। ঘরের বাজারের চেয়েও সাশ্রয়ী দামে সেরা নিশ্চয়তা।",
+    descriptionEn: "Stone-ground roasted aromatic cumin powder. Cleaned, destoned and slow-roasted for intense authentic aroma.",
+    labReport: {
+      labName: "সায়েন্স ল্যাব খাদ্য শাখা",
+      testId: "BCSIR-CUMIN-2026",
+      moisture: "৭.৮%",
+      purityScore: "১০০% বিশুদ্ধ কিউমিন নির্যাস",
+      status: "কোনো প্রকার ভেজাল বা ডাস্ট মিশ্রণ নেই"
+    },
+    benefits: [
+      "হজমশক্তি উন্নত করে ও এসিডিটি নিরাময়ে দারুণ সহায়ক",
+      "শরীরে আয়রনের ভারসাম্য রক্ষা করে ও রোগ প্রতিরোধ বাড়ায়",
+      "যেকোনো সাধারণ রান্নাকে করে তোলে অতুলনীয় সুস্বাদু"
+    ],
+    benefitsEn: [
+      "Enhances digestion and eases bloating",
+      "Rich in natural dietary iron and essential oils",
+      "Imparts unmatched warm aroma to any gourmet dish"
     ]
   },
   {
@@ -563,12 +607,12 @@ export const products = [
     rating: 5.0,
     reviewsCount: 340,
     image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80",
-    badge: "শতভাগ অ্যালকোহলমুক্ত",
-    badgeColor: "gold",
+    badge: "স্টক শেষ (Out of Stock)",
+    badgeColor: "red",
     origin: "পবিত্র মদিনা ও দুবাই (ইউএই)",
     isSunnah: true,
     isBestseller: true,
-    stock: 15,
+    stock: 0,
     hadith: "সুগন্ধি গ্রহণ করো; কারণ এটি আত্মাকে প্রফুল্ল করে এবং এতে কোনো অপছন্দনীয় গন্ধ থাকে না। (তিরমিযি)",
     description: "পবিত্র কাবার গিলাফের মোহনীয় সুবাসের আদলে তৈরি রাজকীয় ও গভীর উদের স্নিগ্ধ সুবাস। কাপড়ে একবার মাখলে ২-৩ দিন স্থায়ী সুবাস ছড়ায়। শতভাগ অ্যালকোহল ও সিন্থেটিক কেমিক্যালমুক্ত।",
     descriptionEn: "Majestic concentrated perfume oil inspired by the Kiswah of the Holy Kaaba. Long-lasting, alcohol-free projection.",
@@ -606,12 +650,12 @@ export const products = [
     rating: 4.9,
     reviewsCount: 215,
     image: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&w=800&q=80",
-    badge: "স্নিগ্ধ ও মিষ্টি কস্তুরী সুবাস",
-    badgeColor: "emerald",
+    badge: "স্টক শেষ (Out of Stock)",
+    badgeColor: "red",
     origin: "পবিত্র মদিনা ও মধ্যপ্রাচ্য",
     isSunnah: true,
     isBestseller: true,
-    stock: 20,
+    stock: 0,
     hadith: "কস্তুরী হলো সর্বোত্তম সুগন্ধি। (সহিহ মুসলিম)",
     description: "নরম, মিষ্টি ও স্নিগ্ধ হোয়াইট মাস্ক। গরমের দিনে শরীরকে সারাদিন সতেজ ও সুরভিত রাখে। কোনো ঝাঁঝালো গন্ধ নেই, চারপাশের সবাইকে মুগ্ধ করবে।",
     descriptionEn: "Velvety, clean, and celestial white musk attar. Alcohol-free soothing aura that lasts all day.",
@@ -648,12 +692,12 @@ export const products = [
     rating: 5.0,
     reviewsCount: 182,
     image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=800&q=80",
-    badge: "রাজকীয় অ্যারাবিয়ান স্প্রে",
-    badgeColor: "gold",
+    badge: "স্টক শেষ (Out of Stock)",
+    badgeColor: "red",
     origin: "দুবাই, সংযুক্ত আরব আমিরাত",
     isSunnah: true,
     isBestseller: false,
-    stock: 14,
+    stock: 0,
     hadith: "উত্তম সুবাস ব্যক্তিত্বের শোভা বৃদ্ধি করে।",
     description: "কম্বোডিয়ান উদ, ভ্যানিলা, ক্যারামেল ও অ্যাম্বারের এক অপূর্ব মেলবন্ধন। অভিজাত বিয়ের অনুষ্ঠান, জুমা বা বিশেষ মেহমানদারির জন্য সেরা রাজকীয় পারফিউম।",
     descriptionEn: "Rich Arabian luxury scent blending aged Cambodian agarwood with amber, sugar and vanilla.",
@@ -677,8 +721,96 @@ export const products = [
   },
 
   // ==========================================
-  // ৬. প্রিমিয়াম খেজুর ও ড্রাই ফ্রুটস (DATES)
+  // ৬. প্রিমিয়াম খেজুর ও ড্রাই ফ্রুটস / বাদাম (DATES & NUTS)
   // ==========================================
+  {
+    id: 60,
+    name: "প্রিমিয়াম কাজু বাদাম (মিডিয়াম সাইজ)",
+    nameEn: "Premium Whole Cashew Nuts - Medium Size (Kaju Badam)",
+    category: "dates",
+    categoryName: "প্রিমিয়াম বাদাম ও খেজুর",
+    price: 1900,
+    originalPrice: 2200,
+    weight: "১ কেজি (জার/প্যাক)",
+    variants: [
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 490, originalPrice: 580 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 970, originalPrice: 1150 },
+      { label: "১ কেজি", labelEn: "1kg", price: 1900, originalPrice: 2200 }
+    ],
+    rating: 5.0,
+    reviewsCount: 176,
+    image: "https://images.unsplash.com/photo-1509912760195-2c8e235e1654?auto=format&fit=crop&w=800&q=80",
+    badge: "মিডিয়াম সাইজ ১৯০০৳/কেজি",
+    badgeColor: "gold",
+    origin: "আমদানিকৃত প্রিমিয়াম গ্রেড (ভিয়েতনাম)",
+    isSunnah: true,
+    isBestseller: true,
+    stock: 45,
+    hadith: "পুষ্টিকর খাদ্য ও বাদাম শরীরকে কর্মক্ষম ও সবল রাখে।",
+    description: "সম্পূর্ণ মচমচে, টাটকা ও মিষ্টি স্বাদের এ-গ্রেড আস্ত কাজু বাদাম (মিডিয়াম সাইজ)। কোনো প্রকার পচা, ঘুণে ধরা দানা বা কেমিক্যাল প্রিজারভেটিভ নেই। সম্পূর্ণ কাঁচা ও প্রাকৃতিক পুষ্টিগুণে ভরপুর। নিয়মিত খেলে শরীর ও মন চাঙ্গা থাকে।",
+    descriptionEn: "Supreme quality crispy, unroasted whole cashew nuts (medium size). Freshly packed, nutrient-dense and zero chemical additives.",
+    labReport: {
+      labName: "সায়েন্স ল্যাব খাদ্য বিভাগ (BCSIR)",
+      testId: "BCSIR-CASHEW-2026",
+      moisture: "৪.২% (নিখুঁত ক্রিস্পি আর্দ্রতা)",
+      purityScore: "১০০% প্রিমিয়াম কাজু বাদাম",
+      status: "জিরো অ্যাডিটিভস ও প্রাকৃতিক ফ্রেশনেস"
+    },
+    benefits: [
+      "প্রচুর ম্যাগনেসিয়াম, জিংক ও আয়রন সমৃদ্ধ যা শক্তিবর্ধক",
+      "হার্ট ভালো রাখে এবং রক্তনালীর স্বাস্থ্য রক্ষা করে",
+      "ত্বক, চুল ও হাড়ের সুস্বাস্থ্যে প্রতিদিনের শ্রেষ্ঠ পুষ্টি"
+    ],
+    benefitsEn: [
+      "Rich in heart-healthy plant fats and minerals",
+      "Packed with zinc and magnesium for daily stamina",
+      "Delicious wholesome crunch for kids and adults"
+    ]
+  },
+  {
+    id: 61,
+    name: "আমেরিকান প্রিমিয়াম কাঠ বাদাম (Almond)",
+    nameEn: "California Premium Whole Almonds (Kat Badam)",
+    category: "dates",
+    categoryName: "প্রিমিয়াম বাদাম ও খেজুর",
+    price: 1600,
+    originalPrice: 1950,
+    weight: "১ কেজি (জার/প্যাক)",
+    variants: [
+      { label: "২৫০ গ্রাম", labelEn: "250g", price: 420, originalPrice: 500 },
+      { label: "৫০০ গ্রাম", labelEn: "500g", price: 820, originalPrice: 1000 },
+      { label: "১ কেজি", labelEn: "1kg", price: 1600, originalPrice: 1950 }
+    ],
+    rating: 5.0,
+    reviewsCount: 194,
+    image: "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?auto=format&fit=crop&w=800&q=80",
+    badge: "ক্যালিফোর্নিয়া ১৬০০৳/কেজি",
+    badgeColor: "emerald",
+    origin: "ক্যালিফোর্নিয়া, ইউএসএ (সরাসরি আমদানিকৃত)",
+    isSunnah: true,
+    isBestseller: true,
+    stock: 50,
+    hadith: "স্বাস্থ্যকর প্রাকৃতিক আহার দীর্ঘায়ু ও সুস্থতার সহায়ক।",
+    description: "আমেরিকার ক্যালিফোর্নিয়া থেকে সরাসরি সংগৃহীত সেরা মানের ফ্রেশ কাঠ বাদাম (বাদামি খোসাসহ)। সকালে ভিজিয়ে খাওয়ার জন্য অত্যন্ত কার্যকরী। উচ্চমাত্রার ভিটামিন ই, ক্যালসিয়াম ও প্রাকৃতিক ফাইবারের অতুলনীয় উৎস।",
+    descriptionEn: "Top-grade direct imported California whole almonds with supreme crunch, high dietary fiber and active vitamin E.",
+    labReport: {
+      labName: "বিএসটিআই ও এগ্রিকালচার ল্যাব ভেরিফাইড",
+      testId: "BSTI-ALM-2026",
+      moisture: "৪.৫% (মচমচে গুণমান)",
+      purityScore: "১০০% প্রিমিয়াম কাঠ বাদাম",
+      status: "কোনো কৃত্রিম তেল পলিশ বা রং নেই"
+    },
+    benefits: [
+      "মস্তিষ্কের স্মৃতিশক্তি প্রখর ও স্নায়ুতন্ত্র শান্ত রাখে",
+      "উচ্চ ভিটামিন-ই ত্বক মসৃণ ও তারুণ্যদীপ্ত রাখে",
+      "খারাপ কোলেস্টেরল কমায় ও রক্তে শর্করার মাত্রা নিয়ন্ত্রণ করে"
+    ],
+    benefitsEn: [
+      "Enhances memory retention and cognitive sharpness",
+      "Abundant Vitamin E nourishes skin and hair",
+      "Lowers LDL cholesterol and stabilizes blood glucose"
+    ]
+  },
   {
     id: 3,
     name: "আজওয়া ভিআইপি খেজুর",
@@ -1003,10 +1135,12 @@ export const bundleItems = [
   { id: 'b1', name: 'সাতক্ষীরার খাঁটি গাওয়া ঘি (৫০০ গ্রাম)', price: 970, weight: '৫০০ গ্রাম' },
   { id: 'b2', name: 'সুন্দরবন সাতক্ষীরা খলিশা মধু (৫০০ গ্রাম)', price: 1050, weight: '৫০০ গ্রাম' },
   { id: 'b3', name: 'আজওয়া ভিআইপি খেজুর (৪০০ গ্রাম)', price: 780, weight: '৪০০ গ্রাম' },
-  { id: 'b4', name: 'রয়েল উদ আতর (৬ মিলি)', price: 550, weight: '৬ মিলি' },
-  { id: 'b5', name: 'শ্রীমঙ্গলের কুঁড়ি চা পাতা (৪০০ গ্রাম)', price: 380, weight: '৪০০ গ্রাম' },
-  { id: 'b6', name: 'খাঁটি দেশি গুঁড়া হলুদ (৫০০ গ্রাম)', price: 320, weight: '৫০০ গ্রাম' },
-  { id: 'b7', name: 'সাতক্ষীরার হিমসাগর আম (৫ কেজি)', price: 650, weight: '৫ কেজি' }
+  { id: 'b4', name: 'প্রিমিয়াম কাজু বাদাম (২৫০ গ্রাম)', price: 490, weight: '২৫০ গ্রাম' },
+  { id: 'b5', name: 'আমেরিকান কাঠ বাদাম (২৫০ গ্রাম)', price: 420, weight: '২৫০ গ্রাম' },
+  { id: 'b6', name: 'শ্রীমঙ্গলের কুঁড়ি চা পাতা (৪০০ গ্রাম)', price: 380, weight: '৪০০ গ্রাম' },
+  { id: 'b7', name: 'খাঁটি দেশি গুঁড়া হলুদ (৫০০ গ্রাম)', price: 250, weight: '৫০০ গ্রাম' },
+  { id: 'b8', name: 'খাঁটি প্রিমিয়াম জিরা গুঁড়া (২০০ গ্রাম)', price: 250, weight: '২০০ গ্রাম' },
+  { id: 'b9', name: 'সাতক্ষীরার হিমসাগর আম (৫ কেজি)', price: 650, weight: '৫ কেজি' }
 ];
 
 export const faqs = [

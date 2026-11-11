@@ -57,12 +57,20 @@ export default function App() {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
 
   // Dynamic Product Catalog State (synced with localStorage & Admin Panel)
+  const CATALOG_VERSION = '2026-11-v2';
   const [productList, setProductList] = useState(() => {
     try {
-      const saved = localStorage.getItem('khatisaoda_products');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      const storedVer = localStorage.getItem('khatisaoda_catalog_version');
+      if (storedVer === CATALOG_VERSION) {
+        const saved = localStorage.getItem('khatisaoda_products');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } else {
+        localStorage.setItem('khatisaoda_products', JSON.stringify(defaultProducts));
+        localStorage.setItem('khatisaoda_catalog_version', CATALOG_VERSION);
+        return defaultProducts;
       }
     } catch (e) {
       console.error('Error loading products from localStorage:', e);
@@ -231,6 +239,10 @@ export default function App() {
 
   // Cart actions
   const addToCart = (product, variant = null) => {
+    if (typeof product.stock === 'number' && product.stock <= 0) {
+      alert(`দুঃখিত, "${product.name}" পণ্যটি বর্তমানে স্টক আউট (Out of Stock) রয়েছে!`);
+      return;
+    }
     const chosenPrice = variant ? variant.price : product.price;
     const chosenWeight = variant ? variant.label : product.weight;
     const cartItemId = `${product.id}-${chosenWeight}`;
@@ -785,10 +797,10 @@ export default function App() {
                   <span className="cat-emoji">🌶️</span>
                   <div>
                     <span className="cat-name">খাঁটি মশলা সম্ভার</span>
-                    <span className="cat-sub">বগুড়ার মরিচ ও দেশি হলুদ গুঁড়া</span>
+                    <span className="cat-sub">হলুদ গুঁড়া, ঝালের গুঁড়া ও প্রিমিয়াম জিরা গুঁড়া</span>
                   </div>
                 </span>
-                <span className="drawer-badge">৪টি</span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'spices').length}টি</span>
               </button>
 
               <button 
@@ -802,7 +814,7 @@ export default function App() {
                     <span className="cat-sub">শ্রীমঙ্গলের ক্লোন কুঁড়ি চা ও পাহাড়ি তেজপাতা</span>
                   </div>
                 </span>
-                <span className="drawer-badge">২টি</span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'sylhet_tea').length}টি</span>
               </button>
 
               <button 
@@ -816,7 +828,7 @@ export default function App() {
                     <span className="cat-sub">মদিনা ও দুবাইয়ের কাবার উদ ও সুবাস</span>
                   </div>
                 </span>
-                <span className="drawer-badge special">জনপ্রিয়</span>
+                <span className="drawer-badge" style={{ background: '#fee2e2', color: '#dc2626' }}>স্টক শেষ</span>
               </button>
 
               <button 
@@ -826,11 +838,11 @@ export default function App() {
                 <span className="drawer-cat-left">
                   <span className="cat-emoji">🌴</span>
                   <div>
-                    <span className="cat-name">সৌদি প্রিমিয়াম খেজুর</span>
-                    <span className="cat-sub">মদিনার আজওয়া ও কাসিমের সুক্কারি</span>
+                    <span className="cat-name">সৌদি খেজুর ও প্রিমিয়াম বাদাম</span>
+                    <span className="cat-sub">আজওয়া, সুক্কারি, কাজু বাদাম ও কাঠ বাদাম</span>
                   </div>
                 </span>
-                <span className="drawer-badge">২টি</span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'dates').length}টি</span>
               </button>
 
               <button 
@@ -1091,14 +1103,15 @@ export default function App() {
             className={`category-pill-btn special-attar ${selectedCategory === 'attar' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('attar'); setShowWishlistOnly(false); }}
           >
-            👑 রয়্যাল আতর (মদিনা ও দুবাই) ({productList.filter(p => p.category === 'attar').length})
+            👑 রয়্যাল আতর ({productList.filter(p => p.category === 'attar').length})
+            <span style={{ fontSize: '0.68rem', background: '#fee2e2', color: '#dc2626', padding: '1px 5px', borderRadius: '8px', marginLeft: '5px' }}>স্টক শেষ</span>
           </button>
 
           <button 
             className={`category-pill-btn ${selectedCategory === 'dates' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('dates'); setShowWishlistOnly(false); }}
           >
-            🌴 সৌদি খেজুর (আজওয়া ও সুক্কারি) ({productList.filter(p => p.category === 'dates').length})
+            🌴 সৌদি খেজুর ও বাদাম ({productList.filter(p => p.category === 'dates').length})
           </button>
 
           <button 
@@ -1159,10 +1172,10 @@ export default function App() {
                   {selectedCategory === 'mango' && 'সাতক্ষীরার বিখ্যাত কলারোয়ার কেমিক্যালমুক্ত গাছপাকা হিমসাগর আম (উৎস: সাতক্ষীরা)'}
                   {selectedCategory === 'ghee' && 'সাতক্ষীরার খাঁটি ঐতিহ্যবাহী গাওয়া ঘি (উৎস: সাতক্ষীরার গ্রাম)'}
                   {selectedCategory === 'honey' && 'সুন্দরবনের র\' মধু ও প্রাকৃতিক ফুলের মধু কালেকশন (উৎস: সুন্দরবন ও ফুলের খেত)'}
-                  {selectedCategory === 'attar' && 'পবিত্র মদিনা ও দুবাইয়ের রয়্যাল আতর সম্ভার (১০০% অ্যালকোহলমুক্ত)'}
-                  {selectedCategory === 'dates' && 'সৌদি আরবের আজওয়া ভিআইপি ও সুক্কারি নরম খেজুর (উৎস: মদিনা ও আল-কাসিম)'}
+                  {selectedCategory === 'attar' && 'পবিত্র মদিনা ও দুবাইয়ের রয়্যাল আতর সম্ভার (বর্তমানে স্টক শেষ)'}
+                  {selectedCategory === 'dates' && 'সৌদি আরবের আজওয়া, সুক্কারি খেজুর ও প্রিমিয়াম কাজু ও কাঠ বাদাম (উৎস: মদিনা, ক্যালিফোর্নিয়া ও ভিয়েতনাম)'}
                   {selectedCategory === 'sylhet_tea' && 'সিলেটের শ্রীমঙ্গলের কুঁড়ি চা ও পাহাড়ি সুগন্ধি তেজপাতা (উৎস: সিলেট)'}
-                  {selectedCategory === 'spices' && 'খাঁটি মশলা সম্ভার (উৎস: বগুড়া ও মাঠপর্যায়ের খাঁটি দেশি হলুদ)'}
+                  {selectedCategory === 'spices' && 'খাঁটি মশলা সম্ভার - হলুদ গুঁড়া, ঝালের গুঁড়া ও জিরা গুঁড়া (ঘরের বাজারের চেয়েও সাশ্রয়ী মূল্যে)'}
                   {selectedCategory === 'sunnah_oil' && 'সুন্নতি খাদ্য, ঘানিভাঙা সরিষার তেল ও কালোজিরা তেল (উৎস: দেশি ঘানি)'}
                   {selectedCategory === 'lifestyle' && 'ইসলামিক লাইফস্টাইল, তুর্কি জায়নামাজ ও জয়তুন মেসওয়াক (উৎস: তুরস্ক ও মদিনা)'}
                 </h3>
@@ -1170,10 +1183,10 @@ export default function App() {
                   {selectedCategory === 'mango' && 'সাতক্ষীরার সুপ্রসিদ্ধ কলারোয়া ও দেবহাটার প্রাচীন বাগান থেকে সংগৃহীত। কার্বাইড ও ফরমালিনমুক্ত গাছপাকা হিমসাগর—পাতলা খোসা, আঁশহীন রসালো মিষ্টি শাঁস।'}
                   {selectedCategory === 'ghee' && 'সাতক্ষীরার গ্রাম থেকে সংগৃহীত খাঁটি গাভীর দুধ থেকে কাঠের আগুনে জ্বাল দিয়ে তৈরি নিখুঁত সোনালী দানাদার ঘি। জিরো কেমিক্যাল ও কোনো কৃত্রিম গন্ধ বা রঙ নেই।'}
                   {selectedCategory === 'honey' && 'সুন্দরবনের খলিশা, কুল বরই, দিনাজপুরের লিচু, সরিষা ও কালোজিরা ফুলের কাঁচা র\' মধু—২৫০ গ্রাম, ৫০০ গ্রাম ও ১ কেজি সাইজে উপলব্ধ।'}
-                  {selectedCategory === 'attar' && 'পবিত্র কাবার আদলে উদ আল কা\'বা, সিলভার হোয়াইট মাস্ক ও লাক্সারি আমির আল উদ—কাপড়ে দীর্ঘস্থায়ী রাজকীয় সুবাস।'}
-                  {selectedCategory === 'dates' && 'সৌদি আরবের বাগান থেকে সরাসরি আমদানিকৃত এ-গ্রেড নরম ও সুস্বাদু খেজুর। কোনো প্রিজারভেটিভ বা কেমিক্যাল পলিশ নেই।'}
+                  {selectedCategory === 'attar' && 'পবিত্র কাবার আদলে উদ আল কা\'বা, সিলভার হোয়াইট মাস্ক ও লাক্সারি আমির আল উদ—সাময়িকভাবে স্টক শেষ। নতুন লট আসলে আবারও পাওয়া যাবে ইনশাআল্লাহ।'}
+                  {selectedCategory === 'dates' && 'সৌদি আরবের বাগান থেকে সরাসরি আমদানিকৃত নরম সুস্বাদু খেজুর এবং ক্রিস্পি প্রিমিয়াম কাজু বাদাম ও ক্যালিফোর্নিয়া কাঠ বাদাম।'}
                   {selectedCategory === 'sylhet_tea' && 'শ্রীমঙ্গলের সেরা বাগানের দুটি পাতা একটি কুঁড়ি এবং সিলেটের পাহাড়ি ঢালে প্রাকৃতিকভাবে জন্ম নেওয়া সুগন্ধি তেজপাতা (কুড়েই পাতা)।'}
-                  {selectedCategory === 'spices' && 'মাঠপর্যায়ের কৃষকদের থেকে খাঁটি দেশি হলুদ ও বগুড়ার মরিচ ধুয়ে রোদে শুকিয়ে পরিচ্ছন্নভাবে ভাঙানো। গুয়াতেমালা এলাচ ও আসল সিলন দারুচিনি।'}
+                  {selectedCategory === 'spices' && 'মাঠপর্যায়ের কৃষকদের থেকে খাঁটি দেশি হলুদ, বগুড়ার ঝালের শুকনো লাল মরিচ ও নিজস্ব মিলে ভাঙানো খাঁটি প্রিমিয়াম জিরা গুঁড়া। ঘরের বাজারের চেয়েও সাশ্রয়ী মূল্যে শতভাগ খাঁটি নিশ্চয়তা।'}
                   {selectedCategory === 'sunnah_oil' && 'কাঠের ঘানিতে কোল্ড-প্রেসড সরিষার তেল ও উচ্চ থাইমোকুইনোন সমৃদ্ধ কাঁচা কালোজিরা তেল।'}
                   {selectedCategory === 'lifestyle' && '২৫ মিলিমিটার পুরু অর্থোপেডিক মেমোরি ফোম তুর্কি জায়নামাজ ও ভ্যাকুয়াম সিল্ড জয়তুন কাঠের তাজা মেসওয়াক।'}
                 </p>
@@ -1208,11 +1221,15 @@ export default function App() {
                 onClick={() => { setDetailModalProduct(product); setSelectedVariantIndex(activeVarIdx); }}
               >
                 <img src={product.image} alt={product.name} loading="lazy" />
-                {product.badge && (
+                {typeof product.stock === 'number' && product.stock <= 0 ? (
+                  <span className="product-badge-float" style={{ background: '#dc2626', color: '#fff', fontWeight: 800 }}>
+                    🚫 স্টক শেষ
+                  </span>
+                ) : product.badge ? (
                   <span className={`product-badge-float ${product.badgeColor || ''}`}>
                     {product.badge}
                   </span>
-                )}
+                ) : null}
                 {product.isSunnah && (
                   <span className="sunnah-verified-tag">
                     <Sparkles size={11} />
@@ -1311,20 +1328,39 @@ export default function App() {
                   </div>
 
                   <div style={{ display: 'flex', gap: '6px' }}>
-                    <button 
-                      className="btn-add-cart" 
-                      title="কার্টে যোগ করুন"
-                      onClick={() => addToCart(product, currentVariant)}
-                    >
-                      <Plus size={16} />
-                    </button>
-                    <button 
-                      className="btn-direct-order"
-                      onClick={() => directOrder(product, currentVariant)}
-                    >
-                      <ShoppingBag size={14} />
-                      <span>অর্ডার</span>
-                    </button>
+                    {typeof product.stock === 'number' && product.stock <= 0 ? (
+                      <span className="out-of-stock-pill" style={{
+                        background: '#fee2e2',
+                        color: '#dc2626',
+                        border: '1px solid #fca5a5',
+                        padding: '6px 12px',
+                        borderRadius: '20px',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                      }}>
+                        🚫 স্টক শেষ
+                      </span>
+                    ) : (
+                      <>
+                        <button 
+                          className="btn-add-cart" 
+                          title="কার্টে যোগ করুন"
+                          onClick={() => addToCart(product, currentVariant)}
+                        >
+                          <Plus size={16} />
+                        </button>
+                        <button 
+                          className="btn-direct-order"
+                          onClick={() => directOrder(product, currentVariant)}
+                        >
+                          <ShoppingBag size={14} />
+                          <span>অর্ডার</span>
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1599,30 +1635,41 @@ export default function App() {
               </div>
 
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button 
-                  className="btn-gold-primary" 
-                  style={{ flex: 1, justifyContent: 'center' }}
-                  onClick={() => {
-                    const currentVar = detailModalProduct.variants ? detailModalProduct.variants[selectedVariantIndex] : null;
-                    directOrder(detailModalProduct, currentVar);
-                    setDetailModalProduct(null);
-                  }}
-                >
-                  <ShoppingBag size={18} />
-                  <span>এখনই অর্ডার করুন</span>
-                </button>
-                <button 
-                  className="btn-add-cart"
-                  style={{ width: '44px', height: '44px' }}
-                  title="কার্টে যোগ করুন"
-                  onClick={() => {
-                    const currentVar = detailModalProduct.variants ? detailModalProduct.variants[selectedVariantIndex] : null;
-                    addToCart(detailModalProduct, currentVar);
-                    setDetailModalProduct(null);
-                  }}
-                >
-                  <Plus size={20} />
-                </button>
+                {typeof detailModalProduct.stock === 'number' && detailModalProduct.stock <= 0 ? (
+                  <button 
+                    disabled 
+                    style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#fee2e2', color: '#dc2626', border: '1px solid #fca5a5', fontWeight: 700, cursor: 'not-allowed', fontSize: '0.95rem' }}
+                  >
+                    🚫 এই পণ্যটি বর্তমানে স্টক শেষ (Out of Stock)
+                  </button>
+                ) : (
+                  <>
+                    <button 
+                      className="btn-gold-primary" 
+                      style={{ flex: 1, justifyContent: 'center' }}
+                      onClick={() => {
+                        const currentVar = detailModalProduct.variants ? detailModalProduct.variants[selectedVariantIndex] : null;
+                        directOrder(detailModalProduct, currentVar);
+                        setDetailModalProduct(null);
+                      }}
+                    >
+                      <ShoppingBag size={18} />
+                      <span>এখনই অর্ডার করুন</span>
+                    </button>
+                    <button 
+                      className="btn-add-cart"
+                      style={{ width: '44px', height: '44px' }}
+                      title="কার্টে যোগ করুন"
+                      onClick={() => {
+                        const currentVar = detailModalProduct.variants ? detailModalProduct.variants[selectedVariantIndex] : null;
+                        addToCart(detailModalProduct, currentVar);
+                        setDetailModalProduct(null);
+                      }}
+                    >
+                      <Plus size={20} />
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
