@@ -57,7 +57,7 @@ export default function App() {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
 
   // Dynamic Product Catalog State (synced with localStorage & Admin Panel)
-  const CATALOG_VERSION = '2026-11-v2';
+  const CATALOG_VERSION = '2026-11-v3';
   const [productList, setProductList] = useState(() => {
     try {
       const storedVer = localStorage.getItem('khatisaoda_catalog_version');
@@ -501,8 +501,8 @@ export default function App() {
         <span>
           <Sparkles size={16} />
           {lang === 'bn' 
-            ? 'সাতক্ষীরার খাঁটি গাওয়া ঘি ও হিমসাগর আম, সুন্দরবনের র\' মধু, মদিনার আজওয়া খেজুর, সিলেটের চা ও রয়্যাল আতর | ক্যাশ অন ডেলিভারি!' 
-            : 'Satkhira Ghee & Mango, Sundarban Raw Honey, Madinah Dates & Royal Attar | Nationwide Cash on Delivery!'}
+            ? 'সাতক্ষীরার খাঁটি ঘি ও হিমসাগর আম, সুন্দরবনের মধু, ঘানিভাঙা সরিষার তেল, প্রিমিয়াম বাদাম ও খাঁটি মশলা | সারা দেশে ক্যাশ অন ডেলিভারি!' 
+            : 'Satkhira Ghee & Mango, Sundarban Raw Honey, Mustard Oil, Premium Nuts & Pure Spices | Cash on Delivery!'}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <a href="tel:+8801714740430" className="top-phone-link">
@@ -577,30 +577,21 @@ export default function App() {
                     <span className="mega-menu-link">পণ্যগুলো দেখুন →</span>
                   </div>
 
-                  <div className="mega-menu-column" onClick={() => { scrollToCategories('attar'); setIsMainMenuOpen(false); }}>
+                  <div className="mega-menu-column" onClick={() => { scrollToCategories('oil'); setIsMainMenuOpen(false); }}>
                     <div className="mega-menu-cat-title">
-                      <span className="cat-icon">👑</span>
-                      <strong>রয়্যাল আতর ও পারফিউম</strong>
+                      <span className="cat-icon">🌿</span>
+                      <strong>ঘানিভাঙা সরিষার তেল</strong>
                     </div>
-                    <p className="mega-menu-cat-desc">📍 উৎস: মদিনা ও দুবাই | কাবার উদ, হোয়াইট মাস্ক, আমির আল উদ (অ্যালকোহলমুক্ত)</p>
+                    <p className="mega-menu-cat-desc">📍 উৎস: দেশি কাঠের ঘানি | শতভাগ খাঁটি কোল্ড-প্রেসড ঝাঁঝালো সরিষার তেল</p>
                     <span className="mega-menu-link">পণ্যগুলো দেখুন →</span>
                   </div>
 
-                  <div className="mega-menu-column" onClick={() => { scrollToCategories('dates'); setIsMainMenuOpen(false); }}>
+                  <div className="mega-menu-column" onClick={() => { scrollToCategories('nuts'); setIsMainMenuOpen(false); }}>
                     <div className="mega-menu-cat-title">
-                      <span className="cat-icon">🌴</span>
-                      <strong>সৌদি প্রিমিয়াম খেজুর</strong>
+                      <span className="cat-icon">🥜</span>
+                      <strong>প্রিমিয়াম বাদাম সম্ভার</strong>
                     </div>
-                    <p className="mega-menu-cat-desc">📍 উৎস: মদিনা ও আল-কাসিম | আজওয়া ভিআইপি ও সোনালী সুক্কারি নরম খেজুর</p>
-                    <span className="mega-menu-link">পণ্যগুলো দেখুন →</span>
-                  </div>
-
-                  <div className="mega-menu-column" onClick={() => { scrollToCategories('sylhet_tea'); setIsMainMenuOpen(false); }}>
-                    <div className="mega-menu-cat-title">
-                      <span className="cat-icon">🍃</span>
-                      <strong>সিলেটের চা ও তেজপাতা</strong>
-                    </div>
-                    <p className="mega-menu-cat-desc">📍 উৎস: শ্রীমঙ্গল ও জৈন্তাপুর পাহাড় | ক্লোন কুঁড়ি চা ও পাহাড়ি সুগন্ধি তেজপাতা</p>
+                    <p className="mega-menu-cat-desc">📍 উৎস: ক্যালিফোর্নিয়া, ভিয়েতনাম ও ইরান | কাজু বাদাম, কাঠ বাদাম ও পেস্তা বাদাম</p>
                     <span className="mega-menu-link">পণ্যগুলো দেখুন →</span>
                   </div>
 
@@ -609,25 +600,7 @@ export default function App() {
                       <span className="cat-icon">🌶️</span>
                       <strong>খাঁটি মশলা সম্ভার</strong>
                     </div>
-                    <p className="mega-menu-cat-desc">📍 উৎস: বগুড়া ও মাঠপর্যায় | খাঁটি দেশি গুঁড়া হলুদ, লাল মরিচ, এলাচ ও দারুচিনি</p>
-                    <span className="mega-menu-link">পণ্যগুলো দেখুন →</span>
-                  </div>
-
-                  <div className="mega-menu-column" onClick={() => { scrollToCategories('sunnah_oil'); setIsMainMenuOpen(false); }}>
-                    <div className="mega-menu-cat-title">
-                      <span className="cat-icon">🌿</span>
-                      <strong>সুন্নতি খাদ্য ও তেল</strong>
-                    </div>
-                    <p className="mega-menu-cat-desc">📍 উৎস: দেশি কাঠের ঘানি | ঘানিভাঙা সরিষার তেল ও কোল্ড প্রেসড কালোজিরা তেল</p>
-                    <span className="mega-menu-link">পণ্যগুলো দেখুন →</span>
-                  </div>
-
-                  <div className="mega-menu-column" onClick={() => { scrollToCategories('lifestyle'); setIsMainMenuOpen(false); }}>
-                    <div className="mega-menu-cat-title">
-                      <span className="cat-icon">🕌</span>
-                      <strong>ইসলামিক লাইফস্টাইল</strong>
-                    </div>
-                    <p className="mega-menu-cat-desc">📍 উৎস: তুরস্ক ও মদিনা | তুর্কি মেমরি-ফোম জায়নামাজ ও প্রাকৃতিক জয়তুন কাঠ মেসওয়াক</p>
+                    <p className="mega-menu-cat-desc">📍 উৎস: বগুড়া ও নিজস্ব মিল | খাঁটি গুঁড়া হলুদ, ঝালের মরিচ ও ভাজা জিরা গুঁড়া</p>
                     <span className="mega-menu-link">পণ্যগুলো দেখুন →</span>
                   </div>
                 </div>
@@ -639,7 +612,7 @@ export default function App() {
             <Search size={18} className="search-icon-pos" />
             <input
               type="text"
-              placeholder={lang === 'bn' ? 'আতর, সাতক্ষীরার ঘি, সুন্দরবনের মধু, মশলা, কুঁড়ি চা খুঁজুন...' : 'Search attar, ghee, honey, spices, tea...'}
+              placeholder={lang === 'bn' ? 'সাতক্ষীরার ঘি, সুন্দরবনের মধু, সরিষার তেল, বাদাম, মশলা বা আম খুঁজুন...' : 'Search ghee, honey, mustard oil, nuts, spices, mango...'}
               className="search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -647,14 +620,14 @@ export default function App() {
           </div>
 
           <div className="nav-actions">
-            {/* Dedicated Attar & Perfume Header Menu Button */}
+            {/* Dedicated Nuts & Spices Header Menu Button */}
             <button 
               className="nav-icon-btn nav-attar-highlight" 
-              onClick={() => scrollToCategories('attar')}
-              title="Attar & Perfume Collection"
+              onClick={() => scrollToCategories('nuts')}
+              title="বাদাম সম্ভার"
             >
-              <Droplets size={16} />
-              <span>আতর সম্ভার</span>
+              <Package size={16} />
+              <span>বাদাম সম্ভার</span>
             </button>
 
             {/* Track Order Button */}
@@ -748,20 +721,6 @@ export default function App() {
               </button>
 
               <button 
-                className={`drawer-cat-btn ${selectedCategory === 'honey' ? 'active' : ''}`}
-                onClick={() => { scrollToCategories('honey'); setIsMobileMenuOpen(false); }}
-              >
-                <span className="drawer-cat-left">
-                  <span className="cat-emoji">🍯</span>
-                  <div>
-                    <span className="cat-name">সুন্দরবন ও খাঁটি মধু</span>
-                    <span className="cat-sub">খলিশা, বরই, লিচু, সরিষা, কালোজিরা (250g-1kg)</span>
-                  </div>
-                </span>
-                <span className="drawer-badge">৫টি</span>
-              </button>
-
-              <button 
                 className={`drawer-cat-btn ${selectedCategory === 'ghee' ? 'active' : ''}`}
                 onClick={() => { scrollToCategories('ghee'); setIsMobileMenuOpen(false); }}
               >
@@ -772,7 +731,63 @@ export default function App() {
                     <span className="cat-sub">সাতক্ষীরার চরের দানাদার গাওয়া ঘি</span>
                   </div>
                 </span>
-                <span className="drawer-badge">১টি</span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'ghee').length}টি</span>
+              </button>
+
+              <button 
+                className={`drawer-cat-btn ${selectedCategory === 'honey' ? 'active' : ''}`}
+                onClick={() => { scrollToCategories('honey'); setIsMobileMenuOpen(false); }}
+              >
+                <span className="drawer-cat-left">
+                  <span className="cat-emoji">🍯</span>
+                  <div>
+                    <span className="cat-name">সুন্দরবন ও খাঁটি মধু</span>
+                    <span className="cat-sub">খলিশা, বরই, লিচু, সরিষা ও কালোজিরা মধু</span>
+                  </div>
+                </span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'honey').length}টি</span>
+              </button>
+
+              <button 
+                className={`drawer-cat-btn ${selectedCategory === 'oil' ? 'active' : ''}`}
+                onClick={() => { scrollToCategories('oil'); setIsMobileMenuOpen(false); }}
+              >
+                <span className="drawer-cat-left">
+                  <span className="cat-emoji">🌿</span>
+                  <div>
+                    <span className="cat-name">ঘানিভাঙা সরিষার তেল</span>
+                    <span className="cat-sub">কাঠের ঘানিভাঙা কোল্ড-প্রেসড ঝাঁঝালো তেল</span>
+                  </div>
+                </span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'oil').length}টি</span>
+              </button>
+
+              <button 
+                className={`drawer-cat-btn ${selectedCategory === 'nuts' ? 'active' : ''}`}
+                onClick={() => { scrollToCategories('nuts'); setIsMobileMenuOpen(false); }}
+              >
+                <span className="drawer-cat-left">
+                  <span className="cat-emoji">🥜</span>
+                  <div>
+                    <span className="cat-name">প্রিমিয়াম বাদাম সম্ভার</span>
+                    <span className="cat-sub">আমেরিকান কাঠ বাদাম, কাজু ও ইরানি পেস্তা</span>
+                  </div>
+                </span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'nuts').length}টি</span>
+              </button>
+
+              <button 
+                className={`drawer-cat-btn ${selectedCategory === 'spices' ? 'active' : ''}`}
+                onClick={() => { scrollToCategories('spices'); setIsMobileMenuOpen(false); }}
+              >
+                <span className="drawer-cat-left">
+                  <span className="cat-emoji">🌶️</span>
+                  <div>
+                    <span className="cat-name">খাঁটি দেশি মশলা</span>
+                    <span className="cat-sub">হলুদ গুঁড়া, ঝালের গুঁড়া ও ভাজা জিরা গুঁড়া</span>
+                  </div>
+                </span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'spices').length}টি</span>
               </button>
 
               <button 
@@ -786,91 +801,7 @@ export default function App() {
                     <span className="cat-sub">কলারোয়ার কেমিক্যালমুক্ত হিমসাগর আম</span>
                   </div>
                 </span>
-                <span className="drawer-badge">১টি</span>
-              </button>
-
-              <button 
-                className={`drawer-cat-btn ${selectedCategory === 'spices' ? 'active' : ''}`}
-                onClick={() => { scrollToCategories('spices'); setIsMobileMenuOpen(false); }}
-              >
-                <span className="drawer-cat-left">
-                  <span className="cat-emoji">🌶️</span>
-                  <div>
-                    <span className="cat-name">খাঁটি মশলা সম্ভার</span>
-                    <span className="cat-sub">হলুদ গুঁড়া, ঝালের গুঁড়া ও প্রিমিয়াম জিরা গুঁড়া</span>
-                  </div>
-                </span>
-                <span className="drawer-badge">{productList.filter(p => p.category === 'spices').length}টি</span>
-              </button>
-
-              <button 
-                className={`drawer-cat-btn ${selectedCategory === 'sylhet_tea' ? 'active' : ''}`}
-                onClick={() => { scrollToCategories('sylhet_tea'); setIsMobileMenuOpen(false); }}
-              >
-                <span className="drawer-cat-left">
-                  <span className="cat-emoji">🍃</span>
-                  <div>
-                    <span className="cat-name">সিলেটের চা ও তেজপাতা</span>
-                    <span className="cat-sub">শ্রীমঙ্গলের ক্লোন কুঁড়ি চা ও পাহাড়ি তেজপাতা</span>
-                  </div>
-                </span>
-                <span className="drawer-badge">{productList.filter(p => p.category === 'sylhet_tea').length}টি</span>
-              </button>
-
-              <button 
-                className={`drawer-cat-btn ${selectedCategory === 'attar' ? 'active' : ''}`}
-                onClick={() => { scrollToCategories('attar'); setIsMobileMenuOpen(false); }}
-              >
-                <span className="drawer-cat-left">
-                  <span className="cat-emoji">👑</span>
-                  <div>
-                    <span className="cat-name">রয়্যাল আতর ও পারফিউম</span>
-                    <span className="cat-sub">মদিনা ও দুবাইয়ের কাবার উদ ও সুবাস</span>
-                  </div>
-                </span>
-                <span className="drawer-badge" style={{ background: '#fee2e2', color: '#dc2626' }}>স্টক শেষ</span>
-              </button>
-
-              <button 
-                className={`drawer-cat-btn ${selectedCategory === 'dates' ? 'active' : ''}`}
-                onClick={() => { scrollToCategories('dates'); setIsMobileMenuOpen(false); }}
-              >
-                <span className="drawer-cat-left">
-                  <span className="cat-emoji">🌴</span>
-                  <div>
-                    <span className="cat-name">সৌদি খেজুর ও প্রিমিয়াম বাদাম</span>
-                    <span className="cat-sub">আজওয়া, সুক্কারি, কাজু বাদাম ও কাঠ বাদাম</span>
-                  </div>
-                </span>
-                <span className="drawer-badge">{productList.filter(p => p.category === 'dates').length}টি</span>
-              </button>
-
-              <button 
-                className={`drawer-cat-btn ${selectedCategory === 'sunnah_oil' ? 'active' : ''}`}
-                onClick={() => { scrollToCategories('sunnah_oil'); setIsMobileMenuOpen(false); }}
-              >
-                <span className="drawer-cat-left">
-                  <span className="cat-emoji">🌿</span>
-                  <div>
-                    <span className="cat-name">সুন্নতি খাদ্য ও তেল</span>
-                    <span className="cat-sub">ঘানিভাঙা সরিষার তেল ও কালোজিরা তেল</span>
-                  </div>
-                </span>
-                <span className="drawer-badge">২টি</span>
-              </button>
-
-              <button 
-                className={`drawer-cat-btn ${selectedCategory === 'lifestyle' ? 'active' : ''}`}
-                onClick={() => { scrollToCategories('lifestyle'); setIsMobileMenuOpen(false); }}
-              >
-                <span className="drawer-cat-left">
-                  <span className="cat-emoji">🕌</span>
-                  <div>
-                    <span className="cat-name">ইসলামিক লাইফস্টাইল</span>
-                    <span className="cat-sub">অর্থোপেডিক জায়নামাজ ও জয়তুন মেসওয়াক</span>
-                  </div>
-                </span>
-                <span className="drawer-badge">২টি</span>
+                <span className="drawer-badge">{productList.filter(p => p.category === 'mango').length}টি</span>
               </button>
             </div>
 
@@ -911,16 +842,16 @@ export default function App() {
                 <span>সুন্নাহর বরকতময় জীবন</span>
               </h2>
               <p className="hero-subtext">
-                সাতক্ষীরার খাঁটি গাওয়া ঘি ও বিখ্যাত হিমসাগর আম, সুন্দরবনের র' মধু, সৌদি আরবের আজওয়া খেজুর, সিলেটের শ্রীমঙ্গলের কুঁড়ি চা এবং দুবাই-মদিনার ১০০% অ্যালকোহলমুক্ত রাজকীয় আতর—প্রতিটি পণ্য সরাসরি নিজস্ব আদি উৎস থেকে সংগৃহীত।
+                সাতক্ষীরার খাঁটি গাওয়া ঘি ও বিখ্যাত হিমসাগর আম, সুন্দরবনের র' মধু, কাঠের ঘানিভাঙা সরিষার তেল, প্রিমিয়াম কাজু-কাঠ-পেস্তা বাদাম এবং খাঁটি দেশি গুঁড়া মশলা—প্রতিটি পণ্য সরাসরি নিজস্ব আদি উৎস থেকে সংগৃহীত।
               </p>
               <div className="hero-cta-group">
                 <button onClick={() => scrollToCategories('all')} className="btn-gold-primary">
                   <ShoppingBag size={18} />
                   <span>এখনই কেনাকাটা করুন</span>
                 </button>
-                <button onClick={() => scrollToCategories('attar')} className="btn-glass-secondary" style={{ borderColor: '#fbbf24', color: '#fbbf24' }}>
-                  <Droplets size={18} />
-                  <span>আতর কালেকশন</span>
+                <button onClick={() => scrollToCategories('nuts')} className="btn-glass-secondary" style={{ borderColor: '#fbbf24', color: '#fbbf24' }}>
+                  <Package size={18} />
+                  <span>বাদাম সম্ভার</span>
                 </button>
                 <a href="#bundle-section" className="btn-glass-secondary">
                   <Gift size={18} />
@@ -933,15 +864,15 @@ export default function App() {
               <div className="hero-main-img-card">
                 <img 
                   src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80" 
-                  alt="Royal Attar and Pure Food" 
+                  alt="Pure and Authentic Food" 
                 />
                 <div className="hero-floating-badge">
                   <div className="icon-box">
                     <ShieldCheck size={22} />
                   </div>
                   <div>
-                    <p>ল্যাব সার্টিফাইড ও সুন্নাহ সম্মত</p>
-                    <span>১০০% খাঁটি, নিরাপদ ও ভেজালমুক্ত</span>
+                    <p>ল্যাব সার্টিফাইড ও শতভাগ খাঁটি</p>
+                    <span>১০০% প্রাকৃতিক, নিরাপদ ও ভেজালমুক্ত</span>
                   </div>
                 </div>
               </div>
@@ -974,39 +905,32 @@ export default function App() {
             <div className="origin-chip-desc">সাতক্ষীরা রেঞ্জের গভীর বনের খলিশা ও প্রাকৃতিক মধু</div>
           </div>
 
-          <div className="origin-chip" onClick={() => scrollToCategories('dates')}>
+          <div className="origin-chip" onClick={() => scrollToCategories('oil')}>
             <div className="origin-chip-top">
-              <span>🌴</span> সৌদি আরব
+              <span>🌿</span> দেশি ঘানি
             </div>
-            <div className="origin-chip-desc">পবিত্র মদিনার আজওয়া ও কাসিমের সুক্কারি খেজুর</div>
+            <div className="origin-chip-desc">কাঠের ঘানিভাঙা খাঁটি সরিষার তেল</div>
           </div>
 
-          <div className="origin-chip" onClick={() => scrollToCategories('attar')}>
+          <div className="origin-chip" onClick={() => scrollToCategories('nuts')}>
             <div className="origin-chip-top">
-              <span>👑</span> মদিনা ও দুবাই
+              <span>🥜</span> ক্যালিফোর্নিয়া ও ইরান
             </div>
-            <div className="origin-chip-desc">১০০% অ্যালকোহলমুক্ত কাবার উদ ও রয়্যাল আতর</div>
-          </div>
-
-          <div className="origin-chip" onClick={() => scrollToCategories('sylhet_tea')}>
-            <div className="origin-chip-top">
-              <span>🍃</span> সিলেট ও শ্রীমঙ্গল
-            </div>
-            <div className="origin-chip-desc">কড়া লিকারের ক্লোন কুঁড়ি চা ও পাহাড়ি সুগন্ধি তেজপাতা</div>
+            <div className="origin-chip-desc">আমেরিকান কাঠ বাদাম, কাজু ও ইরানি পেস্তা</div>
           </div>
 
           <div className="origin-chip" onClick={() => scrollToCategories('spices')}>
             <div className="origin-chip-top">
-              <span>🌶️</span> বগুড়া ও মাঠপর্যায়
+              <span>🌶️</span> বগুড়া ও নিজস্ব মিল
             </div>
-            <div className="origin-chip-desc">খাঁটি দেশি হলুদ গুঁড়া, লাল মরিচ ও সিলন দারুচিনি</div>
+            <div className="origin-chip-desc">খাঁটি দেশি হলুদ গুঁড়া, লাল মরিচ ও ভাজা জিরা গুঁড়া</div>
           </div>
 
-          <div className="origin-chip" onClick={() => scrollToCategories('lifestyle')}>
+          <div className="origin-chip" onClick={() => scrollToCategories('mango')}>
             <div className="origin-chip-top">
-              <span>🕌</span> তুরস্ক ও মদিনা
+              <span>🥭</span> সাতক্ষীরা
             </div>
-            <div className="origin-chip-desc">তুর্কি অর্থোপেডিক জায়নামাজ ও জয়তুন মেসওয়াক</div>
+            <div className="origin-chip-desc">কলারোয়ার কেমিক্যালমুক্ত গাছপাকা হিমসাগর আম</div>
           </div>
         </div>
       </section>
@@ -1086,13 +1010,6 @@ export default function App() {
           </button>
 
           <button 
-            className={`category-pill-btn ${selectedCategory === 'mango' && !showWishlistOnly ? 'active' : ''}`}
-            onClick={() => { setSelectedCategory('mango'); setShowWishlistOnly(false); }}
-          >
-            🥭 সাতক্ষীরার হিমসাগর আম ({productList.filter(p => p.category === 'mango').length})
-          </button>
-
-          <button 
             className={`category-pill-btn ${selectedCategory === 'honey' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('honey'); setShowWishlistOnly(false); }}
           >
@@ -1100,25 +1017,17 @@ export default function App() {
           </button>
 
           <button 
-            className={`category-pill-btn special-attar ${selectedCategory === 'attar' && !showWishlistOnly ? 'active' : ''}`}
-            onClick={() => { setSelectedCategory('attar'); setShowWishlistOnly(false); }}
+            className={`category-pill-btn ${selectedCategory === 'oil' && !showWishlistOnly ? 'active' : ''}`}
+            onClick={() => { setSelectedCategory('oil'); setShowWishlistOnly(false); }}
           >
-            👑 রয়্যাল আতর ({productList.filter(p => p.category === 'attar').length})
-            <span style={{ fontSize: '0.68rem', background: '#fee2e2', color: '#dc2626', padding: '1px 5px', borderRadius: '8px', marginLeft: '5px' }}>স্টক শেষ</span>
+            🌿 ঘানিভাঙা সরিষার তেল ({productList.filter(p => p.category === 'oil').length})
           </button>
 
           <button 
-            className={`category-pill-btn ${selectedCategory === 'dates' && !showWishlistOnly ? 'active' : ''}`}
-            onClick={() => { setSelectedCategory('dates'); setShowWishlistOnly(false); }}
+            className={`category-pill-btn ${selectedCategory === 'nuts' && !showWishlistOnly ? 'active' : ''}`}
+            onClick={() => { setSelectedCategory('nuts'); setShowWishlistOnly(false); }}
           >
-            🌴 সৌদি খেজুর ও বাদাম ({productList.filter(p => p.category === 'dates').length})
-          </button>
-
-          <button 
-            className={`category-pill-btn ${selectedCategory === 'sylhet_tea' && !showWishlistOnly ? 'active' : ''}`}
-            onClick={() => { setSelectedCategory('sylhet_tea'); setShowWishlistOnly(false); }}
-          >
-            🍃 সিলেটের চা ও তেজপাতা ({productList.filter(p => p.category === 'sylhet_tea').length})
+            🥜 বাদাম সম্ভার ({productList.filter(p => p.category === 'nuts').length})
           </button>
 
           <button 
@@ -1129,25 +1038,18 @@ export default function App() {
           </button>
 
           <button 
-            className={`category-pill-btn ${selectedCategory === 'sunnah_oil' && !showWishlistOnly ? 'active' : ''}`}
-            onClick={() => { setSelectedCategory('sunnah_oil'); setShowWishlistOnly(false); }}
+            className={`category-pill-btn ${selectedCategory === 'mango' && !showWishlistOnly ? 'active' : ''}`}
+            onClick={() => { setSelectedCategory('mango'); setShowWishlistOnly(false); }}
           >
-            🌿 সুন্নতি খাদ্য ও তেল ({productList.filter(p => p.category === 'sunnah_oil').length})
+            🥭 সাতক্ষীরার হিমসাগর আম ({productList.filter(p => p.category === 'mango').length})
           </button>
 
-          <button 
-            className={`category-pill-btn ${selectedCategory === 'lifestyle' && !showWishlistOnly ? 'active' : ''}`}
-            onClick={() => { setSelectedCategory('lifestyle'); setShowWishlistOnly(false); }}
-          >
-            🕌 ইসলামিক লাইফস্টাইল ({productList.filter(p => p.category === 'lifestyle').length})
-          </button>
-
-          {productList.some(p => p.category === 'other' || !['ghee','mango','honey','attar','dates','sylhet_tea','spices','sunnah_oil','lifestyle'].includes(p.category)) && (
+          {productList.some(p => p.category === 'other' || !['ghee','mango','honey','oil','nuts','spices'].includes(p.category)) && (
             <button 
               className={`category-pill-btn ${selectedCategory === 'other' && !showWishlistOnly ? 'active' : ''}`}
               onClick={() => { setSelectedCategory('other'); setShowWishlistOnly(false); }}
             >
-              📦 অন্যান্য পণ্য ({productList.filter(p => p.category === 'other' || !['ghee','mango','honey','attar','dates','sylhet_tea','spices','sunnah_oil','lifestyle'].includes(p.category)).length})
+              📦 অন্যান্য পণ্য ({productList.filter(p => p.category === 'other' || !['ghee','mango','honey','oil','nuts','spices'].includes(p.category)).length})
             </button>
           )}
         </div>
@@ -1157,38 +1059,29 @@ export default function App() {
           <div className="category-active-banner">
             <div className="cat-banner-content">
               <span className="cat-banner-icon">
-                {selectedCategory === 'mango' && '🥭'}
-                {selectedCategory === 'honey' && '🍯'}
                 {selectedCategory === 'ghee' && '🧈'}
+                {selectedCategory === 'honey' && '🍯'}
+                {selectedCategory === 'oil' && '🌿'}
+                {selectedCategory === 'nuts' && '🥜'}
                 {selectedCategory === 'spices' && '🌶️'}
-                {selectedCategory === 'sylhet_tea' && '🍃'}
-                {selectedCategory === 'attar' && '👑'}
-                {selectedCategory === 'dates' && '🌴'}
-                {selectedCategory === 'sunnah_oil' && '🌿'}
-                {selectedCategory === 'lifestyle' && '🕌'}
+                {selectedCategory === 'mango' && '🥭'}
               </span>
               <div>
                 <h3>
-                  {selectedCategory === 'mango' && 'সাতক্ষীরার বিখ্যাত কলারোয়ার কেমিক্যালমুক্ত গাছপাকা হিমসাগর আম (উৎস: সাতক্ষীরা)'}
                   {selectedCategory === 'ghee' && 'সাতক্ষীরার খাঁটি ঐতিহ্যবাহী গাওয়া ঘি (উৎস: সাতক্ষীরার গ্রাম)'}
                   {selectedCategory === 'honey' && 'সুন্দরবনের র\' মধু ও প্রাকৃতিক ফুলের মধু কালেকশন (উৎস: সুন্দরবন ও ফুলের খেত)'}
-                  {selectedCategory === 'attar' && 'পবিত্র মদিনা ও দুবাইয়ের রয়্যাল আতর সম্ভার (বর্তমানে স্টক শেষ)'}
-                  {selectedCategory === 'dates' && 'সৌদি আরবের আজওয়া, সুক্কারি খেজুর ও প্রিমিয়াম কাজু ও কাঠ বাদাম (উৎস: মদিনা, ক্যালিফোর্নিয়া ও ভিয়েতনাম)'}
-                  {selectedCategory === 'sylhet_tea' && 'সিলেটের শ্রীমঙ্গলের কুঁড়ি চা ও পাহাড়ি সুগন্ধি তেজপাতা (উৎস: সিলেট)'}
+                  {selectedCategory === 'oil' && 'কাঠের ঘানিভাঙা খাঁটি সরিষার তেল (উৎস: দেশি ঘানি)'}
+                  {selectedCategory === 'nuts' && 'প্রিমিয়াম বাদাম সম্ভার - কাজু, কাঠ ও পেস্তা বাদাম (উৎস: ক্যালিফোর্নিয়া, ভিয়েতনাম ও ইরান)'}
                   {selectedCategory === 'spices' && 'খাঁটি মশলা সম্ভার - হলুদ গুঁড়া, ঝালের গুঁড়া ও জিরা গুঁড়া (ঘরের বাজারের চেয়েও সাশ্রয়ী মূল্যে)'}
-                  {selectedCategory === 'sunnah_oil' && 'সুন্নতি খাদ্য, ঘানিভাঙা সরিষার তেল ও কালোজিরা তেল (উৎস: দেশি ঘানি)'}
-                  {selectedCategory === 'lifestyle' && 'ইসলামিক লাইফস্টাইল, তুর্কি জায়নামাজ ও জয়তুন মেসওয়াক (উৎস: তুরস্ক ও মদিনা)'}
+                  {selectedCategory === 'mango' && 'সাতক্ষীরার বিখ্যাত কলারোয়ার কেমিক্যালমুক্ত গাছপাকা হিমসাগর আম (উৎস: সাতক্ষীরা)'}
                 </h3>
                 <p>
-                  {selectedCategory === 'mango' && 'সাতক্ষীরার সুপ্রসিদ্ধ কলারোয়া ও দেবহাটার প্রাচীন বাগান থেকে সংগৃহীত। কার্বাইড ও ফরমালিনমুক্ত গাছপাকা হিমসাগর—পাতলা খোসা, আঁশহীন রসালো মিষ্টি শাঁস।'}
                   {selectedCategory === 'ghee' && 'সাতক্ষীরার গ্রাম থেকে সংগৃহীত খাঁটি গাভীর দুধ থেকে কাঠের আগুনে জ্বাল দিয়ে তৈরি নিখুঁত সোনালী দানাদার ঘি। জিরো কেমিক্যাল ও কোনো কৃত্রিম গন্ধ বা রঙ নেই।'}
                   {selectedCategory === 'honey' && 'সুন্দরবনের খলিশা, কুল বরই, দিনাজপুরের লিচু, সরিষা ও কালোজিরা ফুলের কাঁচা র\' মধু—২৫০ গ্রাম, ৫০০ গ্রাম ও ১ কেজি সাইজে উপলব্ধ।'}
-                  {selectedCategory === 'attar' && 'পবিত্র কাবার আদলে উদ আল কা\'বা, সিলভার হোয়াইট মাস্ক ও লাক্সারি আমির আল উদ—সাময়িকভাবে স্টক শেষ। নতুন লট আসলে আবারও পাওয়া যাবে ইনশাআল্লাহ।'}
-                  {selectedCategory === 'dates' && 'সৌদি আরবের বাগান থেকে সরাসরি আমদানিকৃত নরম সুস্বাদু খেজুর এবং ক্রিস্পি প্রিমিয়াম কাজু বাদাম ও ক্যালিফোর্নিয়া কাঠ বাদাম।'}
-                  {selectedCategory === 'sylhet_tea' && 'শ্রীমঙ্গলের সেরা বাগানের দুটি পাতা একটি কুঁড়ি এবং সিলেটের পাহাড়ি ঢালে প্রাকৃতিকভাবে জন্ম নেওয়া সুগন্ধি তেজপাতা (কুড়েই পাতা)।'}
+                  {selectedCategory === 'oil' && 'কাঠের ঘানিতে কোল্ড-প্রেসড ঝাঁঝালো সরিষার তেল—প্রাকৃতিক ঝাঁঝ, খাঁটি রঙ ও পুষ্টিগুণে ভরপুর।'}
+                  {selectedCategory === 'nuts' && 'আমেরিকান প্রিমিয়াম কাঠ বাদাম (১৬০০ টাকা/কেজি), ভিয়েতনামি কাজু বাদাম (১৯০০ টাকা/কেজি) এবং ইরানি আস্ত পেস্তা বাদাম (২৬০০ টাকা/কেজি)।'}
                   {selectedCategory === 'spices' && 'মাঠপর্যায়ের কৃষকদের থেকে খাঁটি দেশি হলুদ, বগুড়ার ঝালের শুকনো লাল মরিচ ও নিজস্ব মিলে ভাঙানো খাঁটি প্রিমিয়াম জিরা গুঁড়া। ঘরের বাজারের চেয়েও সাশ্রয়ী মূল্যে শতভাগ খাঁটি নিশ্চয়তা।'}
-                  {selectedCategory === 'sunnah_oil' && 'কাঠের ঘানিতে কোল্ড-প্রেসড সরিষার তেল ও উচ্চ থাইমোকুইনোন সমৃদ্ধ কাঁচা কালোজিরা তেল।'}
-                  {selectedCategory === 'lifestyle' && '২৫ মিলিমিটার পুরু অর্থোপেডিক মেমোরি ফোম তুর্কি জায়নামাজ ও ভ্যাকুয়াম সিল্ড জয়তুন কাঠের তাজা মেসওয়াক।'}
+                  {selectedCategory === 'mango' && 'সাতক্ষীরার সুপ্রসিদ্ধ কলারোয়া ও দেবহাটার প্রাচীন বাগান থেকে সংগৃহীত। কার্বাইড ও ফরমালিনমুক্ত গাছপাকা হিমসাগর—পাতলা খোসা, আঁশহীন রসালো মিষ্টি শাঁস।'}
                 </p>
               </div>
             </div>
@@ -2176,7 +2069,7 @@ export default function App() {
 
       {/* 16. Floating WhatsApp Instant Connect */}
       <a 
-        href="https://wa.me/8801714740430?text=আসসালামু%20আলাইকুম,%20সাতক্ষীরার%20গাওয়া%20ঘি,%20মধু%20ও%20আতর%20সম্পর্কে%20জানতে%20চাই।" 
+        href="https://wa.me/8801714740430?text=আসসালামু%20আলাইকুম,%20সাতক্ষীরার%20গাওয়া%20ঘি,%20মধু,%20বাদাম%20বা%20অন্যান্য%20পণ্য%20সম্পর্কে%20জানতে%20চাই।" 
         target="_blank" 
         rel="noopener noreferrer" 
         className="floating-whatsapp-btn"
@@ -2200,11 +2093,11 @@ export default function App() {
         </button>
 
         <button 
-          className={`mobile-nav-item ${selectedCategory === 'attar' ? 'active' : ''}`}
-          onClick={() => scrollToCategories('attar')}
+          className={`mobile-nav-item ${selectedCategory === 'nuts' ? 'active' : ''}`}
+          onClick={() => scrollToCategories('nuts')}
         >
-          <Droplets size={19} color={selectedCategory === 'attar' ? '#d97706' : 'currentColor'} />
-          <span style={selectedCategory === 'attar' ? { color: '#d97706', fontWeight: '700' } : {}}>আতর</span>
+          <Package size={19} color={selectedCategory === 'nuts' ? '#d97706' : 'currentColor'} />
+          <span style={selectedCategory === 'nuts' ? { color: '#d97706', fontWeight: '700' } : {}}>বাদাম</span>
         </button>
 
         <button 
@@ -2250,19 +2143,19 @@ export default function App() {
               </div>
             </div>
             <p style={{ marginBottom: '12px' }}>
-              সাতক্ষীরার খাঁটি গাওয়া ঘি ও বিখ্যাত হিমসাগর আম, সুন্দরবনের র' মধু, সৌদি আরবের আজওয়া খেজুর, সিলেটের চা এবং মদিনা ও দুবাইয়ের অ্যালকোহলমুক্ত রাজকীয় আতরের এক বিশ্বস্ত প্ল্যাটফর্ম।
+              সাতক্ষীরার খাঁটি গাওয়া ঘি ও বিখ্যাত হিমসাগর আম, সুন্দরবনের র' মধু, কাঠের ঘানিভাঙা সরিষার তেল, প্রিমিয়াম কাজু-কাঠ-পেস্তা বাদাম এবং খাঁটি গুঁড়া মশলার এক বিশ্বস্ত প্ল্যাটফর্ম।
             </p>
             <span style={{ fontSize: '0.78rem', color: '#6ee7b7' }}>ট্রেড লাইসেন্স নং: TRAD/DNCC/2026/0912</span>
           </div>
 
           <div className="footer-col">
             <h4>জনপ্রিয় ক্যাটাগরি ও উৎস</h4>
-            <a href="#products-section" onClick={() => scrollToCategories('attar')}>👑 মদিনা ও দুবাইয়ের রাজকীয় আতর</a>
             <a href="#products-section" onClick={() => scrollToCategories('ghee')}>🧈 সাতক্ষীরার খাঁটি গাওয়া ঘি</a>
-            <a href="#products-section" onClick={() => scrollToCategories('mango')}>🥭 সাতক্ষীরার হিমসাগর আম</a>
-            <a href="#products-section" onClick={() => scrollToCategories('honey')}>🍯 সুন্দরবনের র' খলিশা মধু</a>
-            <a href="#products-section" onClick={() => scrollToCategories('dates')}>🌴 সৌদি আরবের আজওয়া ও সুক্কারি</a>
-            <a href="#products-section" onClick={() => scrollToCategories('sylhet_tea')}>🍃 সিলেটের শ্রীমঙ্গলের কুঁড়ি চা</a>
+            <a href="#products-section" onClick={() => scrollToCategories('honey')}>🍯 সুন্দরবনের র' খলিশা ও প্রাকৃতিক মধু</a>
+            <a href="#products-section" onClick={() => scrollToCategories('oil')}>🌿 কাঠের ঘানিভাঙা সরিষার তেল</a>
+            <a href="#products-section" onClick={() => scrollToCategories('nuts')}>🥜 প্রিমিয়াম কাজু, কাঠ ও পেস্তা বাদাম</a>
+            <a href="#products-section" onClick={() => scrollToCategories('spices')}>🌶️ খাঁটি দেশি হলুদ, মরিচ ও জিরা গুঁড়া</a>
+            <a href="#products-section" onClick={() => scrollToCategories('mango')}>🥭 সাতক্ষীরার রসালো হিমসাগর আম</a>
           </div>
 
           <div className="footer-col">

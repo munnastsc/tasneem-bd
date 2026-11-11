@@ -24,13 +24,10 @@ import {
 const STORE_CATEGORIES = [
   { id: 'ghee', name: 'সাতক্ষীরার খাঁটি ঘি', icon: '🧈' },
   { id: 'honey', name: 'সুন্দরবন ও খাঁটি মধু', icon: '🍯' },
-  { id: 'mango', name: 'সাতক্ষীরার হিমসাগর আম', icon: '🥭' },
-  { id: 'attar', name: 'রয়্যাল আতর (মদিনা ও দুবাই)', icon: '👑' },
-  { id: 'dates', name: 'সৌদি খেজুর ও বাদাম', icon: '🌴' },
-  { id: 'sylhet_tea', name: 'সিলেটের চা ও তেজপাতা', icon: '🍃' },
+  { id: 'oil', name: 'ঘানিভাঙা সরিষার তেল', icon: '🌿' },
+  { id: 'nuts', name: 'বাদাম সম্ভার (কাজু, কাঠ ও পেস্তা)', icon: '🥜' },
   { id: 'spices', name: 'খাঁটি দেশি মশলা (হলুদ, ঝাল ও জিরা)', icon: '🌶️' },
-  { id: 'sunnah_oil', name: 'সুন্নতি খাদ্য ও তেল', icon: '🌿' },
-  { id: 'lifestyle', name: 'ইসলামিক লাইফস্টাইল', icon: '🕌' },
+  { id: 'mango', name: 'সাতক্ষীরার হিমসাগর আম', icon: '🥭' },
   { id: 'other', name: 'অন্যান্য প্রাকৃতিক পণ্য', icon: '📦' }
 ];
 
@@ -68,7 +65,7 @@ export default function AdminPanel({ onClose }) {
   const [pixelEvents, setPixelEvents] = useState(() => getPixelEventLogs());
 
   // Products Catalog Management State
-  const CATALOG_VERSION = '2026-11-v2';
+  const CATALOG_VERSION = '2026-11-v3';
   const [productsList, setProductsList] = useState(() => {
     try {
       const storedVer = localStorage.getItem('khatisaoda_catalog_version');
@@ -379,7 +376,7 @@ export default function AdminPanel({ onClose }) {
     setProductsList(newList);
     try {
       localStorage.setItem('khatisaoda_products', JSON.stringify(newList));
-      localStorage.setItem('khatisaoda_catalog_version', '2026-11-v2');
+      localStorage.setItem('khatisaoda_catalog_version', '2026-11-v3');
       window.dispatchEvent(new CustomEvent('khatisaoda_products_updated', { detail: { products: newList } }));
     } catch (e) {
       console.error(e);
