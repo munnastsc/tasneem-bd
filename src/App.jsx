@@ -37,13 +37,13 @@ import {
 import { products as defaultProducts, bundleItems, reviews, faqs, sourcingStories } from './data/products';
 import AdminPanel from './components/AdminPanel';
 import { logVisitorAction, sendHeartbeat } from './utils/visitorTracker';
-import { 
-  pixelPageView, 
-  pixelViewContent, 
-  pixelAddToCart, 
-  pixelInitiateCheckout, 
-  pixelPurchase, 
-  pixelContact 
+import {
+  pixelPageView,
+  pixelViewContent,
+  pixelAddToCart,
+  pixelInitiateCheckout,
+  pixelPurchase,
+  pixelContact
 } from './utils/facebookPixel';
 
 export default function App() {
@@ -57,7 +57,7 @@ export default function App() {
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
 
   // Dynamic Product Catalog State (synced with localStorage & Admin Panel)
-  const CATALOG_VERSION = '2026-11-v3';
+  const CATALOG_VERSION = '2026-11-v4';
   const [productList, setProductList] = useState(() => {
     try {
       const storedVer = localStorage.getItem('khatisaoda_catalog_version');
@@ -107,7 +107,7 @@ export default function App() {
       window.removeEventListener('storage', handleProductsUpdate);
     };
   }, []);
-  
+
   // Admin Panel state & URL hash listener
   const [isAdminOpen, setIsAdminOpen] = useState(() => {
     return window.location.hash === '#admin';
@@ -160,7 +160,7 @@ export default function App() {
       logVisitorAction('ল্যাব রিপোর্ট যাচাই করছে', labModalProduct.name);
     }
   }, [labModalProduct]);
-  
+
   // Main Menu & Mobile Drawer states
   const [isMainMenuOpen, setIsMainMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -182,10 +182,10 @@ export default function App() {
 
   // FAQ open index state
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
-  
+
   // Custom Bundle Builder state
   const [selectedBundleIds, setSelectedBundleIds] = useState(['b1', 'b2', 'b4']);
-  
+
   // Checkout Form State
   const [customerName, setCustomerName] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
@@ -232,7 +232,7 @@ export default function App() {
 
   // Toggle wishlist
   const toggleWishlist = (productId) => {
-    setWishlist(prev => 
+    setWishlist(prev =>
       prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
     );
   };
@@ -332,7 +332,7 @@ export default function App() {
     const paymentDetails = (paymentMethod === 'bkash' || paymentMethod === 'nagad')
       ? `%0A*পেমেন্ট নম্বর:* ${senderNumber}%0A*TrxID:* ${trxId}`
       : '';
-    
+
     return `*নতুন অর্ডার স্লিপ - ${orderId}*%0A` +
       `*খাঁটি সওদা (www.khatisaoda.com)*%0A` +
       `---------------------------------%0A` +
@@ -421,7 +421,7 @@ export default function App() {
 
       await fetch("https://formsubmit.co/ajax/munnastsc@gmail.com", {
         method: "POST",
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
@@ -483,13 +483,13 @@ export default function App() {
   // Exclusive Fullscreen Admin Portal View
   if (isAdminOpen) {
     return (
-      <AdminPanel 
+      <AdminPanel
         onClose={() => {
           setIsAdminOpen(false);
           if (window.location.hash === '#admin') {
             window.history.pushState("", document.title, window.location.pathname + window.location.search);
           }
-        }} 
+        }}
       />
     );
   }
@@ -500,8 +500,8 @@ export default function App() {
       <div className="top-announcement">
         <span>
           <Sparkles size={16} />
-          {lang === 'bn' 
-            ? 'সাতক্ষীরার খাঁটি ঘি ও হিমসাগর আম, সুন্দরবনের মধু, ঘানিভাঙা সরিষার তেল, প্রিমিয়াম বাদাম ও খাঁটি মশলা | সারা দেশে ক্যাশ অন ডেলিভারি!' 
+          {lang === 'bn'
+            ? 'সাতক্ষীরার খাঁটি ঘি ও হিমসাগর আম, সুন্দরবনের মধু, ঘানিভাঙা সরিষার তেল, প্রিমিয়াম বাদাম ও খাঁটি মশলা | সারা দেশে ক্যাশ অন ডেলিভারি!'
             : 'Satkhira Ghee & Mango, Sundarban Raw Honey, Mustard Oil, Premium Nuts & Pure Spices | Cash on Delivery!'}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -517,8 +517,8 @@ export default function App() {
         <div className="nav-container">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {/* Mobile Hamburger Menu Button */}
-            <button 
-              className="mobile-hamburger-btn" 
+            <button
+              className="mobile-hamburger-btn"
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open Menu"
             >
@@ -538,7 +538,7 @@ export default function App() {
 
           {/* Desktop Main Menu Mega Dropdown */}
           <div className="main-menu-dropdown-wrapper">
-            <button 
+            <button
               className={`nav-mainmenu-btn ${isMainMenuOpen ? 'active' : ''}`}
               onClick={() => setIsMainMenuOpen(!isMainMenuOpen)}
             >
@@ -621,8 +621,8 @@ export default function App() {
 
           <div className="nav-actions">
             {/* Dedicated Nuts & Spices Header Menu Button */}
-            <button 
-              className="nav-icon-btn nav-attar-highlight" 
+            <button
+              className="nav-icon-btn nav-attar-highlight"
               onClick={() => scrollToCategories('nuts')}
               title="বাদাম সম্ভার"
             >
@@ -631,8 +631,8 @@ export default function App() {
             </button>
 
             {/* Track Order Button */}
-            <button 
-              className="nav-icon-btn" 
+            <button
+              className="nav-icon-btn"
               onClick={() => setIsTrackingOpen(true)}
               title="Track Order"
             >
@@ -641,8 +641,8 @@ export default function App() {
             </button>
 
             {/* Wishlist Button */}
-            <button 
-              className="nav-icon-btn" 
+            <button
+              className="nav-icon-btn"
               onClick={() => setShowWishlistOnly(prev => !prev)}
               style={showWishlistOnly ? { background: '#ef4444', color: '#fff' } : {}}
               title="Wishlist"
@@ -652,8 +652,8 @@ export default function App() {
             </button>
 
             {/* Language Switcher */}
-            <button 
-              className="lang-toggle-btn" 
+            <button
+              className="lang-toggle-btn"
               onClick={() => setLang(l => l === 'bn' ? 'en' : 'bn')}
               title="Change Language"
             >
@@ -661,8 +661,8 @@ export default function App() {
             </button>
 
             {/* Cart Button */}
-            <button 
-              className="cart-btn-luxury" 
+            <button
+              className="cart-btn-luxury"
               onClick={() => setIsCheckoutOpen(true)}
             >
               <ShoppingBag size={18} />
@@ -709,7 +709,7 @@ export default function App() {
             <div className="drawer-categories-list">
               <p className="drawer-section-heading">সকল প্রোডাক্ট ক্যাটাগরি</p>
 
-              <button 
+              <button
                 className={`drawer-cat-btn ${selectedCategory === 'all' ? 'active' : ''}`}
                 onClick={() => { scrollToCategories('all'); setIsMobileMenuOpen(false); }}
               >
@@ -720,7 +720,7 @@ export default function App() {
                 <ChevronRight size={16} />
               </button>
 
-              <button 
+              <button
                 className={`drawer-cat-btn ${selectedCategory === 'ghee' ? 'active' : ''}`}
                 onClick={() => { scrollToCategories('ghee'); setIsMobileMenuOpen(false); }}
               >
@@ -734,7 +734,7 @@ export default function App() {
                 <span className="drawer-badge">{productList.filter(p => p.category === 'ghee').length}টি</span>
               </button>
 
-              <button 
+              <button
                 className={`drawer-cat-btn ${selectedCategory === 'honey' ? 'active' : ''}`}
                 onClick={() => { scrollToCategories('honey'); setIsMobileMenuOpen(false); }}
               >
@@ -748,7 +748,7 @@ export default function App() {
                 <span className="drawer-badge">{productList.filter(p => p.category === 'honey').length}টি</span>
               </button>
 
-              <button 
+              <button
                 className={`drawer-cat-btn ${selectedCategory === 'oil' ? 'active' : ''}`}
                 onClick={() => { scrollToCategories('oil'); setIsMobileMenuOpen(false); }}
               >
@@ -762,7 +762,7 @@ export default function App() {
                 <span className="drawer-badge">{productList.filter(p => p.category === 'oil').length}টি</span>
               </button>
 
-              <button 
+              <button
                 className={`drawer-cat-btn ${selectedCategory === 'nuts' ? 'active' : ''}`}
                 onClick={() => { scrollToCategories('nuts'); setIsMobileMenuOpen(false); }}
               >
@@ -776,7 +776,7 @@ export default function App() {
                 <span className="drawer-badge">{productList.filter(p => p.category === 'nuts').length}টি</span>
               </button>
 
-              <button 
+              <button
                 className={`drawer-cat-btn ${selectedCategory === 'spices' ? 'active' : ''}`}
                 onClick={() => { scrollToCategories('spices'); setIsMobileMenuOpen(false); }}
               >
@@ -790,7 +790,7 @@ export default function App() {
                 <span className="drawer-badge">{productList.filter(p => p.category === 'spices').length}টি</span>
               </button>
 
-              <button 
+              <button
                 className={`drawer-cat-btn ${selectedCategory === 'mango' ? 'active' : ''}`}
                 onClick={() => { scrollToCategories('mango'); setIsMobileMenuOpen(false); }}
               >
@@ -807,7 +807,7 @@ export default function App() {
 
             {/* Drawer Bottom Actions */}
             <div className="drawer-footer-actions">
-              <a 
+              <a
                 href="https://wa.me/8801714740430?text=আসসালামু%20আলাইকুম,%20সাতক্ষীরার%20ঘি,%20মধু%20বা%20অন্যান্য%20পণ্য%20সম্পর্কে%20জানতে%20চাই।"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -816,7 +816,7 @@ export default function App() {
                 <MessageCircle size={17} />
                 <span>হোয়াটসঅ্যাপে সরাসরি চ্যাট</span>
               </a>
-              <button 
+              <button
                 className="drawer-track-btn"
                 onClick={() => { setIsTrackingOpen(true); setIsMobileMenuOpen(false); }}
               >
@@ -862,9 +862,9 @@ export default function App() {
 
             <div className="hero-image-showcase">
               <div className="hero-main-img-card">
-                <img 
-                  src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80" 
-                  alt="Pure and Authentic Food" 
+                <img
+                  src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80"
+                  alt="Pure and Authentic Food"
                 />
                 <div className="hero-floating-badge">
                   <div className="icon-box">
@@ -987,69 +987,69 @@ export default function App() {
             {showWishlistOnly ? 'আপনার পছন্দের সংরক্ষিত পণ্যসমূহ' : 'আমাদের নির্বাচিত ক্যাটাগরি'}
           </h2>
           <p>
-            {showWishlistOnly 
-              ? `${filteredProducts.length} টি পণ্য সংরক্ষিত রয়েছে` 
+            {showWishlistOnly
+              ? `${filteredProducts.length} টি পণ্য সংরক্ষিত রয়েছে`
               : 'খাঁটি খাদ্য, প্রাকৃতিক সুবাস ও ইসলামিক লাইফস্টাইলের বিশ্বস্ত সংগ্রহ'}
           </p>
         </div>
 
         {/* Categories Bar */}
         <div className="category-pills-list">
-          <button 
+          <button
             className={`category-pill-btn ${selectedCategory === 'all' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('all'); setShowWishlistOnly(false); }}
           >
             ✨ সকল পণ্য ({productList.length})
           </button>
 
-          <button 
+          <button
             className={`category-pill-btn ${selectedCategory === 'ghee' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('ghee'); setShowWishlistOnly(false); }}
           >
             🧈 সাতক্ষীরার খাঁটি ঘি ({productList.filter(p => p.category === 'ghee').length})
           </button>
 
-          <button 
+          <button
             className={`category-pill-btn ${selectedCategory === 'honey' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('honey'); setShowWishlistOnly(false); }}
           >
             🍯 সুন্দরবন ও খাঁটি মধু ({productList.filter(p => p.category === 'honey').length})
           </button>
 
-          <button 
+          <button
             className={`category-pill-btn ${selectedCategory === 'oil' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('oil'); setShowWishlistOnly(false); }}
           >
             🌿 ঘানিভাঙা সরিষার তেল ({productList.filter(p => p.category === 'oil').length})
           </button>
 
-          <button 
+          <button
             className={`category-pill-btn ${selectedCategory === 'nuts' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('nuts'); setShowWishlistOnly(false); }}
           >
             🥜 বাদাম সম্ভার ({productList.filter(p => p.category === 'nuts').length})
           </button>
 
-          <button 
+          <button
             className={`category-pill-btn ${selectedCategory === 'spices' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('spices'); setShowWishlistOnly(false); }}
           >
             🌶️ খাঁটি দেশি মশলা ({productList.filter(p => p.category === 'spices').length})
           </button>
 
-          <button 
+          <button
             className={`category-pill-btn ${selectedCategory === 'mango' && !showWishlistOnly ? 'active' : ''}`}
             onClick={() => { setSelectedCategory('mango'); setShowWishlistOnly(false); }}
           >
             🥭 সাতক্ষীরার হিমসাগর আম ({productList.filter(p => p.category === 'mango').length})
           </button>
 
-          {productList.some(p => p.category === 'other' || !['ghee','mango','honey','oil','nuts','spices'].includes(p.category)) && (
-            <button 
+          {productList.some(p => p.category === 'other' || !['ghee', 'mango', 'honey', 'oil', 'nuts', 'spices'].includes(p.category)) && (
+            <button
               className={`category-pill-btn ${selectedCategory === 'other' && !showWishlistOnly ? 'active' : ''}`}
               onClick={() => { setSelectedCategory('other'); setShowWishlistOnly(false); }}
             >
-              📦 অন্যান্য পণ্য ({productList.filter(p => p.category === 'other' || !['ghee','mango','honey','oil','nuts','spices'].includes(p.category)).length})
+              📦 অন্যান্য পণ্য ({productList.filter(p => p.category === 'other' || !['ghee', 'mango', 'honey', 'oil', 'nuts', 'spices'].includes(p.category)).length})
             </button>
           )}
         </div>
@@ -1085,8 +1085,8 @@ export default function App() {
                 </p>
               </div>
             </div>
-            <button 
-              className="cat-banner-clear-btn" 
+            <button
+              className="cat-banner-clear-btn"
               onClick={() => setSelectedCategory('all')}
             >
               সব পণ্য দেখুন ✕
@@ -1109,8 +1109,8 @@ export default function App() {
 
           return (
             <div key={product.id} className="product-luxury-card">
-              <div 
-                className="product-img-box" 
+              <div
+                className="product-img-box"
                 onClick={() => { setDetailModalProduct(product); setSelectedVariantIndex(activeVarIdx); }}
               >
                 <img src={product.image} alt={product.name} loading="lazy" />
@@ -1131,7 +1131,7 @@ export default function App() {
                 )}
 
                 {/* Heart Wishlist Trigger */}
-                <button 
+                <button
                   className={`wishlist-heart-btn ${isFavorited ? 'active' : ''}`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -1156,7 +1156,7 @@ export default function App() {
                   </div>
                 )}
 
-                <h3 
+                <h3
                   className="product-title"
                   onClick={() => { setDetailModalProduct(product); setSelectedVariantIndex(activeVarIdx); }}
                 >
@@ -1203,7 +1203,7 @@ export default function App() {
 
                 {/* Lab Test Viewer Button */}
                 {product.labReport && (
-                  <button 
+                  <button
                     className="lab-test-btn-trigger"
                     onClick={() => setLabModalProduct(product)}
                   >
@@ -1238,14 +1238,14 @@ export default function App() {
                       </span>
                     ) : (
                       <>
-                        <button 
-                          className="btn-add-cart" 
+                        <button
+                          className="btn-add-cart"
                           title="কার্টে যোগ করুন"
                           onClick={() => addToCart(product, currentVariant)}
                         >
                           <Plus size={16} />
                         </button>
-                        <button 
+                        <button
                           className="btn-direct-order"
                           onClick={() => directOrder(product, currentVariant)}
                         >
@@ -1279,8 +1279,8 @@ export default function App() {
                 {bundleItems.map(item => {
                   const isSelected = selectedBundleIds.includes(item.id);
                   return (
-                    <div 
-                      key={item.id} 
+                    <div
+                      key={item.id}
                       className={`bundle-choice-card ${isSelected ? 'selected' : ''}`}
                       onClick={() => toggleBundleItem(item.id)}
                     >
@@ -1332,8 +1332,8 @@ export default function App() {
                   <span>৳{bundleFinalPrice}</span>
                 </div>
 
-                <button 
-                  className="btn-gold-primary" 
+                <button
+                  className="btn-gold-primary"
                   style={{ width: '100%', marginTop: '16px', justifyContent: 'center' }}
                   onClick={addCustomBundleToCart}
                 >
@@ -1417,7 +1417,7 @@ export default function App() {
             const isOpen = openFaqIndex === idx;
             return (
               <div key={idx} className="faq-card">
-                <div 
+                <div
                   className="faq-header"
                   onClick={() => setOpenFaqIndex(isOpen ? -1 : idx)}
                 >
@@ -1482,7 +1482,7 @@ export default function App() {
                   </p>
                   <div className="variant-selector-grid">
                     {detailModalProduct.variants.map((v, i) => (
-                      <button 
+                      <button
                         key={i}
                         className={`variant-pill ${selectedVariantIndex === i ? 'active' : ''}`}
                         onClick={() => setSelectedVariantIndex(i)}
@@ -1529,16 +1529,16 @@ export default function App() {
 
               <div style={{ display: 'flex', gap: '10px' }}>
                 {typeof detailModalProduct.stock === 'number' && detailModalProduct.stock <= 0 ? (
-                  <button 
-                    disabled 
+                  <button
+                    disabled
                     style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#fee2e2', color: '#dc2626', border: '1px solid #fca5a5', fontWeight: 700, cursor: 'not-allowed', fontSize: '0.95rem' }}
                   >
                     🚫 এই পণ্যটি বর্তমানে স্টক শেষ (Out of Stock)
                   </button>
                 ) : (
                   <>
-                    <button 
-                      className="btn-gold-primary" 
+                    <button
+                      className="btn-gold-primary"
                       style={{ flex: 1, justifyContent: 'center' }}
                       onClick={() => {
                         const currentVar = detailModalProduct.variants ? detailModalProduct.variants[selectedVariantIndex] : null;
@@ -1549,7 +1549,7 @@ export default function App() {
                       <ShoppingBag size={18} />
                       <span>এখনই অর্ডার করুন</span>
                     </button>
-                    <button 
+                    <button
                       className="btn-add-cart"
                       style={{ width: '44px', height: '44px' }}
                       title="কার্টে যোগ করুন"
@@ -1640,8 +1640,8 @@ export default function App() {
             </div>
 
             <form onSubmit={handleTrackOrder} style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="FN-XXXXXX অথবা 017XXXXXXXX"
                 className="form-input-luxury"
                 value={trackingInput}
@@ -1708,7 +1708,7 @@ export default function App() {
                 <ShoppingBag size={20} />
                 <h3>১-ক্লিক ফাস্ট চেকআউট</h3>
               </div>
-              <button 
+              <button
                 onClick={() => setIsCheckoutOpen(false)}
                 style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer' }}
               >
@@ -1758,9 +1758,9 @@ export default function App() {
                   <p style={{ color: '#64748b', fontSize: '0.78rem', marginBottom: '10px', lineHeight: '1.35' }}>
                     আপনার পিসিতে বা ফোনে হোয়াটসঅ্যাপ থাকলে চাইলে এক ক্লিকে অর্ডার স্লিপটি আমাদের অফিশিয়াল হোয়াটসঅ্যাপেও পাঠিয়ে রাখতে পারেন:
                   </p>
-                  <button 
+                  <button
                     type="button"
-                    className="checkout-submit-btn" 
+                    className="checkout-submit-btn"
                     style={{ width: '100%', background: '#25d366', color: '#fff', padding: '10px 14px', fontSize: '0.88rem', boxShadow: '0 4px 12px rgba(37, 211, 102, 0.3)' }}
                     onClick={sendWhatsAppOrder}
                   >
@@ -1770,7 +1770,7 @@ export default function App() {
                 </div>
 
                 {/* Close & Continue Shopping */}
-                <button 
+                <button
                   type="button"
                   onClick={() => {
                     setOrderConfirmed(false);
@@ -1802,20 +1802,20 @@ export default function App() {
                           </span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <button 
+                          <button
                             onClick={() => updateQty(item.id, -1, item.isBundle)}
                             style={{ width: '24px', height: '24px', borderRadius: '4px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
                           >
                             <Minus size={10} />
                           </button>
                           <span style={{ fontWeight: '700', fontSize: '0.85rem' }}>{item.qty}</span>
-                          <button 
+                          <button
                             onClick={() => updateQty(item.id, 1, item.isBundle)}
                             style={{ width: '24px', height: '24px', borderRadius: '4px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}
                           >
                             <Plus size={10} />
                           </button>
-                          <button 
+                          <button
                             onClick={() => removeFromCart(item.id, item.isBundle)}
                             style={{ border: 'none', background: 'none', color: '#ef4444', cursor: 'pointer', marginLeft: '4px' }}
                           >
@@ -1853,9 +1853,9 @@ export default function App() {
 
                   <div className="form-group-luxury">
                     <label>আপনার পূর্ণ নাম *</label>
-                    <input 
-                      type="text" 
-                      placeholder="যেমন: মো. কামরুল হাসান" 
+                    <input
+                      type="text"
+                      placeholder="যেমন: মো. কামরুল হাসান"
                       className="form-input-luxury"
                       value={customerName}
                       onChange={e => setCustomerName(e.target.value)}
@@ -1865,9 +1865,9 @@ export default function App() {
 
                   <div className="form-group-luxury">
                     <label>সচল মোবাইল নম্বর * (যেটিতে ফোন যাবে)</label>
-                    <input 
-                      type="tel" 
-                      placeholder="যেমন: 017XXXXXXXX" 
+                    <input
+                      type="tel"
+                      placeholder="যেমন: 017XXXXXXXX"
                       className="form-input-luxury"
                       value={customerPhone}
                       onChange={e => setCustomerPhone(e.target.value)}
@@ -1877,9 +1877,9 @@ export default function App() {
 
                   <div className="form-group-luxury">
                     <label>ইমেইল ঠিকানা (ঐচ্ছিক - ইনভয়েস ও মেমো পেতে)</label>
-                    <input 
-                      type="email" 
-                      placeholder="যেমন: yourname@gmail.com" 
+                    <input
+                      type="email"
+                      placeholder="যেমন: yourname@gmail.com"
                       className="form-input-luxury"
                       value={customerEmail}
                       onChange={e => setCustomerEmail(e.target.value)}
@@ -1888,9 +1888,9 @@ export default function App() {
 
                   <div className="form-group-luxury">
                     <label>পূর্ণ ঠিকানা (বাসা/রোড/এলাকা/জেলা) *</label>
-                    <textarea 
-                      rows="2" 
-                      placeholder="যেমন: বাড়ি ১২, রোড ৫, উত্তরা, ঢাকা" 
+                    <textarea
+                      rows="2"
+                      placeholder="যেমন: বাড়ি ১২, রোড ৫, উত্তরা, ঢাকা"
                       className="form-input-luxury"
                       value={customerAddress}
                       onChange={e => setCustomerAddress(e.target.value)}
@@ -1901,14 +1901,14 @@ export default function App() {
                   <div className="form-group-luxury">
                     <label>ডেলিভারি এলাকা সিলেক্ট করুন:</label>
                     <div className="delivery-options-grid">
-                      <div 
+                      <div
                         className={`delivery-choice ${deliveryArea === 'dhaka' ? 'selected' : ''}`}
                         onClick={() => setDeliveryArea('dhaka')}
                       >
                         <span style={{ fontWeight: '700' }}>ঢাকা সিটি</span>
                         <span style={{ fontSize: '0.78rem', color: '#059669' }}>৳ ৬০ (২৪-৪৮ ঘণ্টা)</span>
                       </div>
-                      <div 
+                      <div
                         className={`delivery-choice ${deliveryArea === 'outside' ? 'selected' : ''}`}
                         onClick={() => setDeliveryArea('outside')}
                       >
@@ -1921,19 +1921,19 @@ export default function App() {
                   <div className="form-group-luxury">
                     <label>পেমেন্ট পদ্ধতি:</label>
                     <div className="payment-methods-grid">
-                      <div 
+                      <div
                         className={`payment-choice ${paymentMethod === 'cod' ? 'selected' : ''}`}
                         onClick={() => setPaymentMethod('cod')}
                       >
                         ক্যাশ অন ডেলিভারি
                       </div>
-                      <div 
+                      <div
                         className={`payment-choice ${paymentMethod === 'bkash' ? 'selected' : ''}`}
                         onClick={() => setPaymentMethod('bkash')}
                       >
                         বিকাশ (bKash)
                       </div>
-                      <div 
+                      <div
                         className={`payment-choice ${paymentMethod === 'nagad' ? 'selected' : ''}`}
                         onClick={() => setPaymentMethod('nagad')}
                       >
@@ -1947,7 +1947,7 @@ export default function App() {
                     <div className="online-payment-box">
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                         <span style={{ fontWeight: '700', color: '#e2136e' }}>বিকাশ নম্বর:</span>
-                        <button 
+                        <button
                           type="button"
                           onClick={() => copyPaymentNumber('01714740430')}
                           style={{ border: 'none', background: '#e2136e', color: '#fff', padding: '3px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px' }}
@@ -1962,8 +1962,8 @@ export default function App() {
                       <p style={{ fontSize: '0.78rem', color: '#57534e', marginBottom: '8px' }}>
                         বিকাশ অ্যাপ থেকে <strong>৳{grandTotal}</strong> টাকা 'Send Money' করে ট্রানজেকশন আইডি দিন:
                       </p>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         placeholder="TrxID (যেমন: 9J76KL2X)"
                         className="form-input-luxury"
                         value={trxId}
@@ -1971,8 +1971,8 @@ export default function App() {
                         required
                         style={{ marginBottom: '6px' }}
                       />
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         placeholder="যে বিকাশ নম্বর থেকে পাঠিয়েছেন"
                         className="form-input-luxury"
                         value={senderNumber}
@@ -1987,7 +1987,7 @@ export default function App() {
                     <div className="online-payment-box nagad">
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                         <span style={{ fontWeight: '700', color: '#f7941d' }}>নগদ নম্বর:</span>
-                        <button 
+                        <button
                           type="button"
                           onClick={() => copyPaymentNumber('01714740430')}
                           style={{ border: 'none', background: '#f7941d', color: '#fff', padding: '3px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px' }}
@@ -2002,8 +2002,8 @@ export default function App() {
                       <p style={{ fontSize: '0.78rem', color: '#57534e', marginBottom: '8px' }}>
                         নগদ অ্যাপ থেকে <strong>৳{grandTotal}</strong> টাকা 'Send Money' করে তথ্য দিন:
                       </p>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         placeholder="নগদ ট্রানজেকশন আইডি (TrxID)"
                         className="form-input-luxury"
                         value={trxId}
@@ -2011,8 +2011,8 @@ export default function App() {
                         required
                         style={{ marginBottom: '6px' }}
                       />
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         placeholder="যে নগদ নম্বর থেকে পাঠিয়েছেন"
                         className="form-input-luxury"
                         value={senderNumber}
@@ -2022,8 +2022,8 @@ export default function App() {
                     </div>
                   )}
 
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="checkout-submit-btn"
                     disabled={cart.length === 0 || isSubmittingOrder}
                     style={{ opacity: isSubmittingOrder ? 0.75 : 1, cursor: isSubmittingOrder ? 'wait' : 'pointer' }}
@@ -2068,10 +2068,10 @@ export default function App() {
       )}
 
       {/* 16. Floating WhatsApp Instant Connect */}
-      <a 
-        href="https://wa.me/8801714740430?text=আসসালামু%20আলাইকুম,%20সাতক্ষীরার%20গাওয়া%20ঘি,%20মধু,%20বাদাম%20বা%20অন্যান্য%20পণ্য%20সম্পর্কে%20জানতে%20চাই।" 
-        target="_blank" 
-        rel="noopener noreferrer" 
+      <a
+        href="https://wa.me/8801714740430?text=আসসালামু%20আলাইকুম,%20সাতক্ষীরার%20গাওয়া%20ঘি,%20মধু,%20বাদাম%20বা%20অন্যান্য%20পণ্য%20সম্পর্কে%20জানতে%20চাই।"
+        target="_blank"
+        rel="noopener noreferrer"
         className="floating-whatsapp-btn"
         title="WhatsApp-এ সরাসরি যোগাযোগ করুন"
       >
@@ -2080,7 +2080,7 @@ export default function App() {
 
       {/* 17. MOBILE BOTTOM NAVIGATION BAR (BD Mobile First E-commerce UX) */}
       <nav className="mobile-bottom-nav">
-        <button 
+        <button
           className={`mobile-nav-item ${selectedCategory === 'all' && !showWishlistOnly ? 'active' : ''}`}
           onClick={() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2092,7 +2092,7 @@ export default function App() {
           <span>হোম</span>
         </button>
 
-        <button 
+        <button
           className={`mobile-nav-item ${selectedCategory === 'nuts' ? 'active' : ''}`}
           onClick={() => scrollToCategories('nuts')}
         >
@@ -2100,7 +2100,7 @@ export default function App() {
           <span style={selectedCategory === 'nuts' ? { color: '#d97706', fontWeight: '700' } : {}}>বাদাম</span>
         </button>
 
-        <button 
+        <button
           className="mobile-nav-item"
           onClick={() => setIsMobileMenuOpen(true)}
         >
@@ -2108,7 +2108,7 @@ export default function App() {
           <span>ক্যাটাগরি</span>
         </button>
 
-        <button 
+        <button
           className={`mobile-nav-item ${showWishlistOnly ? 'active' : ''}`}
           onClick={() => setShowWishlistOnly(prev => !prev)}
         >
@@ -2119,7 +2119,7 @@ export default function App() {
           )}
         </button>
 
-        <button 
+        <button
           className="mobile-nav-item"
           onClick={() => setIsCheckoutOpen(true)}
         >
@@ -2164,7 +2164,7 @@ export default function App() {
             <a href="#!">ল্যাব টেস্ট ভেরিফিকেশন</a>
             <a href="#!">ডেলিভারি চার্জ ও সময়সীমা</a>
             <a href="#!">প্রাইভেসি ও শর্তাবলী</a>
-            <button 
+            <button
               onClick={() => { setIsAdminOpen(true); window.location.hash = 'admin'; }}
               style={{ background: 'none', border: 'none', color: '#fbbf24', fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer', textAlign: 'left', padding: '6px 0', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}
             >
@@ -2177,10 +2177,10 @@ export default function App() {
             <p>হটলাইন: +880 1714-740430</p>
             <p>হোয়াটসঅ্যাপ: +880 1714-740430</p>
             <p>
-              <a 
-                href="https://www.facebook.com/khatisaoda" 
-                target="_blank" 
-                rel="noreferrer" 
+              <a
+                href="https://www.facebook.com/khatisaoda"
+                target="_blank"
+                rel="noreferrer"
                 style={{ color: '#60a5fa', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '5px' }}
               >
                 🌐 ফেসবুক: facebook.com/khatisaoda

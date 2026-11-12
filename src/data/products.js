@@ -53,7 +53,7 @@ export const products = [
   // ==========================================
   {
     id: 2,
-    name: "সুন্দরবনের খাঁটি র' খলিশা ফুলের মধু (সাতক্ষীরা রেঞ্জ)",
+    name: "সুন্দরবনের খাঁটি র' খলিশা মধু",
     nameEn: "Raw Sundarban Khalisha Honey (Satkhira Range)",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
@@ -97,7 +97,7 @@ export const products = [
   },
   {
     id: 20,
-    name: "প্রাকৃতিক কুল বরই ফুলের খাঁটি মধু (Jujube Blossom Honey)",
+    name: "প্রাকৃতিক কুল বরই ফুলের মধু",
     nameEn: "Pure Natural Jujube / Kul Boroi Flower Honey",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
@@ -141,7 +141,7 @@ export const products = [
   },
   {
     id: 21,
-    name: "দিনাজপুরের খাঁটি লিচু ফুলের মধু (Lychee Honey)",
+    name: "দিনাজপুরের খাঁটি লিচু ফুলের মধু",
     nameEn: "Pure Dinajpur Lychee Blossom Honey",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
@@ -185,7 +185,7 @@ export const products = [
   },
   {
     id: 22,
-    name: "প্রাকৃতিক সরিষা ফুলের খাঁটি মধু (Cream Honey)",
+    name: "প্রাকৃতিক সরিষা ফুলের খাঁটি মধু",
     nameEn: "Pure Mustard Blossom Raw Honey (Natural Cream)",
     category: "honey",
     categoryName: "খাঁটি মধু সম্ভার",
@@ -291,7 +291,7 @@ export const products = [
     ],
     rating: 4.9,
     reviewsCount: 230,
-    image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=800&q=80",
+    image: "/images/sorisar_oil.jpg",
     badge: "তীব্র প্রাকৃতিক ঝাঁঝ",
     badgeColor: "gold",
     origin: "দেশি কাঠের ঘানি, পাবনা",
@@ -326,8 +326,8 @@ export const products = [
   // ==========================================
   {
     id: 60,
-    name: "প্রিমিয়াম কাজু বাদাম (মিডিয়াম সাইজ)",
-    nameEn: "Premium Whole Cashew Nuts - Medium Size (Kaju Badam)",
+    name: "প্রিমিয়াম কাজু বাদাম",
+    nameEn: "Premium Whole Cashew Nuts (Kaju Badam)",
     category: "nuts",
     categoryName: "প্রিমিয়াম বাদাম সম্ভার",
     price: 1900,
@@ -340,7 +340,7 @@ export const products = [
     ],
     rating: 5.0,
     reviewsCount: 176,
-    image: "https://images.unsplash.com/photo-1509912760195-2c8e235e1654?auto=format&fit=crop&w=800&q=80",
+    image: "/images/kaju_badam.jpg",
     badge: "মিডিয়াম সাইজ ১৯০০৳/কেজি",
     badgeColor: "gold",
     origin: "আমদানিকৃত প্রিমিয়াম গ্রেড (ভিয়েতনাম)",
@@ -348,8 +348,8 @@ export const products = [
     isBestseller: true,
     stock: 45,
     hadith: "পুষ্টিকর খাদ্য ও বাদাম শরীরকে কর্মক্ষম ও সবল রাখে।",
-    description: "সম্পূর্ণ মচমচে, টাটকা ও মিষ্টি স্বাদের এ-গ্রেড আস্ত কাজু বাদাম (মিডিয়াম সাইজ)। কোনো প্রকার পচা, ঘুণে ধরা দানা বা কেমিক্যাল প্রিজারভেটিভ নেই। সম্পূর্ণ কাঁচা ও প্রাকৃতিক পুষ্টিগুণে ভরপুর। নিয়মিত খেলে শরীর ও মন চাঙ্গা থাকে।",
-    descriptionEn: "Supreme quality crispy, unroasted whole cashew nuts (medium size). Freshly packed, nutrient-dense and zero chemical additives.",
+    description: "সম্পূর্ণ মচমচে, টাটকা ও মিষ্টি স্বাদের এ-গ্রেড আস্ত কাজু বাদাম। কোনো প্রকার পচা, ঘুণে ধরা দানা বা কেমিক্যাল প্রিজারভেটিভ নেই। সম্পূর্ণ কাঁচা ও প্রাকৃতিক পুষ্টিগুণে ভরপুর। নিয়মিত খেলে শরীর ও মন চাঙ্গা থাকে।",
+    descriptionEn: "Supreme quality crispy, unroasted whole cashew nuts. Freshly packed, nutrient-dense and zero chemical additives.",
     labReport: {
       labName: "সায়েন্স ল্যাব খাদ্য বিভাগ (BCSIR)",
       testId: "BCSIR-CASHEW-2026",
@@ -370,7 +370,7 @@ export const products = [
   },
   {
     id: 61,
-    name: "আমেরিকান প্রিমিয়াম কাঠ বাদাম (Almond)",
+    name: "প্রিমিয়াম কাঠ বাদাম",
     nameEn: "California Premium Whole Almonds (Kat Badam)",
     category: "nuts",
     categoryName: "প্রিমিয়াম বাদাম সম্ভার",
@@ -384,7 +384,7 @@ export const products = [
     ],
     rating: 5.0,
     reviewsCount: 194,
-    image: "https://images.unsplash.com/photo-1508061253366-f7da158b6d46?auto=format&fit=crop&w=800&q=80",
+    image: "/images/kat_badam.jpg",
     badge: "ক্যালিফোর্নিয়া ১৬০০৳/কেজি",
     badgeColor: "emerald",
     origin: "ক্যালিফোর্নিয়া, ইউএসএ (সরাসরি আমদানিকৃত)",
@@ -404,7 +404,7 @@ export const products = [
     benefits: [
       "মস্তিষ্কের স্মৃতিশক্তি প্রখর ও স্নায়ুতন্ত্র শান্ত রাখে",
       "উচ্চ ভিটামিন-ই ত্বক মসৃণ ও তারুণ্যদীপ্ত রাখে",
-      "খারাপ কোলেস্টেরল কমায় ও রক্তে শর্করার মাত্রা নিয়ন্ত্রণ করে"
+      "খারাপ কোলেস্টেরল কমায় ও রক্তে শর্পরার মাত্রা নিয়ন্ত্রণ করে"
     ],
     benefitsEn: [
       "Enhances memory retention and cognitive sharpness",
@@ -414,7 +414,7 @@ export const products = [
   },
   {
     id: 62,
-    name: "ইরানি প্রিমিয়াম পেস্তা বাদাম (Pistachio)",
+    name: "প্রিমিয়াম পেস্তা বাদাম",
     nameEn: "Premium Iranian Whole Pistachios (Pesta Badam)",
     category: "nuts",
     categoryName: "প্রিমিয়াম বাদাম সম্ভার",
@@ -428,7 +428,7 @@ export const products = [
     ],
     rating: 5.0,
     reviewsCount: 154,
-    image: "https://images.unsplash.com/photo-1543158181-e6f9f6712055?auto=format&fit=crop&w=800&q=80",
+    image: "/images/pesta_badam.jpg",
     badge: "ইরানি এ-গ্রেড পেস্তা",
     badgeColor: "emerald",
     origin: "ইরান (সরাসরি আমদানিকৃত)",
@@ -463,7 +463,7 @@ export const products = [
   // ==========================================
   {
     id: 30,
-    name: "খাঁটি দেশি হলুদ গুঁড়া (কাঁচা হলুদ থেকে ভাঙানো)",
+    name: "খাঁটি দেশি হলুদ গুঁড়া",
     nameEn: "Pure Deshi Organic Turmeric Powder (Holud Gura)",
     category: "spices",
     categoryName: "খাঁটি দেশি মশলা",
@@ -507,7 +507,7 @@ export const products = [
   },
   {
     id: 31,
-    name: "খাঁটি দেশি ঝালের গুঁড়া (বগুড়ার শুকনো লাল মরিচ)",
+    name: "খাঁটি দেশি ঝালের গুঁড়া",
     nameEn: "Pure Hot Red Chili Powder (Jhaler Gura)",
     category: "spices",
     categoryName: "খাঁটি দেশি মশলা",
@@ -521,7 +521,7 @@ export const products = [
     ],
     rating: 4.9,
     reviewsCount: 195,
-    image: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=800&q=80",
+    image: "/images/jhaler_gura.jpg",
     badge: "তীব্র খাঁটি ঝাঁঝ ও লালচে আভা",
     badgeColor: "emerald",
     origin: "বগুড়ার ঝাল মরিচ খেত",
@@ -551,7 +551,7 @@ export const products = [
   },
   {
     id: 34,
-    name: "খাঁটি প্রিমিয়াম জিরা গুঁড়া (ভেজালমুক্ত সুবাসিত)",
+    name: "খাঁটি প্রিমিয়াম জিরা গুঁড়া",
     nameEn: "Pure Aromatic Roasted Cumin Powder (Jira Gura)",
     category: "spices",
     categoryName: "খাঁটি দেশি মশলা",
@@ -565,7 +565,7 @@ export const products = [
     ],
     rating: 5.0,
     reviewsCount: 162,
-    image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80",
+    image: "/images/jira_gura.jpg",
     badge: "১০০% খাঁটি কিউমিন সুবাস",
     badgeColor: "gold",
     origin: "নির্বাচিত প্রিমিয়াম কিউমিন বীজ",
@@ -647,12 +647,12 @@ export const products = [
 
 export const bundleItems = [
   { id: 'b1', name: 'সাতক্ষীরার খাঁটি গাওয়া ঘি (৫০০ গ্রাম)', price: 970, weight: '৫০০ গ্রাম' },
-  { id: 'b2', name: 'সুন্দরবন সাতক্ষীরা খলিশা মধু (৫০০ গ্রাম)', price: 1050, weight: '৫০০ গ্রাম' },
+  { id: 'b2', name: 'সুন্দরবনের খাঁটি খলিশা মধু (৫০০ গ্রাম)', price: 1050, weight: '৫০০ গ্রাম' },
   { id: 'b3', name: 'কাঠের ঘানিভাঙা সরিষার তেল (১ লিটার)', price: 360, weight: '১ লিটার' },
   { id: 'b4', name: 'প্রিমিয়াম কাজু বাদাম (২৫০ গ্রাম)', price: 490, weight: '২৫০ গ্রাম' },
-  { id: 'b5', name: 'আমেরিকান কাঠ বাদাম (২৫০ গ্রাম)', price: 420, weight: '২৫০ গ্রাম' },
-  { id: 'b6', name: 'ইরানি পেস্তা বাদাম (২৫০ গ্রাম)', price: 680, weight: '২৫০ গ্রাম' },
-  { id: 'b7', name: 'খাঁটি দেশি গুঁড়া হলুদ (৫০০ গ্রাম)', price: 250, weight: '৫০০ গ্রাম' },
+  { id: 'b5', name: 'প্রিমিয়াম কাঠ বাদাম (২৫০ গ্রাম)', price: 420, weight: '২৫০ গ্রাম' },
+  { id: 'b6', name: 'প্রিমিয়াম পেস্তা বাদাম (২৫০ গ্রাম)', price: 680, weight: '২৫০ গ্রাম' },
+  { id: 'b7', name: 'খাঁটি দেশি হলুদ গুঁড়া (৫০০ গ্রাম)', price: 250, weight: '৫০০ গ্রাম' },
   { id: 'b8', name: 'খাঁটি দেশি ঝালের গুঁড়া (৫০০ গ্রাম)', price: 310, weight: '৫০০ গ্রাম' },
   { id: 'b9', name: 'খাঁটি প্রিমিয়াম জিরা গুঁড়া (২০০ গ্রাম)', price: 250, weight: '২০০ গ্রাম' },
   { id: 'b10', name: 'সাতক্ষীরার হিমসাগর আম (৫ কেজি)', price: 650, weight: '৫ কেজি' }

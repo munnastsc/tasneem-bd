@@ -65,7 +65,7 @@ export default function AdminPanel({ onClose }) {
   const [pixelEvents, setPixelEvents] = useState(() => getPixelEventLogs());
 
   // Products Catalog Management State
-  const CATALOG_VERSION = '2026-11-v3';
+  const CATALOG_VERSION = '2026-11-v4';
   const [productsList, setProductsList] = useState(() => {
     try {
       const storedVer = localStorage.getItem('khatisaoda_catalog_version');
@@ -376,7 +376,7 @@ export default function AdminPanel({ onClose }) {
     setProductsList(newList);
     try {
       localStorage.setItem('khatisaoda_products', JSON.stringify(newList));
-      localStorage.setItem('khatisaoda_catalog_version', '2026-11-v3');
+      localStorage.setItem('khatisaoda_catalog_version', '2026-11-v4');
       window.dispatchEvent(new CustomEvent('khatisaoda_products_updated', { detail: { products: newList } }));
     } catch (e) {
       console.error(e);
